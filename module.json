@@ -1,11 +1,11 @@
 {
-    "name": "HostetskiGPT",
-    "alias": "hostetskigpt",
+    "name": "FreeScoutGPT",
+    "alias": "freescoutgpt",
     "description": "Module for requests to GPT",
     "version": "1.0.5",
     "img": "https://hostetski.com/files/fs/hostetskigpt_module_logo.png",
     "detailsUrl": "",
-    "author": "Hostetski",
+    "author": "Press Wizards - Original was Hostetski",
     "authorUrl": "",
     "requiredAppVersion": "1.0.2",
     "license": "MIT",
@@ -13,7 +13,7 @@
     "active": 0,
     "order": 0,
     "providers": [
-        "Modules\\HostetskiGPT\\Providers\\HostetskiGPTServiceProvider"
+        "Modules\\FreeScoutGPT\\Providers\\HostetskiGPTServiceProvider"
     ],
     "aliases": {},
     "files": [
