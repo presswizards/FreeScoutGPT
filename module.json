@@ -13,7 +13,7 @@
     "active": 0,
     "order": 0,
     "providers": [
-        "Modules\\FreeScoutGPT\\Providers\\HostetskiGPTServiceProvider"
+        "Modules\\HostetskiGPT\\Providers\\HostetskiGPTServiceProvider"
     ],
     "aliases": {},
     "files": [
