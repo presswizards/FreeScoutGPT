@@ -1,6 +1,6 @@
 {
-    "name": "FreeScoutGPT",
-    "alias": "freescoutgpt",
+    "name": "HostetskiGPT",
+    "alias": "hostetskigpt",
     "description": "Module for requests to GPT",
     "version": "1.0.5",
     "img": "https://hostetski.com/files/fs/hostetskigpt_module_logo.png",
