@@ -44,23 +44,23 @@ function hostetskigptInit() {
             );
         }
 
-        if (document.location.pathname === "/modules/list") {
-            $.ajax({
-                url: 'https://updates.hostetski.com/hostetskigpt/updates',
-                dataType: 'json',
-                success: function (response, status) {
-                    if (response.current_version != hostetskiGPTData.version) {
-                        $('#installed').after(`
-                            <div class="row-container margin-top">
-                                <div class="alert alert-warning">
-                                    ${hostetskiGPTData.updateAvailable} <a href="https://github.com/code-debug228/HostetskiGPT">HostetskiGPT</a>
-                                </div>
-                            </div>
-                        `)
-                    }
-                }
-            });
-        }
+				// if (document.location.pathname === "/modules/list") {
+				//     $.ajax({
+				//         url: 'https://updates.hostetski.com/hostetskigpt/updates',
+				//         dataType: 'json',
+				//         success: function (response, status) {
+				//             if (response.current_version != hostetskiGPTData.version) {
+				//                 $('#installed').after(`
+				//                     <div class="row-container margin-top">
+				//                         <div class="alert alert-warning">
+				//                             ${hostetskiGPTData.updateAvailable} <a href="https://github.com/code-debug228/HostetskiGPT">HostetskiGPT</a>
+				//                         </div>
+				//                     </div>
+				//                 `)
+				//             }
+				//         }
+				//     });
+				// }
 	});
 }
 
