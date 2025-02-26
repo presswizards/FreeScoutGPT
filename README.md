@@ -1,6 +1,8 @@
 # FreeScout ChatGPT Integration Module (FreescoutGPT)
 
-This repository contains the FreeScout ChatGPT Integration Module, which connects FreeScout with the powerful language model ChatGPT by OpenAI. This integration enables the generation of AI-based responses for incoming messages, providing a more efficient and intelligent support system for your helpdesk.
+![FreeScout ChatGPT Integration Module](https://raw.githubusercontent.com/presswizards/FreeScoutGPT/refs/heads/main/FreeScoutGPT-Logo.jpg "ChatGPT Logo")
+
+This repository contains the FreeScout ChatGPT Integration Module, which connects FreeScout with the powerful language model ChatGPT by OpenAI via their API and your API key. This integration enables the generation of AI-based responses for incoming messages, providing a more efficient and intelligent support system for your FreeScout users.
 
 ![FreeScout ChatGPT Integration Module Example](https://my.hostetski.com/files/img/hostetskigpt.jpg "Integration Module Example")
 
@@ -13,7 +15,7 @@ This repository contains the FreeScout ChatGPT Integration Module, which connect
 
 
 ## Requirements
-To use this module, you will need an API key for ChatGPT, which can be obtained from the OpenAI platform at https://platform.openai.com/account/api-keys.
+To use this module, you will need an API key for ChatGPT, which can be obtained from the OpenAI platform at [https://platform.openai.com/account/api-keys](https://platform.openai.com/account/api-keys).
 
 ## Configuration
 1. Install the FreeScout ChatGPT Integration Module, ensure the module folder is named "FreeScoutGPT".
@@ -33,3 +35,6 @@ To use this module, you will need an API key for ChatGPT, which can be obtained 
 This is an early version of the FreeScout ChatGPT Integration Module, and we appreciate any feedback, suggestions, or contributions to help improve the module. Please feel free to open issues or submit pull requests on GitHub.
 
 Together, we can make this integration a valuable addition to the FreeScout ecosystem and enhance the capabilities of helpdesk software for the entire community.
+
+### Use of OpenAI ChatGPT name and API
+This module uses the ChatGPT API, developed by OpenAI, and is not officially affiliated with or endorsed by OpenAI. For more details, see OpenAI’s [Terms of Service](https://openai.com/policies/terms-of-use).
