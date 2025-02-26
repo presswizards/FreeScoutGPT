@@ -1,4 +1,4 @@
-![image](https://github.com/user-attachments/assets/60a8cdf0-b990-4778-b8a4-3e7d4526eb4e)![image](https://github.com/user-attachments/assets/4543f15b-e9c9-447d-962f-1eae31476949)![FreeScout ChatGPT Integration Module](https://platform.theverge.com/wp-content/uploads/sites/2/2025/02/openai-new-logo_f252fc.png?quality=75&strip=all&crop=7.8125%2C0%2C84.375%2C100&w=300 "ChatGPT Logo")
+![FreeScout ChatGPT Integration Module](https://platform.theverge.com/wp-content/uploads/sites/2/2025/02/openai-new-logo_f252fc.png?quality=75&strip=all&crop=7.8125%2C0%2C84.375%2C100&w=300 "ChatGPT Logo")
 
 # FreeScout ChatGPT Integration Module (FreeScoutGPT)
 
@@ -23,21 +23,19 @@ To use this module, you will need an API key for ChatGPT, which can be obtained 
 ## Helpful Screenshots
 
 ### Module Settings Page (set per mailbox)
-![FreeScoutGPT Module Settings Page](https://private-user-images.githubusercontent.com/16616345/417042293-690ef890-58a4-4c37-a29f-94665102ce0d.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NDA2MDg5OTYsIm5iZiI6MTc0MDYwODY5NiwicGF0aCI6Ii8xNjYxNjM0NS80MTcwNDIyOTMtNjkwZWY4OTAtNThhNC00YzM3LWEyOWYtOTQ2NjUxMDJjZTBkLnBuZz9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNTAyMjYlMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjUwMjI2VDIyMjQ1NlomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPWRhMmUzMGFjZjhmZDUzODlkZWQ2NmE3MWVkMThiYTA2MDBkNjkzOGM5MGMwYmM5ODZmMDgxM2RmMTI2ZmVkNmImWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0In0.EDKTMGzB1GiZ5Cno4ntu1rzyGXl7OqW2KIn0a4CRcFQ)
+![FreeScoutGPT Module Settings Page](https://github.com/user-attachments/assets/690ef890-58a4-4c37-a29f-94665102ce0d)
 
 ### Look for "Generate answer (GPT)" in the drop-down on a conversation page (not reply page)
 <img width="897" alt="Image" src="https://github.com/user-attachments/assets/7fd0bee6-d8c3-4321-829d-1f0ade379911" />
 
 ### Generated answer in yellow box above that conversation with a copy button next to it
-<img width="897" alt="Image" src="https://github.com/user-attachments/assets/417036861-c2e37401-cd5d-4f5a-a689-b3850ddd7843" />
-
-![FreeScoutGPT generated answer attached to conversation, click the Copy icon to copy it](https://private-user-images.githubusercontent.com/16616345/417036861-c2e37401-cd5d-4f5a-a689-b3850ddd7843.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NDA2MTA0MDcsIm5iZiI6MTc0MDYxMDEwNywicGF0aCI6Ii8xNjYxNjM0NS80MTcwMzY4NjEtYzJlMzc0MDEtY2Q1ZC00ZjVhLWE2ODktYjM4NTBkZGQ3ODQzLnBuZz9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNTAyMjYlMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjUwMjI2VDIyNDgyN1omWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPTZhZTAxMjYzYzA2OTQ4OTYzN2ZiZjcyNjE5MWI1ZjY5OTM4YzgxODRhMDQ5Zjc4NmQ2ZTVmNGZmMDRlMTFkMWImWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0In0.MYx_Obuq00eAi6kkjYRkdI2LxAwhpi-dTw4pfVMLZ_A)
+![image](https://github.com/user-attachments/assets/c2e37401-cd5d-4f5a-a689-b3850ddd7843)
 
 ### Copied to the clipboard succcessful notice after clicking the copy icon
-![Copied to the clipboard notice](https://private-user-images.githubusercontent.com/16616345/417036859-3d131a3a-8212-4887-8c6b-351202df7a2f.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NDA2MDg5OTYsIm5iZiI6MTc0MDYwODY5NiwicGF0aCI6Ii8xNjYxNjM0NS80MTcwMzY4NTktM2QxMzFhM2EtODIxMi00ODg3LThjNmItMzUxMjAyZGY3YTJmLnBuZz9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNTAyMjYlMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjUwMjI2VDIyMjQ1NlomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPTAxYzQxZmUyOWFiMDQwYWZmNzc5NzYzYWMzNjkzOWU2ZWZmOGJlZWM3NDdkYjljY2M5YWIzYWI5N2Q3YzBkOTQmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0In0.4iRy1NZ7f8rWmCjGvkIh7rs7kmftZf9mVpAgz6Kh8Lg)
+![image](https://github.com/user-attachments/assets/3d131a3a-8212-4887-8c6b-351202df7a2f)
 
 ### Paste the generated answer into your reply text area, and edit as desired
-![Paste the generated answer into your reply text area](https://private-user-images.githubusercontent.com/16616345/417036860-4cf70554-a082-49b6-92d8-b5cf3c082a2b.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NDA2MDg5OTYsIm5iZiI6MTc0MDYwODY5NiwicGF0aCI6Ii8xNjYxNjM0NS80MTcwMzY4NjAtNGNmNzA1NTQtYTA4Mi00OWI2LTkyZDgtYjVjZjNjMDgyYTJiLnBuZz9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNTAyMjYlMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjUwMjI2VDIyMjQ1NlomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPTQ4MTFiMmIzMTM2NDA2NGFkNjcyYzliZTljYmExNTA1ZGYxYTRjMmY1ZjkxZjMxNjMxZjhlNzU4YWI4NTZjNmEmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0In0.8Vnhmh8gqRJ7HWldxkLDTcC5ibaDDw-lViOaPaPUPi4)
+![image](https://github.com/user-attachments/assets/4cf70554-a082-49b6-92d8-b5cf3c082a2b)
 
 ## Contributing
 This is an updated version of the FreeScout + ChatGPT Integration Module, and we appreciate any feedback, suggestions, or contributions to help improve the module. Please feel free to open issues or submit pull requests on GitHub.
