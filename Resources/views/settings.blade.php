@@ -18,7 +18,7 @@
             {{ csrf_field() }}
 
             <div class="form-group">
-                <label for="gpt_enabled" class="col-sm-2 control-label">{{ __("Enable GPT") }}</label>
+                <label for="gpt_enabled" class="col-sm-2 control-label">{{ __("Enable ChatGPT") }}</label>
 
                 <div class="col-sm-6">
                     <div class="controls">
@@ -51,10 +51,10 @@
             </div>
 
             <div class="form-group">
-                <label class="col-sm-2 control-label">{{ __("Prompts") }}</label>
+                <label class="col-sm-2 control-label">{{ __("Prompts and Training Info") }}</label>
 
                 <div class="col-sm-6">
-                    <textarea name="start_message" class="form-control" placeholder="Act like a support agent" required>{{ $settings['start_message'] }}</textarea>
+                    <textarea rows="15" name="start_message" class="form-control" placeholder="Act like a support agent. Act like a professional concise support agent. Train ChatGPT more by adding details like website link, knowledgebase link, etc." required>{{ $settings['start_message'] }}</textarea>
                 </div>
             </div>
 
@@ -71,7 +71,7 @@
             </div>
 
             <div class="form-group">
-                <label for="show_client_data_enabled" class="col-sm-2 control-label">{{ __("Send client information to GPT") }}</label>
+                <label for="show_client_data_enabled" class="col-sm-2 control-label">{{ __("Send client information to ChatGPT") }}</label>
 
                 <div class="col-sm-6" style="display: inline-flex;">
                     <div class="controls">
