@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title_full', 'HostetskiGPT - ' . $mailbox->name)
+@section('title_full', 'FreeScoutGPT - ' . $mailbox->name)
 
 @section('body_attrs')@parent data-mailbox_id="{{ $mailbox->id }}"@endsection
 
@@ -11,7 +11,7 @@
 
 @section('content')
     <div class="section-heading">
-        HostetskiGPT
+        FreeScoutGPT
     </div>
     <div class="col-xs-12">
         <form class="form-horizontal margin-top margin-bottom" method="POST" action="">
@@ -102,5 +102,5 @@
 
 @section('body_bottom')
     @parent
-    
+
 @endsection

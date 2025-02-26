@@ -1,1 +1,1 @@
-<li @if (Route::is('hostetskigpt.settings'))class="active"@endif><a href="{{ route('hostetskigpt.settings', ['mailbox_id'=>$mailbox->id]) }}"><i class="glyphicon glyphicon-globe"></i>HostetskiGPT</a></li>
+<li @if (Route::is('freescoutgpt.settings'))class="active"@endif><a href="{{ route('freescoutgpt.settings', ['mailbox_id'=>$mailbox->id]) }}"><i class="glyphicon glyphicon-globe"></i>FreeScoutGPT</a></li>

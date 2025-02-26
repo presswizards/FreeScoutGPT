@@ -1,4 +1,4 @@
-function hostetskigptInit() {
+function freescoutgptInit() {
 	$(document).ready(function(){
         // Add event listeners
         $(document).on("click", ".chatgpt-get", generateAnswer);
@@ -13,7 +13,7 @@ function hostetskigptInit() {
         if (document.location.pathname.startsWith("/conversation")) {
             const mailbox_id = $("body").attr("data-mailbox_id");
             $.ajax({
-                url: '/hostetskigpt/is_enabled?mailbox=' + mailbox_id,
+                url: '/freescoutgpt/is_enabled?mailbox=' + mailbox_id,
                 dataType: 'json',
                 success: function (response, status) {
                     if (!response.enabled) {
@@ -24,7 +24,7 @@ function hostetskigptInit() {
 
             const conversation_id = $("body").attr("data-conversation_id");
             $.ajax({
-                url: '/hostetskigpt/answers?conversation=' + conversation_id,
+                url: '/freescoutgpt/answers?conversation=' + conversation_id,
                 dataType: 'json',
                 success: function (response, status) {
                     response.answers.forEach(function (item, index, array) {
@@ -46,14 +46,14 @@ function hostetskigptInit() {
 
 				// if (document.location.pathname === "/modules/list") {
 				//     $.ajax({
-				//         url: 'https://updates.hostetski.com/hostetskigpt/updates',
+				//         url: 'https://updates.hostetski.com/freescoutgpt/updates',
 				//         dataType: 'json',
 				//         success: function (response, status) {
-				//             if (response.current_version != hostetskiGPTData.version) {
+				//             if (response.current_version != freescoutGPTData.version) {
 				//                 $('#installed').after(`
 				//                     <div class="row-container margin-top">
 				//                         <div class="alert alert-warning">
-				//                             ${hostetskiGPTData.updateAvailable} <a href="https://github.com/code-debug228/HostetskiGPT">HostetskiGPT</a>
+				//                             ${freescoutGPTData.updateAvailable} <a href="https://github.com/code-debug228/FreescoutGPT">FreescoutGPT</a>
 				//                         </div>
 				//                     </div>
 				//                 `)
@@ -75,9 +75,9 @@ function generateAnswer(e) {
     const customer_email = encodeURIComponent($(".customer-email").text().trim());
     const conversation_subject = encodeURIComponent($(".conv-subjtext span").text().trim());
 
-    $(`#thread-${thread_id} .thread-info`).prepend("<img class=\"gpt-loader\" src=\"/modules/hostetskigpt/img/loading.gif\" alt=\"Test\">");
+    $(`#thread-${thread_id} .thread-info`).prepend("<img class=\"gpt-loader\" src=\"/modules/freescoutgpt/img/loading.gif\" alt=\"Test\">");
 
-    fsAjax(`mailbox_id=${mailbox_id}&query=${query}&thread_id=${thread_id}&customer_name=${customer_name}&customer_email=${customer_email}&conversation_subject=${conversation_subject}`, '/hostetskigpt/generate', function (response) {
+    fsAjax(`mailbox_id=${mailbox_id}&query=${query}&thread_id=${thread_id}&customer_name=${customer_name}&customer_email=${customer_email}&conversation_subject=${conversation_subject}`, '/freescoutgpt/generate', function (response) {
         $(`#thread-${thread_id} .gpt-answer`).last().addClass("hidden");
         addAnswer(thread_id, response.answer);
         $(`#thread-${thread_id} .gpt-answer`).last().removeClass("hidden");
@@ -152,14 +152,14 @@ function copyAnswer(e) {
     const thread_id = $(e.target).closest(".thread").attr("data-thread_id");
     const current_answer = $(`#thread-${thread_id} .gpt-answer`).not(".hidden");
     navigator.clipboard.writeText(current_answer[0].innerHTML.replace(/<\/?.*?>/g, "").replaceAll("```", ""));
-    showFloatingAlert('success', hostetskiGPTData.copiedToClipboard);
+    showFloatingAlert('success', freescoutGPTData.copiedToClipboard);
 }
 
 async function injectGptAnswer(){
     // const { value: command } = await Swal.fire({
     //     input: 'textarea',
     //     inputLabel: 'Anfrage an Chat GPT',
-    //     inputValue: hostetskiGPTData.start_message+"\n",
+    //     inputValue: freescoutGPTData.start_message+"\n",
     //     width: '50em',
     //     inputAttributes: {
     //         'aria-label': 'Type your message here'
@@ -182,7 +182,7 @@ async function injectGptAnswer(){
     $(".gptbutton").addClass("disabled");
     hideModifyPromptAlert();
 
-    fsAjax(`mailbox_id=${mailbox_id}&query=${query}&command=${encodeURIComponent(command)}&thread_id=${thread_id}&customer_name=${customer_name}&customer_email=${customer_email}&conversation_subject=${conversation_subject}`, '/hostetskigpt/generate', function (response) {
+    fsAjax(`mailbox_id=${mailbox_id}&query=${query}&command=${encodeURIComponent(command)}&thread_id=${thread_id}&customer_name=${customer_name}&customer_email=${customer_email}&conversation_subject=${conversation_subject}`, '/freescoutgpt/generate', function (response) {
         $('#body').summernote('pasteHTML', response.answer);
         $(".gptbutton").removeClass("disabled");
     }, true, function() {
@@ -200,7 +200,7 @@ function addModifyPromptAlert() {
                         <button type="button" class="close gpt-close-modal" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">×</span>
                         </button>
-                        <h4 class="modal-title">${hostetskiGPTData.modifyPrompt}</h4>
+                        <h4 class="modal-title">${freescoutGPTData.modifyPrompt}</h4>
                     </div>
                     <div class="modal-body">
                         <div class="form-group" style="overflow:auto;">
@@ -209,14 +209,14 @@ function addModifyPromptAlert() {
                     </div>
                     <div class="modal-footer">
                         <button type="submit" href="#" class="btn btn-primary note-btn note-btn-primary gpt-apply-modal">
-                            ${hostetskiGPTData.send}
+                            ${freescoutGPTData.send}
                         </button>
                     </div>
                 </div>
             </div>
         </div>
     `);
-    $("#gpt-modified-prompt").val(hostetskiGPTData.start_message);
+    $("#gpt-modified-prompt").val(freescoutGPTData.start_message);
 }
 
 function showModifyPromptAlert() {
@@ -233,5 +233,5 @@ function hideModifyPromptAlert() {
     alert[0].classList.remove("in");
     alert.css("display", "none");
     $(".modal-backdrop").remove();
-    $("#gpt-modified-prompt").val(hostetskiGPTData.start_message);
+    $("#gpt-modified-prompt").val(freescoutGPTData.start_message);
 }

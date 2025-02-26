@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddPrimaryKeyToHostetskigptTable extends Migration
+class ChangeStartMessageColumnInFreescoutgptTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AddPrimaryKeyToHostetskigptTable extends Migration
      */
     public function up()
     {
-        Schema::table('hostetskigpt', function (Blueprint $table) {
-            $table->integer('mailbox_id')->primary()->change();
+        Schema::table('freescoutgpt', function (Blueprint $table) {
+            $table->text('start_message')->change();
         });
     }
 
@@ -25,8 +25,8 @@ class AddPrimaryKeyToHostetskigptTable extends Migration
      */
     public function down()
     {
-        Schema::table('hostetskigpt', function (Blueprint $table) {
-            $table->integer('mailbox_id')->change();
+        Schema::table('freescoutgpt', function (Blueprint $table) {
+            $table->string('start_message')->change();
         });
     }
 }

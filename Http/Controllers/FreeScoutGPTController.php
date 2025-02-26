@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\HostetskiGPT\Http\Controllers;
+namespace Modules\FreeScoutGPT\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
@@ -8,9 +8,9 @@ use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Thread;
 use App\Mailbox;
-use Modules\HostetskiGPT\Entities\GPTSettings;
+use Modules\FreeScoutGPT\Entities\GPTSettings;
 
-class HostetskiGPTController extends Controller
+class FreeScoutGPTController extends Controller
 {
 
     /**
@@ -19,7 +19,7 @@ class HostetskiGPTController extends Controller
      */
     public function index()
     {
-        return view('hostetskigpt::index');
+        return view('freescoutgpt::index');
     }
 
     /**
@@ -28,7 +28,7 @@ class HostetskiGPTController extends Controller
      */
     public function create()
     {
-        return view('hostetskigpt::create');
+        return view('freescoutgpt::create');
     }
 
     /**
@@ -46,7 +46,7 @@ class HostetskiGPTController extends Controller
      */
     public function show()
     {
-        return view('hostetskigpt::show');
+        return view('freescoutgpt::show');
     }
 
     /**
@@ -55,7 +55,7 @@ class HostetskiGPTController extends Controller
      */
     public function edit()
     {
-        return view('hostetskigpt::edit');
+        return view('freescoutgpt::edit');
     }
 
     /**
@@ -173,7 +173,7 @@ class HostetskiGPTController extends Controller
             $settings['client_data_enabled'] = false;
         }
 
-        return view('hostetskigpt::settings', [
+        return view('freescoutgpt::settings', [
             'mailbox'   => $mailbox,
             'settings'  => $settings
         ]);
@@ -193,7 +193,7 @@ class HostetskiGPTController extends Controller
             ]
         );
 
-        return redirect()->route('hostetskigpt.settings', ['mailbox_id' => $mailbox_id]);
+        return redirect()->route('freescoutgpt.settings', ['mailbox_id' => $mailbox_id]);
     }
 
     public function checkIsEnabled(Request $request) {

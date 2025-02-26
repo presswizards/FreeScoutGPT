@@ -1,10 +1,10 @@
 <?php
 
-Route::group(['middleware' => 'web', 'prefix' => \Helper::getSubdirectory(), 'namespace' => 'Modules\HostetskiGPT\Http\Controllers'], function()
+Route::group(['middleware' => 'web', 'prefix' => \Helper::getSubdirectory(), 'namespace' => 'Modules\FreeScoutGPT\Http\Controllers'], function()
 {
-    Route::post('/hostetskigpt/generate', 'HostetskiGPTController@generate');
-    Route::get('/hostetskigpt/answers', 'HostetskiGPTController@answers');
-    Route::get('/hostetskigpt/is_enabled', 'HostetskiGPTController@checkIsEnabled');
-    Route::get('/mailbox/{mailbox_id}/hostetskigpt-settings', ['uses' => 'HostetskiGPTController@settings', 'middleware' => ['auth', 'roles'], 'roles' => ['admin']])->name('hostetskigpt.settings');
-    Route::post('/mailbox/{mailbox_id}/hostetskigpt-settings', ['uses' => 'HostetskiGPTController@saveSettings', 'middleware' => ['auth', 'roles'], 'roles' => ['admin']]);
+    Route::post('/freescoutgpt/generate', 'FreeScoutGPTController@generate');
+    Route::get('/freescoutgpt/answers', 'FreeScoutGPTController@answers');
+    Route::get('/freescoutgpt/is_enabled', 'FreeScoutGPTController@checkIsEnabled');
+    Route::get('/mailbox/{mailbox_id}/freescoutgpt-settings', ['uses' => 'FreeScoutGPTController@settings', 'middleware' => ['auth', 'roles'], 'roles' => ['admin']])->name('freescoutgpt.settings');
+    Route::post('/mailbox/{mailbox_id}/freescoutgpt-settings', ['uses' => 'FreeScoutGPTController@saveSettings', 'middleware' => ['auth', 'roles'], 'roles' => ['admin']]);
 });

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddClientDataEnabledColumnToHostetskigptTable extends Migration
+class AddPrimaryKeyToFreescoutgptTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AddClientDataEnabledColumnToHostetskigptTable extends Migration
      */
     public function up()
     {
-        Schema::table('hostetskigpt', function (Blueprint $table) {
-            $table->boolean('client_data_enabled');
+        Schema::table('freescoutgpt', function (Blueprint $table) {
+            $table->integer('mailbox_id')->primary()->change();
         });
     }
 
@@ -25,8 +25,8 @@ class AddClientDataEnabledColumnToHostetskigptTable extends Migration
      */
     public function down()
     {
-        Schema::table('hostetskigpt', function (Blueprint $table) {
-            $table->dropColumn('client_data_enabled');
+        Schema::table('freescoutgpt', function (Blueprint $table) {
+            $table->integer('mailbox_id')->change();
         });
     }
 }

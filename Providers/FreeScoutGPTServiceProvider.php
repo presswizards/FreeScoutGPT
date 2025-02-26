@@ -1,16 +1,16 @@
 <?php
 
-namespace Modules\HostetskiGPT\Providers;
+namespace Modules\FreeScoutGPT\Providers;
 
 use App\Mailbox;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Database\Eloquent\Factory;
 use App\Thread;
-use Modules\HostetskiGPT\Entities\GPTSettings;
+use Modules\FreeScoutGPT\Entities\GPTSettings;
 use Nwidart\Modules\Facades\Module;
 
-class HostetskiGPTServiceProvider extends ServiceProvider
+class FreeScoutGPTServiceProvider extends ServiceProvider
 {
     /**
      * Indicates if loading of the provider is deferred.
@@ -43,13 +43,13 @@ class HostetskiGPTServiceProvider extends ServiceProvider
     {
         // Add module's JS file to the application layout.
         \Eventy::addFilter('javascripts', function($javascripts) {
-            array_push($javascripts, \Module::getPublicPath("hostetskigpt").'/js/module.js');
+            array_push($javascripts, \Module::getPublicPath("freescoutgpt").'/js/module.js');
             return $javascripts;
         });
 
         // Add module's CSS file to the application layout.
         \Eventy::addFilter('stylesheets', function($stylesheets) {
-            array_push($stylesheets, \Module::getPublicPath("hostetskigpt").'/css/module.css');
+            array_push($stylesheets, \Module::getPublicPath("freescoutgpt").'/css/module.css');
             return $stylesheets;
         });
 
@@ -61,7 +61,7 @@ class HostetskiGPTServiceProvider extends ServiceProvider
 
         // JavaScript in the bottom
         \Eventy::addAction('javascript', function() {
-            $version = Module::find('hostetskigpt')->get('version');
+            $version = Module::find('freescoutgpt')->get('version');
             $copiedToClipboard = __("Copied to clipboard");
             $updateAvailable = __('Update available for module ');
             $settings = $this->mailbox ? GPTSettings::find($this->mailbox->id) : null;
@@ -77,12 +77,12 @@ class HostetskiGPTServiceProvider extends ServiceProvider
                     "'modifyPrompt': `{$modifyPrompt}`," .
                     "'send': `{$send}`," .
                 "};";
-            echo 'hostetskigptInit();';
+            echo 'freescoutgptInit();';
         });
 
         \Eventy::addAction('mailboxes.settings.menu', function($mailbox) {
             if (auth()->user()->isAdmin()) {
-                echo \View::make('hostetskigpt::partials/settings_menu', ['mailbox' => $mailbox])->render();
+                echo \View::make('freescoutgpt::partials/settings_menu', ['mailbox' => $mailbox])->render();
             }
         }, 80);
 
@@ -115,10 +115,10 @@ class HostetskiGPTServiceProvider extends ServiceProvider
     protected function registerConfig()
     {
         $this->publishes([
-            __DIR__.'/../Config/config.php' => config_path('hostetskigpt.php'),
+            __DIR__.'/../Config/config.php' => config_path('freescoutgpt.php'),
         ], 'config');
         $this->mergeConfigFrom(
-            __DIR__.'/../Config/config.php', 'hostetskigpt'
+            __DIR__.'/../Config/config.php', 'freescoutgpt'
         );
     }
 
@@ -129,7 +129,7 @@ class HostetskiGPTServiceProvider extends ServiceProvider
      */
     public function registerViews()
     {
-        $viewPath = resource_path('views/modules/hostetskigpt');
+        $viewPath = resource_path('views/modules/freescoutgpt');
 
         $sourcePath = __DIR__.'/../Resources/views';
 
@@ -138,8 +138,8 @@ class HostetskiGPTServiceProvider extends ServiceProvider
         ],'views');
 
         $this->loadViewsFrom(array_merge(array_map(function ($path) {
-            return $path . '/modules/hostetskigpt';
-        }, \Config::get('view.paths')), [$sourcePath]), 'hostetskigpt');
+            return $path . '/modules/freescoutgpt';
+        }, \Config::get('view.paths')), [$sourcePath]), 'freescoutgpt');
     }
 
     /**

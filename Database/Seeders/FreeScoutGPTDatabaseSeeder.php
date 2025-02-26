@@ -1,11 +1,11 @@
 <?php
 
-namespace Modules\HostetskiGPT\Database\Seeders;
+namespace Modules\FreeScoutGPT\Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
 
-class HostetskiGPTDatabaseSeeder extends Seeder
+class FreeScoutGPTDatabaseSeeder extends Seeder
 {
     /**
      * Run the database seeds.

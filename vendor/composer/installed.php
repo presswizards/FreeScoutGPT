@@ -1,6 +1,6 @@
 <?php return array(
     'root' => array(
-        'name' => 'freescout/hostetskigpt',
+        'name' => 'freescout/freescoutgpt',
         'pretty_version' => '1.0.0+no-version-set',
         'version' => '1.0.0.0',
         'reference' => NULL,
@@ -28,7 +28,7 @@
             'aliases' => array(),
             'dev_requirement' => false,
         ),
-        'freescout/hostetskigpt' => array(
+        'freescout/freescoutgpt' => array(
             'pretty_version' => '1.0.0+no-version-set',
             'version' => '1.0.0.0',
             'reference' => NULL,

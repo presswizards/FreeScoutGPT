@@ -1,12 +1,12 @@
 <?php
 
-namespace Modules\HostetskiGPT\Entities;
+namespace Modules\FreeScoutGPT\Entities;
 
 use Illuminate\Database\Eloquent\Model;
 
 class GPTSettings extends Model
 {
-    protected $table = 'hostetskigpt';
+    protected $table = 'freescoutgpt';
 
     public $timestamps = false;
 

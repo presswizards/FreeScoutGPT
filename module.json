@@ -1,19 +1,19 @@
 {
-    "name": "HostetskiGPT",
-    "alias": "hostetskigpt",
-    "description": "Module for requests to GPT",
-    "version": "1.0.5",
-    "img": "https://freescout.net/wp-content/uploads/edd/2023/07/freescout-extra-security-module-256x256.png",
+    "name": "FreeScoutGPT",
+    "alias": "freescoutgpt",
+    "description": "Module for requests to ChatGPT with support for multiple models",
+    "version": "1.0.6",
+    "img": "https://raw.githubusercontent.com/presswizards/FreeScoutGPT/refs/heads/main/FreeScoutGPT-Logo.jpg",
     "detailsUrl": "",
-    "author": "Hostetski",
+    "author": "PressWizards",
     "authorUrl": "",
-    "requiredAppVersion": "1.0.2",
+    "requiredAppVersion": "1.8",
     "license": "MIT",
     "keywords": [],
     "active": 0,
     "order": 0,
     "providers": [
-        "Modules\\HostetskiGPT\\Providers\\HostetskiGPTServiceProvider"
+        "Modules\\FreeScoutGPT\\Providers\\FreeScoutGPTServiceProvider"
     ],
     "aliases": {},
     "files": [

@@ -1,5 +1,5 @@
 {
-    "name": "freescout/hostetskigpt",
+    "name": "freescout/freescoutgpt",
     "description": "",
     "authors": [
         {
@@ -10,16 +10,16 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Modules\\HostetskiGPT\\Providers\\HostetskiGPTServiceProvider"
+                "Modules\\FreeScoutGPT\\Providers\\FreeScoutGPTServiceProvider"
             ],
             "aliases": {
-                
+
             }
         }
     },
     "autoload": {
         "psr-4": {
-            "Modules\\HostetskiGPT\\": ""
+            "Modules\\FreeScoutGPT\\": ""
         }
     },
     "require": {

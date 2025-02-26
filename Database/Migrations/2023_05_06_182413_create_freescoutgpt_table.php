@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateHostetskigptTable extends Migration
+class CreateFreescoutgptTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateHostetskigptTable extends Migration
      */
     public function up()
     {
-        Schema::create('hostetskigpt', function (Blueprint $table) {
+        Schema::create('freescoutgpt', function (Blueprint $table) {
             $table->integer('mailbox_id');
             $table->boolean('enabled');
             $table->string('api_key');
@@ -30,6 +30,6 @@ class CreateHostetskigptTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('hostetskigpt');
+        Schema::dropIfExists('freescoutgpt');
     }
 }
