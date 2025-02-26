@@ -1,4 +1,4 @@
-# FreeScout ChatGPT Integration Module (FreescoutGPT)
+# FreeScout ChatGPT Integration Module (FreeScoutGPT)
 
 ![FreeScout ChatGPT Integration Module](https://platform.theverge.com/wp-content/uploads/sites/2/2025/02/openai-new-logo_f252fc.png?quality=75&strip=all&crop=7.8125%2C0%2C84.375%2C100&w=300 "ChatGPT Logo")
 
