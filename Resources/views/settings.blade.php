@@ -35,7 +35,7 @@
             </div>
 
             <div class="form-group">
-                <label class="col-sm-2 control-label">{{ __("OpenAI API key") }}</label>
+                <label class="col-sm-2 control-label"><a target="_blank" href="https://platform.openai.com/api-keys">{{ __("OpenAI API key") }}</a></label>
 
                 <div class="col-sm-6">
                     <input name="api_key" class="form-control" placeholder="sk-..." value="{{ $settings['api_key'] }}" required />
@@ -51,10 +51,10 @@
             </div>
 
             <div class="form-group">
-                <label class="col-sm-2 control-label">{{ __("Prompts and Training Info") }}</label>
+                <label class="col-sm-2 control-label">{{ __("Prompt and Training Info") }}</label>
 
                 <div class="col-sm-6">
-                    <textarea rows="15" name="start_message" class="form-control" placeholder="Act like a support agent. Act like a professional concise support agent. Train ChatGPT more by adding details like website link, knowledgebase link, etc." required>{{ $settings['start_message'] }}</textarea>
+                    <textarea rows="15" name="start_message" class="form-control" placeholder="Act like a support agent. (Add details like website link, knowledgebase link, etc. See module GitHub screenshots for an example)" required>{{ $settings['start_message'] }}</textarea>
                 </div>
             </div>
 
@@ -86,6 +86,14 @@
                     </div>
 
                     <i style="margin-left: 20px" class="glyphicon glyphicon-info-sign icon-info" data-toggle="popover" data-trigger="hover" data-html="true" data-placement="left" data-content="{{ __('If enabled, information such as the subject, customer name, and email address will be sent to the GPT. After activating this function, you can ask in a prompt, for example, to call the client by name, GPT will know his name.') }}" data-original-title="" title=""></i>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="show_client_data_enabled" class="col-sm-2 control-label"><a target="_blank" href="https://platform.openai.com/usage">{{ __("ChatGPT Usage") }}</a></label>
+
+                <div class="col-sm-6" style="display: inline-flex;">
+                    <i style="margin-left: 20px" class="glyphicon glyphicon-info-sign icon-info" data-toggle="popover" data-trigger="hover" data-html="true" data-placement="left" data-content="{{ __('View your ChatGPT usage by clicking the link. Be sure to set a budget and review costs regularly.') }}" data-original-title="" title=""></i>
                 </div>
             </div>
 
