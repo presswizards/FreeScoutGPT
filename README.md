@@ -1,6 +1,6 @@
-# FreeScout ChatGPT Integration Module (FreeScoutGPT)
-
 ![FreeScout ChatGPT Integration Module](https://platform.theverge.com/wp-content/uploads/sites/2/2025/02/openai-new-logo_f252fc.png?quality=75&strip=all&crop=7.8125%2C0%2C84.375%2C100&w=300 "ChatGPT Logo")
+
+# FreeScout ChatGPT Integration Module (FreeScoutGPT)
 
 This repository contains the FreeScout ChatGPT Integration Module, which connects FreeScout with the powerful language model ChatGPT by OpenAI via their API and your API key. This integration enables the generation of AI-based responses for incoming messages, providing a more efficient and intelligent support system for your FreeScout users.
 
@@ -13,14 +13,16 @@ This repository contains the FreeScout ChatGPT Integration Module, which connect
 
 ![FreeScout ChatGPT Integration Module Example](https://my.hostetski.com/files/git/gpt.gif "Integration Module Example")
 
-
 ## Requirements
 To use this module, you will need an API key for ChatGPT, which can be obtained from the OpenAI platform at [https://platform.openai.com/account/api-keys](https://platform.openai.com/account/api-keys).
 
-## Configuration
-1. Install the FreeScout ChatGPT Integration Module, ensure the module folder is named "FreeScoutGPT".
+## Configuration and Use
+1. Upload the FreeScoutGPT Module ZIP file to your FreeScout Modules folder, rename it to ensure the module's folder is named "FreeScoutGPT".
 2. Go to each mailbox you want it enabled on, and add your ChatGPT API key to the module's configuration page.
-3. Set a "prompts message" for the AI.
+3. Set a "prompts message" for the AI as well.
+4. Be sure to check the Enable switch at the top.
+5. On a conversation, click the drop-down and choose "Generate answer (GPT)".
+6. Then you can copy that answer, click Reply, and paste it into your message, and edit/polish it as desired.
 
 ![FreeScout ChatGPT Integration Module Example](https://my.hostetski.com/files/git/gpt-settings.png "GPT Setting Page")
 
