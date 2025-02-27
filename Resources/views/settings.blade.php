@@ -43,7 +43,7 @@
             </div>
 
             <div class="form-group margin-top">
-                <label class="col-sm-2 control-label">{{ __("Token limit") }}</label>
+                <label class="col-sm-2 control-label"><a target="_blank" href="https://help.openai.com/en/articles/4936856-what-are-tokens-and-how-to-count-them">{{ __("Token limit") }}</a></label>
 
                 <div class="col-sm-6">
                     <input name="token_limit" class="form-control" placeholder="1024" type="number" value="{{ $settings['token_limit'] }}" required />
@@ -51,7 +51,7 @@
             </div>
 
             <div class="form-group">
-                <label class="col-sm-2 control-label">{{ __("Prompt and Training Info") }}</label>
+                <label class="col-sm-2 control-label"><a target="_blank" href="https://help.openai.com/en/articles/10032626-prompt-engineering-best-practices-for-chatgpt">{{ __("Prompt and Training") }}</a></label>
 
                 <div class="col-sm-6">
                     <textarea rows="15" name="start_message" class="form-control" placeholder="Act like a support agent. (Add details like website link, knowledgebase link, etc. See module GitHub screenshots for an example)" required>{{ $settings['start_message'] }}</textarea>
@@ -59,13 +59,17 @@
             </div>
 
             <div class="form-group">
-                <label class="col-sm-2 control-label">{{ __("Model") }}</label>
+                <label class="col-sm-2 control-label"><a target="_blank" href="https://platform.openai.com/docs/models">{{ __("OpenAI Model") }}</a> 
+                <br/><a target="_blank" href="https://platform.openai.com/docs/pricing">{{ __("Model Pricing") }}</a>
+                </label>
 
                 <div class="col-sm-6">
-                    <select id="model" class="form-control input-sized" name="model" required>
-                        <option value="gpt-3.5-turbo" {!! $settings['model'] == "gpt-3.5-turbo" ? "selected" : "" !!}>gpt-3.5-turbo</option>
-                        <option value="gpt-3.5-turbo-16k" {!! $settings['model'] == "gpt-3.5-turbo-16k" ? "selected" : "" !!}>gpt-3.5-turbo-16k</option>
-                        <option value="gpt-4" {!! $settings['model'] == "gpt-4" ? "selected" : "" !!}>gpt-4</option>
+                <i style="margin: 0 20px" class="glyphicon glyphicon-info-sign icon-info" data-toggle="popover" data-trigger="hover" data-html="true" data-placement="left" data-content="{{ __('Check the model pricing and capabilities, gpt-4o is the latest ChatGPT model (moderately priced), 4o-mini is decent and very inexpensive, o1 is the latest reasoning model (expensive), and o3-mini is a much less expensive reasoning model.') }}" data-original-title="" title=""></i>
+                   <select id="model" class="form-control input-sized" name="model" required>
+                        <option value="chatgpt-4o-latest" {!! $settings['model'] == "chatgpt-4o-latest" ? "selected" : "" !!}>chatgpt-4o-latest</option>
+                        <option value="gpt-4o-mini" {!! $settings['model'] == "gpt-4o-mini" ? "selected" : "" !!}>gpt-4o-mini</option>
+                        <option value="o1" {!! $settings['model'] == "o1" ? "selected" : "" !!}>o1</option>
+                        <option value="o3-mini" {!! $settings['model'] == "o3-mini" ? "selected" : "" !!}>o3-mini</option>
                     </select>
                 </div>
             </div>
@@ -74,6 +78,7 @@
                 <label for="show_client_data_enabled" class="col-sm-2 control-label">{{ __("Send client information to ChatGPT") }}</label>
 
                 <div class="col-sm-6" style="display: inline-flex;">
+                    <i style="margin: 0 20px" class="glyphicon glyphicon-info-sign icon-info" data-toggle="popover" data-trigger="hover" data-html="true" data-placement="left" data-content="{{ __('If enabled, information such as the subject, customer name, and email address will be sent to the GPT. After activating this function, you can ask in a prompt, for example, to call the client by name, GPT will know his name.') }}" data-original-title="" title=""></i>
                     <div class="controls">
                         <div class="onoffswitch-wrap">
                             <div class="onoffswitch">
@@ -85,7 +90,6 @@
                         </div>
                     </div>
 
-                    <i style="margin-left: 20px" class="glyphicon glyphicon-info-sign icon-info" data-toggle="popover" data-trigger="hover" data-html="true" data-placement="left" data-content="{{ __('If enabled, information such as the subject, customer name, and email address will be sent to the GPT. After activating this function, you can ask in a prompt, for example, to call the client by name, GPT will know his name.') }}" data-original-title="" title=""></i>
                 </div>
             </div>
 
