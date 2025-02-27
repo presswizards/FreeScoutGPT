@@ -69,7 +69,7 @@ class FreeScoutGPTServiceProvider extends ServiceProvider
             $modifyPrompt = __("Complete prompt and send last response from client to GPT");
             $send = __("Send");
 
-            echo "const hostetskiGPTData = {" .
+            echo "const freescoutGPTData = {" .
                     "'copiedToClipboard': '{$copiedToClipboard}'," .
                     "'updateAvailable': '{$updateAvailable}'," .
                     "'version': '{$version}'," .
