@@ -192,7 +192,7 @@ class FreeScoutGPTController extends Controller
                 'client_data_enabled' => isset($_POST['show_client_data_enabled'])
             ]
         );
-
+        \Session::flash('flash_success_floating', __('Settings updated'));
         return redirect()->route('freescoutgpt.settings', ['mailbox_id' => $mailbox_id]);
     }
 
