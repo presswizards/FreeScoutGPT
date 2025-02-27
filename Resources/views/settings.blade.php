@@ -68,8 +68,10 @@
                    <select id="model" class="form-control input-sized" name="model" required>
                         <option value="chatgpt-4o-latest" {!! $settings['model'] == "chatgpt-4o-latest" ? "selected" : "" !!}>chatgpt-4o-latest</option>
                         <option value="gpt-4o-mini" {!! $settings['model'] == "gpt-4o-mini" ? "selected" : "" !!}>gpt-4o-mini</option>
+<!--
                         <option value="o1-preview" {!! $settings['model'] == "o1-preview" ? "selected" : "" !!}>o1-preview</option>
                         <option value="o1-mini" {!! $settings['model'] == "o1-mini" ? "selected" : "" !!}>o1-mini</option>
+-->
                     </select>
                 </div>
             </div>
