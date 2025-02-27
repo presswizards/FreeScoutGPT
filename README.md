@@ -37,6 +37,29 @@ To use this module, you will need an API key for ChatGPT, which can be obtained 
 ### Paste the generated answer into your reply text area, and edit as desired
 ![image](https://github.com/user-attachments/assets/4cf70554-a082-49b6-92d8-b5cf3c082a2b)
 
+## OpenAI Models
+
+OpenAI offers a range of AI language models, each with distinct capabilities and pricing structures. Here’s an overview of the models available for chat completions within FreeScoutGPT:
+
+chatgpt-4o-latest: This is OpenAI’s advanced model, designed to enhance pattern recognition and generate creative insights. It’s particularly adept at tasks requiring high emotional intelligence and creativity, such as writing and brainstorming. However, its advanced capabilities come with a higher cost, priced at $2.50 per million input tokens, and $10 per million output tokens.
+
+4o-mini: Introduced as a cost-efficient alternative, 4o-mini balances performance with affordability. It offers a 128K context window and multimodal capabilities, including text and vision processing. Pricing is set at $0.15 per million input tokens and $0.60 per million output tokens, making it over 60% cheaper than the previous GPT-3.5 Turbo model.  ￼
+
+chatgpt-3.5-turbo: Previously a widely used model, chatgpt-3.5-turbo has been replaced by 4o-mini. The transition to 4o-mini offers users enhanced performance at a significantly reduced cost, providing a more efficient solution for various applications.
+
+There are new reasoning models as well, but they are currently not available via the chat completion API. The models include o1, o1-mini, and o3-mini. Once we're able to see them working via the chat completion API we can add them to FreeScoutGPT.
+
+## Token Details
+
+The default limit of 1024 tokens is about 750 words, and that would include the prompt and generated AI output. If you have more prompt details and training information, and longer messages to send out, then you may want to increase the token limit.
+
+Rough Breakdown:
+	•	1 token ≈ 4 characters (including spaces & punctuation)
+	•	100 tokens ≈ 75 words
+	•	1024 tokens ≈ 750 words
+
+For larger prompts and messages, and larger responses, 2048 or 4096 tokens may work for a better balance of cost and performance. Decrease the token limit for shorter, lower-cost queries to avoid unnecessary expense.
+
 ## Contributing
 This is an updated version of the FreeScout + ChatGPT Integration Module, and we appreciate any feedback, suggestions, or contributions to help improve the module. Please feel free to open issues or submit pull requests on GitHub.
 
