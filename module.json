@@ -2,7 +2,7 @@
     "name": "FreeScoutGPT",
     "alias": "freescoutgpt",
     "description": "Module for requests to ChatGPT with support for multiple models",
-    "version": "1.0.10",
+    "version": "1.0.11",
     "detailsUrl": "https://github.com/presswizards/FreeScoutGPT",
     "img": "https://raw.githubusercontent.com/presswizards/FreeScoutGPT/refs/heads/main/FreeScoutGPT-Logo.jpg",
     "author": "Press Wizards",
@@ -21,5 +21,5 @@
     ],
     "requires": [],
     "latestVersionUrl": "https://raw.githubusercontent.com/presswizards/FreeScoutGPT/refs/heads/main/version.txt",
-    "latestVersionZipUrl": "https://github.com/presswizards/FreeScoutGPT/archive/refs/tags/v1.0.10.zip"
+    "latestVersionZipUrl": "https://github.com/presswizards/FreeScoutGPT/archive/refs/tags/v1.0.11.zip"
 }
