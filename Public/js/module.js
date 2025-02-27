@@ -38,8 +38,8 @@ function freescoutgptInit() {
             });
 
             // Add button to reply form
-	    $(".conv-reply-body .note-toolbar > .note-btn-group:first").append('<button class="gptbutton btn btn-default btn-sm" aria-label="ChatGPT Prompt Edit" data-original-title="ChatGPT Prompt Edit">' +
-                '<i class="glyphicon glyphicon-comment"></i>' +
+            $(".conv-reply-body .note-toolbar > .note-btn-group:first").append('<button type="button" class="note-btn btn btn-default btn-sm gptbutton" tabindex="-1" title aria-label="ChatGPT Prompt Edit" data-original-title="ChatGPT Prompt Edit">' +
+                '<i class="glyphicon glyphicon-console"></i>' +
 		'</button>'
             );
         }
@@ -186,7 +186,7 @@ function addModifyPromptAlert() {
                     </div>
                     <div class="modal-body">
                         <div class="form-group" style="overflow:auto;">
-                            <textarea class="form-control note-form-control note-input col-md-12" id="gpt-modified-prompt"></textarea>
+                            <textarea rows="15" class="form-control note-form-control note-input col-md-12" id="gpt-modified-prompt"></textarea>
                         </div>
                     </div>
                     <div class="modal-footer">
