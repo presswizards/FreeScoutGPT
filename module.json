@@ -19,5 +19,7 @@
     "files": [
         "start.php"
     ],
-    "requires": []
+    "requires": [],
+    "latestVersionUrl": "https://raw.githubusercontent.com/presswizards/FreeScoutGPT/refs/heads/main/version.txt",
+    "latestVersionZipUrl": "https://github.com/presswizards/FreeScoutGPT/archive/refs/tags/v1.0.10.zip"
 }
