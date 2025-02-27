@@ -192,6 +192,7 @@ async function injectGptAnswer(){
 }
 
 function addModifyPromptAlert() {
+    var freescoutGPTData = {};
     $('body').append(`
         <div class="modal fade" aria-hidden="false" tabindex="-1" style="display: none;" id="gpt-prompt-append">
             <div class="modal-dialog">
