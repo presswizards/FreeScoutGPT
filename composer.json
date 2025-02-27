@@ -29,5 +29,10 @@
         "allow-plugins": {
             "php-http/discovery": true
         }
+    },
+    "replace": {
+        "guzzlhttp/guzzle": "*",
+        "guzzlhttp/promises": "*",
+        "guzzlhttp/psr7": "*"
     }
 }
