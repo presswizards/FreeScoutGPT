@@ -38,9 +38,9 @@ function freescoutgptInit() {
             });
 
             // Add button to reply form
-            $(".conv-reply-body .note-toolbar > .note-btn-group:first").append('<button class="gptbutton btn btn-default btn-sm" aria-label="GPT Antwort" data-original-title="GPT Antwort">' +
-                '<i class="glyphicon glyphicon-sunglasses"></i>' +
-                '</button>'
+	    $(".conv-reply-body .note-toolbar > .note-btn-group:first").append('<button class="gptbutton btn btn-default btn-sm" aria-label="ChatGPT Prompt Edit" data-original-title="ChatGPT Prompt Edit">' +
+                '<i class="glyphicon glyphicon-comment"></i>' +
+		'</button>'
             );
         }
 	});
