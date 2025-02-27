@@ -64,12 +64,12 @@
                 </label>
 
                 <div class="col-sm-6">
-                <i style="margin: 0 20px" class="glyphicon glyphicon-info-sign icon-info" data-toggle="popover" data-trigger="hover" data-html="true" data-placement="left" data-content="{{ __('Check the model pricing and capabilities, gpt-4o is the latest ChatGPT model (moderately priced), 4o-mini is decent and very inexpensive, o1 is the latest reasoning model (expensive), and o3-mini is a much less expensive reasoning model.') }}" data-original-title="" title=""></i>
+                <i style="margin: 0 20px" class="glyphicon glyphicon-info-sign icon-info" data-toggle="popover" data-trigger="hover" data-html="true" data-placement="left" data-content="{{ __('Check the model pricing and capabilities, gpt-4o is the latest ChatGPT model (moderately priced), 4o-mini is decent and very inexpensive, o1-preview is the latest reasoning model (expensive), and o1-mini is a much less expensive reasoning model.') }}" data-original-title="" title=""></i>
                    <select id="model" class="form-control input-sized" name="model" required>
                         <option value="chatgpt-4o-latest" {!! $settings['model'] == "chatgpt-4o-latest" ? "selected" : "" !!}>chatgpt-4o-latest</option>
                         <option value="gpt-4o-mini" {!! $settings['model'] == "gpt-4o-mini" ? "selected" : "" !!}>gpt-4o-mini</option>
-                        <option value="o1" {!! $settings['model'] == "o1" ? "selected" : "" !!}>o1</option>
-                        <option value="o3-mini" {!! $settings['model'] == "o3-mini" ? "selected" : "" !!}>o3-mini</option>
+                        <option value="o1-preview" {!! $settings['model'] == "o1-preview" ? "selected" : "" !!}>o1-preview</option>
+                        <option value="o1-mini" {!! $settings['model'] == "o1-mini" ? "selected" : "" !!}>o1-mini</option>
                     </select>
                 </div>
             </div>
