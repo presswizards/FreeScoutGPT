@@ -43,24 +43,6 @@ function freescoutgptInit() {
                 '</button>'
             );
         }
-
-				// if (document.location.pathname === "/modules/list") {
-				//     $.ajax({
-				//         url: 'https://updates.hostetski.com/freescoutgpt/updates',
-				//         dataType: 'json',
-				//         success: function (response, status) {
-				//             if (response.current_version != freescoutGPTData.version) {
-				//                 $('#installed').after(`
-				//                     <div class="row-container margin-top">
-				//                         <div class="alert alert-warning">
-				//                             ${freescoutGPTData.updateAvailable} <a href="https://github.com/code-debug228/FreescoutGPT">FreescoutGPT</a>
-				//                         </div>
-				//                     </div>
-				//                 `)
-				//             }
-				//         }
-				//     });
-				// }
 	});
 }
 
