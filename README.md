@@ -22,7 +22,7 @@ To use this module, you will need an API key for ChatGPT, which can be obtained 
 
 ## Helpful Screenshots
 
-### Module Settings Page (set per mailbox)
+### Module Settings Page - Set Per Mailbox (Models drop-down shown here is often out of date)
 ![FreeScoutGPT Module Settings Page](https://github.com/user-attachments/assets/690ef890-58a4-4c37-a29f-94665102ce0d)
 
 ### Look for "Generate answer (GPT)" in the drop-down on a conversation page (not reply page)
