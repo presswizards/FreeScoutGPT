@@ -88,7 +88,7 @@ class FreeScoutGPTController extends Controller
 
         $command = $request->get("command");
         $messages = [[
-            'role' => 'assistant',
+            'role' => 'user',
             'content' => $command ?? $settings->start_message
         ]];
 
@@ -97,7 +97,7 @@ class FreeScoutGPTController extends Controller
             $customerEmail = $request->get("customer_email");
             $conversationSubject = $request->get("conversation_subject");
             array_push($messages, [
-                'role' => 'assistant',
+                'role' => 'user',
                 'content' => __('Conversation subject is ":subject", customer name is ":name", customer email is ":email"', [
                     'subject' => $conversationSubject,
                     'name' => $customerName,
