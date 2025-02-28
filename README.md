@@ -37,6 +37,12 @@ To use this module, you will need an API key for ChatGPT, which can be obtained 
 ### Paste the generated answer into your reply text area, and edit as desired
 ![image](https://github.com/user-attachments/assets/4cf70554-a082-49b6-92d8-b5cf3c082a2b)
 
+### Use the Edit Prompt button to add message-specific info to use when replying to this one message
+![image](https://github.com/user-attachments/assets/85d1fbff-d970-4cf6-bfb8-5f54012965f4)
+
+### Edit prompt modal window displays current prompt, add message-specific info here and send it to get a generated reply
+![image](https://github.com/user-attachments/assets/e70a5c89-f8e7-4667-bd5d-5c7604d14720)
+
 ## OpenAI Models
 
 OpenAI offers a range of AI language models, each with distinct capabilities and pricing structures. Here’s an overview of the models available for chat completions within FreeScoutGPT:
