@@ -1,8 +1,8 @@
 {
     "name": "FreeScoutGPT",
     "alias": "freescoutgpt",
-    "description": "Module for requests to ChatGPT with support for multiple models",
-    "version": "1.0.18",
+    "description": "Module for requests to ChatGPT with support for multiple models. v1.0.19 fixes some issues including Javascript errors and the Reply Edit Prompt button.",
+    "version": "1.0.19",
     "detailsUrl": "https://github.com/presswizards/FreeScoutGPT",
     "img": "https://raw.githubusercontent.com/presswizards/FreeScoutGPT/refs/heads/main/FreeScoutGPT-Logo.jpg",
     "author": "Press Wizards",
