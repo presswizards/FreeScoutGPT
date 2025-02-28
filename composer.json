@@ -31,8 +31,9 @@
         }
     },
     "replace": {
-        "guzzlhttp/guzzle": "*",
-        "guzzlhttp/promises": "*",
-        "guzzlhttp/psr7": "*"
+        "guzzlehttp/guzzle": "*",
+        "guzzlehttp/promises": "*",
+        "guzzlehttp/psr7": "*",
+        "psr/http-message": "*"
     }
 }
