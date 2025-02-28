@@ -46,15 +46,21 @@ To use this module, you will need an API key for ChatGPT, which can be obtained 
 
 ## OpenAI Models
 
-OpenAI offers a range of AI language models, each with distinct capabilities and pricing structures. Here’s an overview of the models available for chat completions within FreeScoutGPT:
+OpenAI offers a range of AI language models, each with distinct capabilities and pricing structures. Below is an overview of the models available for chat completions within FreeScoutGPT, with pricing details (which may change and be outdated).
 
-chatgpt-4o-latest: This is OpenAI’s advanced model, designed to enhance pattern recognition and generate creative insights. It’s particularly adept at tasks requiring high emotional intelligence and creativity, such as writing and brainstorming. However, its advanced capabilities come with a higher cost, priced at $2.50 per million input tokens, and $10 per million output tokens.
+Visit https://platform.openai.com/docs/pricing for the latest pricing.
 
-4o-mini: Introduced as a cost-efficient alternative, 4o-mini balances performance with affordability. It offers a 128K context window and multimodal capabilities, including text and vision processing. Pricing is set at $0.15 per million input tokens and $0.60 per million output tokens, making it over 60% cheaper than the previous GPT-3.5 Turbo model.  ￼
+### In order of least expensive to most expensive
 
-chatgpt-3.5-turbo: Previously a widely used model, chatgpt-3.5-turbo has been replaced by 4o-mini. The transition to 4o-mini offers users enhanced performance at a significantly reduced cost, providing a more efficient solution for various applications.
+gpt-4o-mini: Introduced as a cost-efficient alternative, 4o-mini balances performance with affordability. It offers a 128K context window and multimodal capabilities, including text and vision processing. This model replaces gpt-3.5-turbo. Pricing is set at $0.15 per million input tokens and $0.60 per million output tokens. Least expensive and fastest performance with decent quality results.
 
-There are new reasoning models as well, but they are currently not available via the chat completion API. The models include o1, o1-mini, and o3-mini. Once we're able to see them working via the chat completion API we can add them to FreeScoutGPT.
+gpt-4o: GPT-4o (“o” for “omni”) is a versatile, high-intelligence flagship model, ideal for complex tasks requiring high accuracy and advanced capabilities. Less expensive but almost as good in quality and performance to chatgpt-4o-latest, its priced at $2.50 per million input tokens, and $10 per million output tokens.
+
+chatgpt-4o-latest: OpenAI’s advanced chat model, designed to enhance pattern recognition and generate creative insights. It’s particularly adept at tasks requiring high emotional intelligence and creativity, such as writing and brainstorming. However, its advanced capabilities come with a higher cost, priced at $5 per million input tokens, and $15 per million output tokens.
+
+There are new reasoning models as well, including o1, o1-preview, o1-mini, and o3-mini. Tier 1 API accounts apparently have access to only o1-preview and o1-mini, so we've fixed the API calls to remove system or developer roles which these models don't support, and added them to be available in the FreeScoutGPT settings page. o1-mini is priced at $1.10 per million input tokens, and $4.40 per million output tokens. o1-preview is the most expensive, priced at $15 per million input tokens, and $60 per million output tokens.
+
+For more details on the models, visit https://platform.openai.com/docs/models
 
 ## Token Details
 
