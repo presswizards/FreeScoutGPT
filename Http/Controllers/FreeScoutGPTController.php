@@ -88,7 +88,7 @@ class FreeScoutGPTController extends Controller
 
         $command = $request->get("command");
         $messages = [[
-            'role' => 'system',
+            'role' => 'assistant',
             'content' => $command ?? $settings->start_message
         ]];
 
@@ -97,7 +97,7 @@ class FreeScoutGPTController extends Controller
             $customerEmail = $request->get("customer_email");
             $conversationSubject = $request->get("conversation_subject");
             array_push($messages, [
-                'role' => 'system',
+                'role' => 'assistant',
                 'content' => __('Conversation subject is ":subject", customer name is ":name", customer email is ":email"', [
                     'subject' => $conversationSubject,
                     'name' => $customerName,
@@ -115,7 +115,7 @@ class FreeScoutGPTController extends Controller
         new \Tectalic\OpenAi\Models\ChatCompletions\CreateRequest([
             'model'  => $settings->model,
             'messages' => $messages,
-            'max_tokens' => (integer) $settings->token_limit
+            'max_completion_tokens' => (integer) $settings->token_limit
         ])
         )->toModel();
 
