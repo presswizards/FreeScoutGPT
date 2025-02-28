@@ -8,6 +8,7 @@ This repository contains the FreeScout + ChatGPT Integration Module, which conne
 - Generate ChatGPT AI-based responses for each incoming message, then edit/polish as needed
 - Utilize the powerful ChatGPT language models to improve support efficiency
 - Customizable prompt message to set ChatGPT's role (e.g., support agent, sales manager, etc.), associate it with your brand with website links, and provide additional training information and context as desired
+- Edit the prompt per reply using the Edit Prompt button on the Reply page, to add message-specific info to send with the request for a more detailed reply.
 
 ## Requirements
 To use this module, you will need an API key for ChatGPT, which can be obtained from the OpenAI platform at [https://platform.openai.com/account/api-keys](https://platform.openai.com/account/api-keys).
@@ -26,22 +27,22 @@ To use this module, you will need an API key for ChatGPT, which can be obtained 
 ![FreeScoutGPT Module Settings Page](https://github.com/user-attachments/assets/e1a54db7-dc6e-4af2-9c9e-3622cf92a9bc)
 
 ### Look for "Generate answer (GPT)" in the drop-down on a conversation page (not reply page)
-<img width="897" alt="Image" src="https://github.com/user-attachments/assets/7fd0bee6-d8c3-4321-829d-1f0ade379911" />
+![Generate answer](https://github.com/user-attachments/assets/7fd0bee6-d8c3-4321-829d-1f0ade379911)
 
 ### Generated answer in yellow box above that conversation with a copy button next to it
-![image](https://github.com/user-attachments/assets/c2e37401-cd5d-4f5a-a689-b3850ddd7843)
+![Yellow answer box](https://github.com/user-attachments/assets/c2e37401-cd5d-4f5a-a689-b3850ddd7843)
 
 ### Copied to the clipboard succcessful notice after clicking the copy icon
-![image](https://github.com/user-attachments/assets/3d131a3a-8212-4887-8c6b-351202df7a2f)
+![copied success](https://github.com/user-attachments/assets/3d131a3a-8212-4887-8c6b-351202df7a2f)
 
 ### Paste the generated answer into your reply text area, and edit as desired
-![image](https://github.com/user-attachments/assets/4cf70554-a082-49b6-92d8-b5cf3c082a2b)
+![paste menu](https://github.com/user-attachments/assets/4cf70554-a082-49b6-92d8-b5cf3c082a2b)
 
 ### Use the Edit Prompt button to add message-specific info to use when replying to this one message
-![image](https://github.com/user-attachments/assets/71c93d6c-ee9b-4d94-9676-66e2235edfaf)
+![edit prompt button](https://github.com/user-attachments/assets/71c93d6c-ee9b-4d94-9676-66e2235edfaf)
 
 ### Edit prompt modal window displays current prompt, add message-specific info here and send it to get a generated reply
-![image](https://github.com/user-attachments/assets/e70a5c89-f8e7-4667-bd5d-5c7604d14720)
+![edit prompt modal window](https://github.com/user-attachments/assets/e70a5c89-f8e7-4667-bd5d-5c7604d14720)
 
 ## OpenAI Models
 
@@ -71,5 +72,5 @@ This is an updated version of the FreeScout + ChatGPT Integration Module, and we
 
 Together, we can make this integration a valuable addition to the FreeScout ecosystem and enhance the capabilities of helpdesk software for the entire community.
 
-### Use of OpenAI ChatGPT name and API
+## Use of OpenAI ChatGPT Name and API
 This module uses the ChatGPT API, developed by OpenAI, and is not officially affiliated with or endorsed by OpenAI. For more details, see OpenAI’s [Terms of Service](https://openai.com/policies/terms-of-use).
