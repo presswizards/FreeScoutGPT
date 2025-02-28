@@ -60,15 +60,19 @@
 
             <div class="form-group">
                 <label class="col-sm-2 control-label"><a target="_blank" href="https://platform.openai.com/docs/models">{{ __("OpenAI Model") }}</a> 
-                <br/><a target="_blank" href="https://platform.openai.com/docs/pricing">{{ __("Model Pricing") }}</a>
+                    <br/>(Ordered by cost)
+                    <br/><a target="_blank" href="https://platform.openai.com/docs/pricing">{{ __("Model Pricing") }}</a>
                 </label>
 
                 <div class="col-sm-6">
                 <i style="margin: 0 20px" class="glyphicon glyphicon-info-sign icon-info" data-toggle="popover" data-trigger="hover" data-html="true" data-placement="left" data-content="{{ __('Check the model pricing and capabilities, gpt-4o is the latest ChatGPT model (moderately priced), 4o-mini is decent and very inexpensive, o1-preview is the latest reasoning model (expensive), and o1-mini is a much less expensive reasoning model.') }}" data-original-title="" title=""></i>
                    <select id="model" class="form-control input-sized" name="model" required>
-                        <option value="chatgpt-4o-latest" {!! $settings['model'] == "chatgpt-4o-latest" ? "selected" : "" !!}>chatgpt-4o-latest</option>
                         <option value="gpt-4o-mini" {!! $settings['model'] == "gpt-4o-mini" ? "selected" : "" !!}>gpt-4o-mini</option>
-                    </select>
+                        <option value="o1-mini" {!! $settings['model'] == "o1-mini" ? "selected" : "" !!}>o1-mini reasoning model</option>
+                        <option value="gpt-4o" {!! $settings['model'] == "gpt-4o" ? "selected" : "" !!}>gpt-4o</option>
+                        <option value="chatgpt-4o-latest" {!! $settings['model'] == "chatgpt-4o-latest" ? "selected" : "" !!}>chatgpt-4o-latest</option>
+                        <option value="o1-preview" {!! $settings['model'] == "o1-preview" ? "selected" : "" !!}>o1-preview reasoning model</option>
+                   </select>
                 </div>
             </div>
 
