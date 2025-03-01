@@ -2,7 +2,7 @@
     "name": "FreeScoutGPT",
     "alias": "freescoutgpt",
     "description": "Module for requests to ChatGPT with support for multiple models. v1.0.20 fixes the model role allowing new o1-preview and o1-mini models to work, and are now added.",
-    "version": "1.0.20",
+    "version": "1.0.21",
     "detailsUrl": "https://github.com/presswizards/FreeScoutGPT",
     "img": "https://raw.githubusercontent.com/presswizards/FreeScoutGPT/refs/heads/main/FreeScoutGPT-Logo.jpg",
     "author": "Press Wizards",
@@ -20,6 +20,6 @@
         "start.php"
     ],
     "requires": [],
-    "latestVersionUrl": "https://raw.githubusercontent.com/presswizards/FreeScoutGPT/refs/heads/main/version.txt",
+    "latestVersionUrl": "https://raw.githubusercontent.com/presswizards/FreeScoutGPT/refs/heads/main/module.json",
     "latestVersionZipUrl": "https://github.com/presswizards/FreeScoutGPT/archive/refs/heads/main.zip"
 }
