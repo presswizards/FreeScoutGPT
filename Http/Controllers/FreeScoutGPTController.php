@@ -86,9 +86,16 @@ class FreeScoutGPTController extends Controller
             ]
         ), new \Tectalic\OpenAi\Authentication($settings->api_key));
 
+        // Determine role based on model
+        if (strpos($settings->model, 'o1-') !== false) {
+            $req_role = 'user';
+        } else {
+            $req_role = 'developer'; // Default role, adjust as needed
+        }
+        
         $command = $request->get("command");
         $messages = [[
-            'role' => 'user',
+            'role' => $req_role,
             'content' => $command ?? $settings->start_message
         ]];
 
@@ -97,7 +104,7 @@ class FreeScoutGPTController extends Controller
             $customerEmail = $request->get("customer_email");
             $conversationSubject = $request->get("conversation_subject");
             array_push($messages, [
-                'role' => 'user',
+                'role' => $req_role,
                 'content' => __('Conversation subject is ":subject", customer name is ":name", customer email is ":email"', [
                     'subject' => $conversationSubject,
                     'name' => $customerName,
