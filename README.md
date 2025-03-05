@@ -70,7 +70,7 @@ https://platform.openai.com/docs/models
 
 ### API Tiered Access
 
-Depending on your API tier, you will have access to only certain models. Be aware that currently the free tier only has access to gpt-4o-mini, while most of us will be in Tier 1, and have access to the following chat completion models: gpt-4o, gpt-4o-mini, o1-preview, and o1-mini.
+Depending on your API tier, you will have access to only certain models. Be aware that currently the free tier only has access to gpt-4o-mini, while most of us will be in Tier 1, and have access to the following chat completion models: gpt-4o, chatgpt-4o-latest, gpt-4o-mini, o1-preview, and o1-mini.
 
 You will gain Tier 2 access once you've spent $50, but it has the same access, with increased request per minute rate limits.
 
