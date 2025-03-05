@@ -44,11 +44,13 @@ To use this module, you will need an API key for ChatGPT, which can be obtained 
 ### Edit prompt modal window displays current prompt, add message-specific info here and send it to get a generated reply
 ![edit prompt modal window](https://github.com/user-attachments/assets/e70a5c89-f8e7-4667-bd5d-5c7604d14720)
 
-## OpenAI Models
+## OpenAI Models and API Tiered Access
 
 OpenAI offers a range of AI language models, each with distinct capabilities and pricing structures. Below is an overview of the models available for chat completions within FreeScoutGPT, with pricing details (which may change and be outdated).
 
 Visit https://platform.openai.com/docs/pricing for the latest pricing.
+
+Be sure to visit https://platform.openai.com/settings/organization/limits to set budget alerts and budget limits, so you don't get any huge surprising invoices/charges.
 
 ### In order of least expensive to most expensive
 
@@ -60,7 +62,25 @@ chatgpt-4o-latest: OpenAI’s advanced chat model, designed to enhance pattern r
 
 There are new reasoning models as well, including o1, o1-preview, o1-mini, and o3-mini. Tier 1 API accounts apparently have access to only o1-preview and o1-mini, so we've fixed the API calls to remove system or developer roles which these models don't support, and added them to be available in the FreeScoutGPT settings page. o1-mini is priced at $1.10 per million input tokens, and $4.40 per million output tokens. o1-preview is the most expensive, priced at $15 per million input tokens, and $60 per million output tokens.
 
-For more details on the models, visit https://platform.openai.com/docs/models
+A very nice comparison of the models:
+https://platform.openai.com/docs/models/compare
+
+For more details on the models, visit:
+https://platform.openai.com/docs/models
+
+### API Tiered Access
+
+Depending on your API tier, you will have access to only certain models. Be aware that currently the free tier only has access to gpt-4o-mini, while most of us will be in Tier 1, and have access to the following chat completion models: gpt-4o, gpt-4o-mini, o1-preview, and o1-mini.
+
+You will gain Tier 2 access once you've spent $50, but it has the same access, with increased request per minute rate limits.
+
+Tier 3 is gained when you spent a total of $100, and it gains access to o1, and o3-mini. Tier 4 and 5 gain increased rate limits to the same models.
+
+To view your API Tier, view the Current Tier section at the bottom of this page:
+https://platform.openai.com/settings/organization/limits
+
+For more information on the tiers and the rate limits, visit:
+https://platform.openai.com/docs/guides/rate-limits?tier=tier-one
 
 ## Token Details
 
@@ -72,6 +92,9 @@ Rough Breakdown:
 	•	1024 tokens ≈ 750 words
 
 For larger prompts and messages, and larger responses, 2048 or 4096 tokens may work for a better balance of cost and performance. Decrease the token limit for shorter, lower-cost queries to avoid unnecessary expense.
+
+Use OpenAI's Tokenizer to test or preview what your prompt and a typical email represents in input tokens:
+https://platform.openai.com/tokenizer
 
 ## Contributing
 This is an updated version of the FreeScout + ChatGPT Integration Module, and we appreciate any feedback, suggestions, or contributions to help improve the module. Please feel free to open issues or submit pull requests on GitHub.
