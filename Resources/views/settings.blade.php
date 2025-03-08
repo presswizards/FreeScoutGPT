@@ -60,7 +60,6 @@
 
             <div class="form-group">
                 <label class="col-sm-2 control-label"><a target="_blank" href="https://platform.openai.com/docs/models">{{ __("OpenAI Model") }}</a> 
-                    <br/>(Ordered by cost)
                     <br/><a target="_blank" href="https://platform.openai.com/docs/pricing">{{ __("Model Pricing") }}</a>
                 </label>
 
