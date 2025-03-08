@@ -66,7 +66,7 @@ gpt-4o: GPT-4o (“o” for “omni”) is a versatile, high-intelligence flagsh
 
 chatgpt-4o-latest: OpenAI’s advanced chat model, designed to enhance pattern recognition and generate creative insights. It’s particularly adept at tasks requiring high emotional intelligence and creativity, such as writing and brainstorming. However, its advanced capabilities come with a higher cost, priced at $5 per million input tokens, and $15 per million output tokens.
 
-There are new reasoning models as well, including o1, o1-preview, o1-mini, and o3-mini. o1 and o1-preview are priced at $15 per million input tokens, and $60 per million output tokens. o3-mini and o1-mini are both priced at $1.10 per million input tokens, and $4.40 per million output tokens. Note that o1 and o3-mini are being rolled out to Tier 1 API users slowly, and should be used instead of o1-preview and o1-mini if you do have access, better results and same costs.
+There are new reasoning models as well, including o1, o1-preview, o1-mini, and o3-mini. o1 and o1-preview are priced at $15 per million input tokens, and $60 per million output tokens. o3-mini and o1-mini are both priced at $1.10 per million input tokens, and $4.40 per million output tokens. Note that o1 and o3-mini are being rolled out to Tier 1 API users slowly, and should be used instead of o1-preview and o1-mini if you do have access, better results and same costs. More info on API access to o1 and o3-mini is here: https://help.openai.com/en/articles/10362446-api-access-to-o1-and-o3-mini
 
 A very nice comparison of the models:
 https://platform.openai.com/docs/models/compare
