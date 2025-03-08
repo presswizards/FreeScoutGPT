@@ -44,6 +44,10 @@ To use this module, you will need an API key for ChatGPT, which can be obtained 
 ### Edit prompt modal window displays current prompt, add message-specific info here and send it to get a generated reply
 ![edit prompt modal window](https://github.com/user-attachments/assets/e70a5c89-f8e7-4667-bd5d-5c7604d14720)
 
+## Models Available In Settings Are Now Populated Dynamically
+
+Based on tiered access frequently changing the models available, the Settings drop-down now dynamically populates the model choices based on your API Key! This gives you access to more models, and keeps the model choices constantly up-to-date without needing to re-code the settings page and release frequent module updates. Note that it caches the models API results for 10 minutes, to avoid hitting the API too frequently. Clearing the FreeScout cache should clear the module's model cache as well, I believe.
+
 ## OpenAI Models and API Tiered Access
 
 OpenAI offers a range of AI language models, each with distinct capabilities and pricing structures. Below is an overview of the models available for chat completions within FreeScoutGPT, with pricing details (which may change and be outdated).
@@ -60,7 +64,7 @@ gpt-4o: GPT-4o (“o” for “omni”) is a versatile, high-intelligence flagsh
 
 chatgpt-4o-latest: OpenAI’s advanced chat model, designed to enhance pattern recognition and generate creative insights. It’s particularly adept at tasks requiring high emotional intelligence and creativity, such as writing and brainstorming. However, its advanced capabilities come with a higher cost, priced at $5 per million input tokens, and $15 per million output tokens.
 
-There are new reasoning models as well, including o1, o1-preview, o1-mini, and o3-mini. Tier 1 API accounts apparently have access to only o1-preview and o1-mini, so we've fixed the API calls to remove system or developer roles which these models don't support, and added them to be available in the FreeScoutGPT settings page. o1-mini is priced at $1.10 per million input tokens, and $4.40 per million output tokens. o1-preview is the most expensive, priced at $15 per million input tokens, and $60 per million output tokens.
+There are new reasoning models as well, including o1, o1-preview, o1-mini, and o3-mini. o1 and o1-preview are priced at $15 per million input tokens, and $60 per million output tokens. o3-mini and o1-mini are both priced at $1.10 per million input tokens, and $4.40 per million output tokens. Note that o1 and o3-mini are being rolled out to Tier 1 API users slowly, and should be used instead of o1-preview and o1-mini if you do have access, better results and same costs.
 
 A very nice comparison of the models:
 https://platform.openai.com/docs/models/compare
@@ -70,7 +74,7 @@ https://platform.openai.com/docs/models
 
 ### API Tiered Access
 
-Depending on your API tier, you will have access to only certain models. Be aware that currently the free tier only has access to gpt-4o-mini, while most of us will be in Tier 1, and have access to the following chat completion models: gpt-4o, chatgpt-4o-latest, gpt-4o-mini, o1-preview, and o1-mini.
+Depending on your API tier, you will have access to only certain models. Be aware that currently the free tier only has access to gpt-4o-mini, while most of us will be in Tier 1, and have access to the following chat completion models: gpt-4o, chatgpt-4o-latest, gpt-4o-mini, o1-preview, and o1-mini, and some Tier 1 users now also have access to o1 and o3-mini as they roll them out.
 
 You will gain Tier 2 access once you've spent $50, but it has the same access, with increased request per minute rate limits.
 
