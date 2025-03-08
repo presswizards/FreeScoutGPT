@@ -152,7 +152,7 @@ public function getAvailableModels(Request $request)
         ), new \Tectalic\OpenAi\Authentication($settings->api_key));
 
         // Determine role based on model
-        if (strpos($settings->model, 'o1-') !== false) {
+        if (strpos($settings->model, 'o1-') !== false || strpos($settings->model, 'o3-') !== false) {
             $req_role = 'user';
         } else {
             $req_role = 'developer'; // Default role, adjust as needed
