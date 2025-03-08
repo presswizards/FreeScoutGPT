@@ -16,10 +16,12 @@ To use this module, you will need an API key for ChatGPT, which can be obtained 
 ## Configuration and Use
 1. Upload the FreeScoutGPT Module ZIP file to your FreeScout Modules folder, rename it to ensure the module's folder is named "FreeScoutGPT".
 2. Go to each mailbox you want it enabled on, and add your ChatGPT API key to the module's configuration page.
-3. Set a good prompt to describe the role, and add some training info, website and KB links, etc for ChatGPT to consider using in it's answers.
-4. Be sure to check the Enable switch at the top.
-5. On a conversation page, not the reply page, click the drop-down in the upper right near the message time and choose "Generate answer (GPT)".
-6. Then you can copy that answer, click Reply, and paste it into your message, and edit/polish it as desired.
+3. Set a good prompt to describe it's role, and add some training info, website and KB links, etc for ChatGPT to consider using in it's answers.
+4. Use the Models drop-down to choose from the various models available to your API Key.
+5. Be sure to check the Enable switch at the top.
+6. On a conversation page, click the drop-down in the upper right near the message time and choose "Generate answer (GPT)".
+7. Then you can copy that answer, click Reply, and paste it into your message, and edit/polish it as desired.
+8. On the Reply screen, there is an Edit Prompt button, which you can use to rework the prompt and customize it for this reply, and then submit it to generate a reply using the additional information entered. Note that this prompt is not saved, it is unique to this reply.
 
 ## Helpful Screenshots
 
