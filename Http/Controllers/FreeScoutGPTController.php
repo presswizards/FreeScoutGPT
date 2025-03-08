@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use App\Thread;
 use App\Mailbox;
 use Modules\FreeScoutGPT\Entities\GPTSettings;
@@ -75,6 +76,70 @@ class FreeScoutGPTController extends Controller
     {
     }
 
+public function getAvailableModels(Request $request)
+{
+    $apiKey = $request->input('api_key');
+
+    if (!$apiKey) {
+        return response()->json(['error' => 'API key is required'], 400);
+    }
+
+    $cacheKey = 'openai_models_' . md5($apiKey);
+
+    // Check if models are cached
+    if (Cache::has($cacheKey)) {
+        return response()->json(['data' => Cache::get($cacheKey)]);
+    }
+
+    try {
+        $client = new \GuzzleHttp\Client();
+        $response = $client->get('https://api.openai.com/v1/models', [
+            'headers' => [
+                'Authorization' => 'Bearer ' . $apiKey,
+                'Accept' => 'application/json',
+            ],
+        ]);
+
+        $models = json_decode($response->getBody(), true);
+
+      // Filter models by version (o1, o3, o4) and remove older models (like 3.5, 4)
+        $filteredModels = array_filter($models['data'], function($model) {
+            // Skip non-chat models like whisper, babbage, tts, etc.
+            $nonChatModels = ['whisper', 'babbage', 'davinci', 'curie', 'text-to-speech', 'dall-e', '-audio', 'tts', 'embedding', '2024', '2025'];
+//            $nonChatModels = ['whisper', 'babbage', 'davinci', 'curie', 'text-to-speech', 'dall-e', '-audio', 'tts', 'embedding'];
+            foreach ($nonChatModels as $nonChatModel) {
+                if (strpos($model['id'], $nonChatModel) !== false) {
+                  return false;
+                }
+            }
+
+            if (strpos($model['id'], 'gpt-4o') !== false || strpos($model['id'], 'gpt-4.5') !== false) {
+                return true; 
+            }
+
+            // Check if model is one of the newer versions (o1, o3, o4)
+            if (preg_match('/(o[1-3]{1})/', $model['id'], $matches)) {
+                return true;
+            }
+            // Skip models that are older (e.g., 'gpt-3.5', 'gpt-4')
+            if (strpos($model['id'], 'gpt-3.5') !== false || strpos($model['id'], 'gpt-4-') !== false) {
+                return false;
+            }
+
+            return false;
+        });
+
+        // Cache filtered models for 10 minutes
+        Cache::put($cacheKey, $filteredModels, now()->addMinutes(10));
+
+        return response()->json(['data' => $filteredModels]);
+        // return response()->json($filteredModels);
+    } catch (\Exception $e) {
+        return response()->json(['error' => $e->getMessage()], 500);
+    }
+}
+
+    
     public function generate(Request $request) {
         if (Auth::user() === null) return Response::json(["error" => "Unauthorized"], 401);
         $settings = GPTSettings::findOrFail($request->get("mailbox_id"));
