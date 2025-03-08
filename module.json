@@ -1,8 +1,8 @@
 {
     "name": "FreeScoutGPT",
     "alias": "freescoutgpt",
-    "description": "Module for requests to ChatGPT with support for multiple models. v1.0.22 changes GPT prompt message role based on model.",
-    "version": "1.0.22",
+    "description": "Module for requests to ChatGPT with support for multiple models. v1.0.23 dynamically loads the settings models based on your API key.",
+    "version": "1.0.23",
     "detailsUrl": "https://github.com/presswizards/FreeScoutGPT",
     "img": "https://raw.githubusercontent.com/presswizards/FreeScoutGPT/refs/heads/main/FreeScoutGPT-Logo.jpg",
     "author": "Press Wizards",
