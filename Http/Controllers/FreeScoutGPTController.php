@@ -105,7 +105,7 @@ public function getAvailableModels(Request $request)
       // Filter models by version (o1, o3, o4) and remove older models (like 3.5, 4)
         $filteredModels = array_filter($models['data'], function($model) {
             // Skip non-chat models like whisper, babbage, tts, etc.
-            $nonChatModels = ['realtime', 'whisper', 'babbage', 'davinci', 'curie', 'text-to-speech', 'dall-e', '-audio', 'tts', 'embedding', '2024', '2025'];
+            $nonChatModels = ['transcribe', 'realtime', 'whisper', 'babbage', 'davinci', 'curie', 'text-to-speech', 'dall-e', '-audio', 'tts', 'embedding', '2024', '2025'];
 //            $nonChatModels = ['whisper', 'babbage', 'davinci', 'curie', 'text-to-speech', 'dall-e', '-audio', 'tts', 'embedding'];
             foreach ($nonChatModels as $nonChatModel) {
                 if (strpos($model['id'], $nonChatModel) !== false) {
@@ -113,7 +113,7 @@ public function getAvailableModels(Request $request)
                 }
             }
 
-            if (strpos($model['id'], 'gpt-4o') !== false || strpos($model['id'], 'gpt-4.5') !== false) {
+            if (strpos($model['id'], 'gpt-4o') !== false || strpos($model['id'], 'gpt-4.5') !== false || strpos($model['id'], 'gpt-4.1') !== false) {
                 return true; 
             }
 
