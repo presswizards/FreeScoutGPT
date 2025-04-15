@@ -29,7 +29,7 @@ To use this module, you will need an API key for ChatGPT, which can be obtained 
 8. On the Reply screen, there is an Edit Prompt button, which you can use to rework the prompt and customize it for this reply, and then submit it to generate a reply using the additional information entered. Note that this prompt is not saved, it is unique to this reply.
 
 ## Changelog
-v1.0.24: Don't block the new gpt-4.1 models from being shown in the Settings model drop-down, which were released April 14, 2025.
+v1.0.24: No longer unintentionally filters out the new gpt-4.1 models from the Settings model drop-down, which were released April 14, 2025. Cheaper, faster, smarter, I'd recommend using gpt-4.1 over gpt-4o now. ( See: https://openai.com/index/gpt-4-1/ )
 
 v1.0.23: The OpenAI models drop-down on the Settings page is dynamically populated based on the chat completion models available to your API key.
 
