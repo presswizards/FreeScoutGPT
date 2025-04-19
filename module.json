@@ -21,5 +21,6 @@
     ],
     "requires": [],
     "latestVersionUrl": "https://raw.githubusercontent.com/presswizards/FreeScoutGPT/refs/heads/main/module.json",
-    "latestVersionZipUrl": "https://github.com/presswizards/FreeScoutGPT/archive/refs/heads/main.zip"
+    "latestVersionZipUrl": "https://github.com/presswizards/FreeScoutGPT/archive/refs/heads/main.zip",
+    "changelogUrl": "https://github.com/presswizards/FreeScoutGPT/blob/main/changelog.txt"
 }
