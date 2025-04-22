@@ -61,7 +61,8 @@ class FreeScoutGPTServiceProvider extends ServiceProvider
 
         // JavaScript in the bottom
         \Eventy::addAction('javascript', function() {
-            $version = Module::find('freescoutgpt')->get('version');
+            $module = Module::find('freescoutgpt');
+            $version = $module ? $module->get('version') : '';
             $copiedToClipboard = __("Copied to clipboard");
             $updateAvailable = __('Update available for module ');
             $settings = $this->mailbox ? GPTSettings::find($this->mailbox->id) : null;
