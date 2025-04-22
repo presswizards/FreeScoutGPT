@@ -240,7 +240,7 @@ class FreeScoutGPTController extends Controller
             if (isset($settings->responses_api_prompt) && $settings->responses_api_prompt) {
                 $prompt .= $settings->responses_api_prompt . "\n\n";
             } else {
-                $prompt .= "Given the user's email and query, and the articles above, find the single article that best answers the user's question. Summarize the relevant part of that article as a support answer, and provide the article URL. If no article is relevant, say so.";
+                $prompt .= "If relevant given the customer's query, and the articles included, find the single article that best answers the user's question. Summarize the relevant part of that article as a support answer, and provide the article URL. If no article is relevant, reply with a concise best attempt to answer their concerns.";
             }
 
             // Use Guzzle to call OpenAI Responses API
