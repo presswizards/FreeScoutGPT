@@ -258,12 +258,22 @@ class FreeScoutGPTController extends Controller
                     $answerText = trim($data['output'][0]['content'][0]['text'], "\n");
                 }
             } catch (\Exception $e) {
+                $errorMsg = $e->getMessage();
+                $openAiError = '';
+                if (method_exists($e, 'getResponse') && $e->getResponse()) {
+                    $body = (string) $e->getResponse()->getBody();
+                    $json = json_decode($body, true);
+                    if (isset($json['error']['message'])) {
+                        $openAiError = $json['error']['message'];
+                    } else {
+                        $openAiError = $body;
+                    }
+                }
+                $answerText = $openAiError ?: $errorMsg;
                 return Response::json([
-                    'error' => 'OpenAI Responses API error: ' . $e->getMessage(),
-                    'trace' => $e->getTraceAsString(),
-                    'line' => $e->getLine(),
-                    'file' => $e->getFile()
-                ], 500);
+                    'query' => $userQuery ?? '',
+                    'answer' => $answerText
+                ], 200);
             }
             $thread = Thread::find($request->get('thread_id'));
             $answers = $thread->chatgpt ? json_decode($thread->chatgpt, true) : [];
