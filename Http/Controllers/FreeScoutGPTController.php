@@ -128,6 +128,11 @@ class FreeScoutGPTController extends Controller
                 return false;
             });
 
+            // Sort filtered models alphabetically by 'id'
+            usort($filteredModels, function($a, $b) {
+                return strcmp($a['id'], $b['id']);
+            });
+
             // Cache filtered models for 10 minutes
             Cache::put($cacheKey, $filteredModels, now()->addMinutes(10));
 
