@@ -117,7 +117,7 @@
                 </div>
             </div>
 
-            <div class="form-group">
+            <div class="form-group" id="article-urls-group">
                 <label for="article_urls" class="col-sm-2 control-label">{{ __("Article URLs for Web Search") }}</label>
                 <div class="col-sm-6">
                     <textarea rows="5" name="article_urls" class="form-control" placeholder="https://example.com/article1

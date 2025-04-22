@@ -45,4 +45,19 @@ document.addEventListener("DOMContentLoaded", function () {
     apiKeyInput.addEventListener("blur", function () {
         fetchModels(this.value);
     });
+
+    // Hide/show Article URLs textarea based on Responses API checkbox
+    const responsesApiCheckbox = document.querySelector("input[name='use_responses_api']");
+    const articleUrlsGroup = document.getElementById("article-urls-group");
+    function toggleArticleUrls() {
+        if (responsesApiCheckbox.checked) {
+            articleUrlsGroup.style.display = '';
+        } else {
+            articleUrlsGroup.style.display = 'none';
+        }
+    }
+    if (responsesApiCheckbox && articleUrlsGroup) {
+        responsesApiCheckbox.addEventListener('change', toggleArticleUrls);
+        toggleArticleUrls(); // Set initial state
+    }
 });
