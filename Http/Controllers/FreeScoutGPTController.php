@@ -141,53 +141,130 @@ class FreeScoutGPTController extends Controller
     {
         if (Auth::user() === null) return Response::json(["error" => "Unauthorized"], 401);
         $settings = GPTSettings::findOrFail($request->get("mailbox_id"));
-        $openaiClient = \Tectalic\OpenAi\Manager::build(new \GuzzleHttp\Client(
-            [
-                'timeout' => config('app.curl_timeout'),
-                'connect_timeout' => config('app.curl_connect_timeout'),
-                'proxy' => config('app.proxy'),
-            ]
-        ), new \Tectalic\OpenAi\Authentication($settings->api_key));
 
         // If Responses API is enabled, use it instead of Chat Completions
         if (!empty($settings->use_responses_api)) {
             $articleUrls = array_filter(array_map('trim', preg_split('/\r?\n/', $settings->article_urls)));
             $articles = [];
-            $client = new \GuzzleHttp\Client(['timeout' => 10]);
+            $client = new \GuzzleHttp\Client(['timeout' => 20]);
             foreach ($articleUrls as $url) {
                 try {
-                    $res = $client->get($url);
+                    $res = $client->get($url, [
+                        'headers' => [
+                            'User-Agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36'
+                        ]
+                    ]);
                     $body = (string) $res->getBody();
-                    // Strip HTML tags for context (basic)
-                    $text = strip_tags($body);
+                    // Extract only the content inside .kb-category-content and strip CSS
+                    $text = '';
+                    $linkLines = [];
+                    libxml_use_internal_errors(true);
+                    $dom = new \DOMDocument();
+                    if ($dom->loadHTML($body)) {
+                        $xpath = new \DOMXPath($dom);
+                        $nodes = $xpath->query('//*[contains(concat(" ", normalize-space(@class), " "), " kb-category-content ")]');
+                        if ($nodes->length > 0) {
+                            foreach ($nodes as $node) {
+                                // Find all <a> tags and build "Link Text: URL" lines
+                                $aTags = $node->getElementsByTagName('a');
+                                $aList = [];
+                                foreach ($aTags as $a) {
+                                    $aList[] = $a;
+                                }
+                                foreach ($aList as $a) {
+                                    $linkText = trim($a->textContent);
+                                    $href = $a->getAttribute('href');
+                                    if ($linkText && $href) {
+                                        $replacement = $linkText . ': ' . $href . "\n";
+                                        $textNode = $dom->createTextNode($replacement);
+                                        $a->parentNode->replaceChild($textNode, $a);
+                                    }
+                                }
+                                // Get the remaining text content
+                                $innerHTML = '';
+                                foreach ($node->childNodes as $child) {
+                                    $innerHTML .= $dom->saveHTML($child);
+                                }
+                                // Remove <style> tags and CSS blocks
+                                $innerHTML = preg_replace('/<style[\s\S]*?<\/style>/i', '', $innerHTML);
+                                // Strip all HTML tags
+                                $text = trim(strip_tags($innerHTML));
+                            }
+                        }
+                    }
+                    libxml_clear_errors();
+                    // Combine links and text, links first, each on its own line
+                    $finalText = '';
+                    if (!empty($linkLines)) {
+                        $finalText .= implode("\n", $linkLines) . "\n\n";
+                    }
+                    $finalText .= $text;
                     $articles[] = [
                         'url' => $url,
-                        'text' => mb_substr($text, 0, 12000) // limit to 12k chars per article
+                        'text' => mb_substr($finalText, 0, 12000) // limit to 12k chars per article
                     ];
                 } catch (\Exception $e) {
-                    continue;
+                    return Response::json(['error' => 'Fetching Articles error: ' . $e->getMessage()], 500);
                 }
             }
-            $userQuery = $request->get('query');
-            $customerEmail = $request->get('customer_email');
-            $context = "User email: $customerEmail\nUser query: $userQuery\n";
-            $context .= "Articles:\n";
-            foreach ($articles as $i => $article) {
-                $context .= "[Article #" . ($i + 1) . "] URL: " . $article['url'] . "\n";
-                $context .= $article['text'] . "\n\n";
+            $context = "";
+            if ($settings->client_data_enabled) {
+                $customerName = $request->get("customer_name");
+                $customerEmail = $request->get("customer_email");
+                $conversationSubject = $request->get("conversation_subject");
+                $context .= "Conversation subject is $conversationSubject, customer name is $customerName, customer email is $customerEmail\n";
             }
+            $userQuery = $request->get('query');
+            $context .= "Customer query: $userQuery\n";
+            if (empty($articles)) {
+                $context .= "No articles could be fetched or parsed.\n";
+            } else {
+                $context .= "Articles:\n";
+                foreach ($articles as $i => $article) {
+                    $context .= "[Article #" . ($i + 1) . "] URL: " . $article['url'] . "\n";
+                    $context .= (is_string($article['text']) ? $article['text'] : '') . "\n\n";
+                }
+            }
+
+            // Debug: log articles and context before API call
+            file_put_contents('freescoutgpt_articles.log', print_r($articles, true), FILE_APPEND);
+            file_put_contents('freescoutgpt_context.log', print_r($context, true), FILE_APPEND);
+
             $prompt = "Given the user's email and query, and the articles above, find the single article that best answers the user's question. Summarize the relevant part of that article as a support answer, and provide the article URL. If no article is relevant, say so.";
-            $response = $openaiClient->chatCompletions()->create(
-                new \Tectalic\OpenAi\Models\ChatCompletions\CreateRequest([
-                    'model'  => $settings->model,
-                    'messages' => [
-                        ['role' => 'system', 'content' => $prompt],
-                        ['role' => 'user', 'content' => $context]
-                    ],
+            // Use Guzzle to call OpenAI Responses API
+            try {
+                $guzzle = new \GuzzleHttp\Client(['timeout' => 30]);
+                $apiKey = $settings->api_key;
+                $payload = [
+                    'model' => is_string($settings->model) ? $settings->model : (is_array($settings->model) ? reset($settings->model) : ''),
+                    'input' => (string)($prompt . "\n" . $context),
                     'max_completion_tokens' => (integer) $settings->token_limit
-                ])
-            )->toModel();
-            $answerText = trim($response->choices[0]->message->content, "\n");
+                ];
+                $jsonPayload = json_encode($payload);
+                file_put_contents('freescoutgpt-payload.log', $jsonPayload, FILE_APPEND);
+                $response = $guzzle->post('https://api.openai.com/v1/responses', [
+                    'headers' => [
+                        'Authorization' => 'Bearer ' . $apiKey,
+                        'Content-Type' => 'application/json',
+                    ],
+                    'body' => $jsonPayload,
+                ]);
+                $data = json_decode($response->getBody(), true);
+                $answerText = '';
+                if (
+                    isset($data['output'][0]['content'][0]['text']) &&
+                    is_string($data['output'][0]['content'][0]['text'])
+                ) {
+                    $answerText = trim($data['output'][0]['content'][0]['text'], "\n");
+                }
+            } catch (\Exception $e) {
+                return Response::json([
+                    'error' => 'OpenAI Responses API error: ' . $e->getMessage(),
+                    'trace' => $e->getTraceAsString(),
+                    'line' => $e->getLine(),
+                    'file' => $e->getFile()
+                ], 500);
+            }
             $thread = Thread::find($request->get('thread_id'));
             $answers = $thread->chatgpt ? json_decode($thread->chatgpt, true) : [];
             if ($answers === null) $answers = [];
@@ -200,8 +277,16 @@ class FreeScoutGPTController extends Controller
             ], 200);
         }
 
+        $openaiClient = \Tectalic\OpenAi\Manager::build(new \GuzzleHttp\Client(
+            [
+                'timeout' => config('app.curl_timeout'),
+                'connect_timeout' => config('app.curl_connect_timeout'),
+                'proxy' => config('app.proxy'),
+            ]
+        ), new \Tectalic\OpenAi\Authentication($settings->api_key));
+
         // Determine role based on model
-        if (strpos($settings->model, 'o1-') !== false || strpos($settings->model, 'o3-') !== false) {
+        if (strpos($settings->model, 'o1') !== false || strpos($settings->model, 'o3') !== false) {
             $req_role = 'user';
         } else {
             $req_role = 'developer'; // Default role, adjust as needed
