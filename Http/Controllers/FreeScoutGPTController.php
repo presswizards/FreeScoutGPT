@@ -117,7 +117,7 @@ class FreeScoutGPTController extends Controller
                 }
 
                 // Check if model is one of the newer versions (o1, o3, o4)
-                if (preg_match('/(o[1-3]{1})/', $model['id'], $matches)) {
+                if (preg_match('/(o[1-4]{1})/', $model['id'], $matches)) {
                     return true;
                 }
                 // Skip models that are older (e.g., 'gpt-3.5', 'gpt-4')
