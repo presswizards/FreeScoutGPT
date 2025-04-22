@@ -102,7 +102,7 @@
             </div>
 
             <div class="form-group">
-                <label for="use_responses_api" class="col-sm-2 control-label">{{ __("Use Responses API") }}</label>
+                <label for="use_responses_api" class="col-sm-2 control-label">{{ __("Use Articles and Responses API") }}</label>
                 <div class="col-sm-6">
                     <div class="controls">
                         <div class="onoffswitch-wrap">
