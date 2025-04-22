@@ -105,7 +105,7 @@ class FreeScoutGPTController extends Controller
             // Filter models by version (o1, o3, o4) and remove older models (like 3.5, 4)
             $filteredModels = array_filter($models['data'], function ($model) {
                 // Skip non-chat models like whisper, babbage, tts, etc.
-                $nonChatModels = ['transcribe', 'realtime', 'whisper', 'babbage', 'davinci', 'curie', 'text-to-speech', 'dall-e', '-audio', 'tts', 'embedding', '2024', '2025'];
+                $nonChatModels = ['search','transcribe', 'realtime', 'whisper', 'babbage', 'davinci', 'curie', 'text-to-speech', 'dall-e', '-audio', 'tts', 'embedding', '2024', '2025'];
                 foreach ($nonChatModels as $nonChatModel) {
                     if (strpos($model['id'], $nonChatModel) !== false) {
                         return false;
