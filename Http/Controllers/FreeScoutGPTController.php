@@ -230,7 +230,10 @@ class FreeScoutGPTController extends Controller
             file_put_contents('freescoutgpt_articles.log', print_r($articles, true), FILE_APPEND);
             file_put_contents('freescoutgpt_context.log', print_r($context, true), FILE_APPEND);
 
-            $prompt = "Given the user's email and query, and the articles above, find the single article that best answers the user's question. Summarize the relevant part of that article as a support answer, and provide the article URL. If no article is relevant, say so.";
+            $prompt = ($settings->start_message ? $settings->start_message . "\n\n" : "")
+                . (isset($settings->responses_api_prompt) && $settings->responses_api_prompt ? $settings->responses_api_prompt . "\n\n" : "")
+                . "Given the user's email and query, and the articles above, find the single article that best answers the user's question. Summarize the relevant part of that article as a support answer, and provide the article URL. If no article is relevant, say so.";
+
             // Use Guzzle to call OpenAI Responses API
             try {
                 $guzzle = new \GuzzleHttp\Client(['timeout' => 30]);
@@ -410,6 +413,7 @@ class FreeScoutGPTController extends Controller
                 'client_data_enabled' => isset($_POST['show_client_data_enabled']),
                 'use_responses_api' => isset($_POST['use_responses_api']),
                 'article_urls' => $request->get('article_urls'),
+                'responses_api_prompt' => $request->get('responses_api_prompt'),
             ]
         );
         \Session::flash('flash_success_floating', __('Settings updated'));

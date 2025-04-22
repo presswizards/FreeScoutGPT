@@ -126,6 +126,14 @@ https://example.com/article2">{{ $settings['article_urls'] }}</textarea>
                 </div>
             </div>
 
+            <div class="form-group">
+                <label class="col-sm-2 control-label">{{ __("Responses API Prompt") }}</label>
+                <div class="col-sm-6">
+                    <textarea rows="6" name="responses_api_prompt" class="form-control" placeholder="Prompt for Responses API (used after articles context)">{{ $settings['responses_api_prompt'] ?? '' }}</textarea>
+                    <span class="help-block">{{ __("This prompt is used for the OpenAI Responses API, after the articles context. You can use this to further instruct the model.") }}</span>
+                </div>
+            </div>
+
             <div class="form-group margin-top margin-bottom">
                 <div class="col-sm-6 col-sm-offset-2">
                     <button type="submit" class="btn btn-primary">
