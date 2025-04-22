@@ -343,7 +343,7 @@ class FreeScoutGPTController extends Controller
             new \Tectalic\OpenAi\Models\ChatCompletions\CreateRequest([
                 'model'  => $settings->model,
                 'messages' => $messages,
-                'max_completion_tokens' => (integer) $settings->token_limit
+                'max_output_tokens' => (integer) $settings->token_limit
             ])
         )->toModel();
 
