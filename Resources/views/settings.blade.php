@@ -101,6 +101,30 @@
                 </div>
             </div>
 
+            <div class="form-group">
+                <label for="use_responses_api" class="col-sm-2 control-label">{{ __("Use Responses API") }}</label>
+                <div class="col-sm-6">
+                    <div class="controls">
+                        <div class="onoffswitch-wrap">
+                            <div class="onoffswitch">
+                                <input type="checkbox" name="use_responses_api" id="use_responses_api" class="onoffswitch-checkbox"
+                                    {!! $settings['use_responses_api'] ? "checked" : "" !!}
+                                >
+                                <label class="onoffswitch-label" for="use_responses_api"></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="article_urls" class="col-sm-2 control-label">{{ __("Article URLs for Web Search") }}</label>
+                <div class="col-sm-6">
+                    <textarea rows="5" name="article_urls" class="form-control" placeholder="https://example.com/article1\nhttps://example.com/article2">{{ $settings['article_urls'] }}</textarea>
+                    <span class="help-block">{{ __("Enter one article URL per line. These will be used for web search and summarization when the Responses API is enabled.") }}</span>
+                </div>
+            </div>
+
             <div class="form-group margin-top margin-bottom">
                 <div class="col-sm-6 col-sm-offset-2">
                     <button type="submit" class="btn btn-primary">

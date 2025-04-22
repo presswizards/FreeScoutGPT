@@ -1,8 +1,8 @@
 {
-    "name": "FreeScoutGPT",
+    "name": "FreeScoutGPT Responses",
     "alias": "freescoutgpt",
     "description": "Module for requests to ChatGPT with support for multiple models. v1.0.24 does not block gpt-4.1 from being listed as available.",
-    "version": "1.0.24",
+    "version": "1.0.25",
     "detailsUrl": "https://github.com/presswizards/FreeScoutGPT",
     "img": "https://raw.githubusercontent.com/presswizards/FreeScoutGPT/refs/heads/main/FreeScoutGPT-Logo.jpg",
     "author": "Press Wizards",

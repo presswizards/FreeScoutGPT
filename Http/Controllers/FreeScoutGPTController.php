@@ -76,71 +76,69 @@ class FreeScoutGPTController extends Controller
     {
     }
 
-public function getAvailableModels(Request $request)
-{
-    $apiKey = $request->input('api_key');
+    public function getAvailableModels(Request $request)
+    {
+        $apiKey = $request->input('api_key');
 
-    if (!$apiKey) {
-        return response()->json(['error' => 'API key is required'], 400);
-    }
+        if (!$apiKey) {
+            return response()->json(['error' => 'API key is required'], 400);
+        }
 
-    $cacheKey = 'openai_models_' . md5($apiKey);
+        $cacheKey = 'openai_models_' . md5($apiKey);
 
-    // Check if models are cached
-    if (Cache::has($cacheKey)) {
-        return response()->json(['data' => Cache::get($cacheKey)]);
-    }
+        // Check if models are cached
+        if (Cache::has($cacheKey)) {
+            return response()->json(['data' => Cache::get($cacheKey)]);
+        }
 
-    try {
-        $client = new \GuzzleHttp\Client();
-        $response = $client->get('https://api.openai.com/v1/models', [
-            'headers' => [
-                'Authorization' => 'Bearer ' . $apiKey,
-                'Accept' => 'application/json',
-            ],
-        ]);
+        try {
+            $client = new \GuzzleHttp\Client();
+            $response = $client->get('https://api.openai.com/v1/models', [
+                'headers' => [
+                    'Authorization' => 'Bearer ' . $apiKey,
+                    'Accept' => 'application/json',
+                ],
+            ]);
 
-        $models = json_decode($response->getBody(), true);
+            $models = json_decode($response->getBody(), true);
 
-      // Filter models by version (o1, o3, o4) and remove older models (like 3.5, 4)
-        $filteredModels = array_filter($models['data'], function($model) {
-            // Skip non-chat models like whisper, babbage, tts, etc.
-            $nonChatModels = ['transcribe', 'realtime', 'whisper', 'babbage', 'davinci', 'curie', 'text-to-speech', 'dall-e', '-audio', 'tts', 'embedding', '2024', '2025'];
-//            $nonChatModels = ['whisper', 'babbage', 'davinci', 'curie', 'text-to-speech', 'dall-e', '-audio', 'tts', 'embedding'];
-            foreach ($nonChatModels as $nonChatModel) {
-                if (strpos($model['id'], $nonChatModel) !== false) {
-                  return false;
+            // Filter models by version (o1, o3, o4) and remove older models (like 3.5, 4)
+            $filteredModels = array_filter($models['data'], function ($model) {
+                // Skip non-chat models like whisper, babbage, tts, etc.
+                $nonChatModels = ['transcribe', 'realtime', 'whisper', 'babbage', 'davinci', 'curie', 'text-to-speech', 'dall-e', '-audio', 'tts', 'embedding', '2024', '2025'];
+                foreach ($nonChatModels as $nonChatModel) {
+                    if (strpos($model['id'], $nonChatModel) !== false) {
+                        return false;
+                    }
                 }
-            }
 
-            if (strpos($model['id'], 'gpt-4o') !== false || strpos($model['id'], 'gpt-4.5') !== false || strpos($model['id'], 'gpt-4.1') !== false) {
-                return true; 
-            }
+                if (strpos($model['id'], 'gpt-4o') !== false || strpos($model['id'], 'gpt-4.5') !== false || strpos($model['id'], 'gpt-4.1') !== false) {
+                    return true;
+                }
 
-            // Check if model is one of the newer versions (o1, o3, o4)
-            if (preg_match('/(o[1-3]{1})/', $model['id'], $matches)) {
-                return true;
-            }
-            // Skip models that are older (e.g., 'gpt-3.5', 'gpt-4')
-            if (strpos($model['id'], 'gpt-3.5') !== false || strpos($model['id'], 'gpt-4-') !== false) {
+                // Check if model is one of the newer versions (o1, o3, o4)
+                if (preg_match('/(o[1-3]{1})/', $model['id'], $matches)) {
+                    return true;
+                }
+                // Skip models that are older (e.g., 'gpt-3.5', 'gpt-4')
+                if (strpos($model['id'], 'gpt-3.5') !== false || strpos($model['id'], 'gpt-4-') !== false) {
+                    return false;
+                }
+
                 return false;
-            }
+            });
 
-            return false;
-        });
+            // Cache filtered models for 10 minutes
+            Cache::put($cacheKey, $filteredModels, now()->addMinutes(10));
 
-        // Cache filtered models for 10 minutes
-        Cache::put($cacheKey, $filteredModels, now()->addMinutes(10));
-
-        return response()->json(['data' => $filteredModels]);
-        // return response()->json($filteredModels);
-    } catch (\Exception $e) {
-        return response()->json(['error' => $e->getMessage()], 500);
+            return response()->json(['data' => $filteredModels]);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
-}
 
-    
-    public function generate(Request $request) {
+    public function generate(Request $request)
+    {
         if (Auth::user() === null) return Response::json(["error" => "Unauthorized"], 401);
         $settings = GPTSettings::findOrFail($request->get("mailbox_id"));
         $openaiClient = \Tectalic\OpenAi\Manager::build(new \GuzzleHttp\Client(
@@ -151,13 +149,64 @@ public function getAvailableModels(Request $request)
             ]
         ), new \Tectalic\OpenAi\Authentication($settings->api_key));
 
+        // If Responses API is enabled, use it instead of Chat Completions
+        if (!empty($settings->use_responses_api)) {
+            $articleUrls = array_filter(array_map('trim', preg_split('/\r?\n/', $settings->article_urls)));
+            $articles = [];
+            $client = new \GuzzleHttp\Client(['timeout' => 10]);
+            foreach ($articleUrls as $url) {
+                try {
+                    $res = $client->get($url);
+                    $body = (string) $res->getBody();
+                    // Strip HTML tags for context (basic)
+                    $text = strip_tags($body);
+                    $articles[] = [
+                        'url' => $url,
+                        'text' => mb_substr($text, 0, 12000) // limit to 12k chars per article
+                    ];
+                } catch (\Exception $e) {
+                    continue;
+                }
+            }
+            $userQuery = $request->get('query');
+            $customerEmail = $request->get('customer_email');
+            $context = "User email: $customerEmail\nUser query: $userQuery\n";
+            $context .= "Articles:\n";
+            foreach ($articles as $i => $article) {
+                $context .= "[Article #" . ($i + 1) . "] URL: " . $article['url'] . "\n";
+                $context .= $article['text'] . "\n\n";
+            }
+            $prompt = "Given the user's email and query, and the articles above, find the single article that best answers the user's question. Summarize the relevant part of that article as a support answer, and provide the article URL. If no article is relevant, say so.";
+            $response = $openaiClient->chatCompletions()->create(
+                new \Tectalic\OpenAi\Models\ChatCompletions\CreateRequest([
+                    'model'  => $settings->model,
+                    'messages' => [
+                        ['role' => 'system', 'content' => $prompt],
+                        ['role' => 'user', 'content' => $context]
+                    ],
+                    'max_completion_tokens' => (integer) $settings->token_limit
+                ])
+            )->toModel();
+            $answerText = trim($response->choices[0]->message->content, "\n");
+            $thread = Thread::find($request->get('thread_id'));
+            $answers = $thread->chatgpt ? json_decode($thread->chatgpt, true) : [];
+            if ($answers === null) $answers = [];
+            $answers[] = $answerText;
+            $thread->chatgpt = json_encode($answers, JSON_UNESCAPED_UNICODE);
+            $thread->save();
+            return Response::json([
+                'query' => $userQuery,
+                'answer' => $answerText
+            ], 200);
+        }
+
         // Determine role based on model
         if (strpos($settings->model, 'o1-') !== false || strpos($settings->model, 'o3-') !== false) {
             $req_role = 'user';
         } else {
             $req_role = 'developer'; // Default role, adjust as needed
         }
-        
+
         $command = $request->get("command");
         $messages = [[
             'role' => $req_role,
@@ -184,11 +233,11 @@ public function getAvailableModels(Request $request)
         ]);
 
         $response = $openaiClient->chatCompletions()->create(
-        new \Tectalic\OpenAi\Models\ChatCompletions\CreateRequest([
-            'model'  => $settings->model,
-            'messages' => $messages,
-            'max_completion_tokens' => (integer) $settings->token_limit
-        ])
+            new \Tectalic\OpenAi\Models\ChatCompletions\CreateRequest([
+                'model'  => $settings->model,
+                'messages' => $messages,
+                'max_completion_tokens' => (integer) $settings->token_limit
+            ])
         )->toModel();
 
         $thread = Thread::find($request->get('thread_id'));
@@ -210,7 +259,8 @@ public function getAvailableModels(Request $request)
         ], 200);
     }
 
-    public function answers(Request $request) {
+    public function answers(Request $request)
+    {
         if (Auth::user() === null) return Response::json(["error" => "Unauthorized"], 401);
         $conversation = $request->query('conversation');
         $threads = Thread::where("conversation_id", $conversation)->get();
@@ -230,7 +280,8 @@ public function getAvailableModels(Request $request)
         return Response::json(["answers" => $result], 200);
     }
 
-    public function settings($mailbox_id) {
+    public function settings($mailbox_id)
+    {
         $mailbox = Mailbox::findOrFail($mailbox_id);
 
         $settings = GPTSettings::find($mailbox_id);
@@ -251,8 +302,8 @@ public function getAvailableModels(Request $request)
         ]);
     }
 
-    public function saveSettings($mailbox_id, Request $request) {
-        //return $request->get('model');
+    public function saveSettings($mailbox_id, Request $request)
+    {
         GPTSettings::updateOrCreate(
             ['mailbox_id' => $mailbox_id],
             [
@@ -261,19 +312,21 @@ public function getAvailableModels(Request $request)
                 'token_limit' => $request->get('token_limit'),
                 'start_message' => $request->get('start_message'),
                 'model' => $request->get('model'),
-                'client_data_enabled' => isset($_POST['show_client_data_enabled'])
+                'client_data_enabled' => isset($_POST['show_client_data_enabled']),
+                'use_responses_api' => isset($_POST['use_responses_api']),
+                'article_urls' => $request->get('article_urls'),
             ]
         );
         \Session::flash('flash_success_floating', __('Settings updated'));
         return redirect()->route('freescoutgpt.settings', ['mailbox_id' => $mailbox_id]);
     }
 
-    public function checkIsEnabled(Request $request) {
+    public function checkIsEnabled(Request $request)
+    {
         $settings = GPTSettings::find($request->query("mailbox"));
         if (empty($settings)) {
-            return Response::json(['enabled'=> false], 200);
+            return Response::json(['enabled' => false], 200);
         }
         return Response::json(['enabled' => $settings['enabled']], 200);
     }
-
 }
