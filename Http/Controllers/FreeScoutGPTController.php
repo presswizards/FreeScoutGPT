@@ -230,9 +230,13 @@ class FreeScoutGPTController extends Controller
             file_put_contents('freescoutgpt_articles.log', print_r($articles, true), FILE_APPEND);
             file_put_contents('freescoutgpt_context.log', print_r($context, true), FILE_APPEND);
 
-            $prompt = ($settings->start_message ? $settings->start_message . "\n\n" : "")
-                . (isset($settings->responses_api_prompt) && $settings->responses_api_prompt ? $settings->responses_api_prompt . "\n\n" : "")
-                . "Given the user's email and query, and the articles above, find the single article that best answers the user's question. Summarize the relevant part of that article as a support answer, and provide the article URL. If no article is relevant, say so.";
+            // Build prompt: use responses_api_prompt if set, otherwise use hardcoded default
+            $prompt = ($settings->start_message ? $settings->start_message . "\n\n" : "");
+            if (isset($settings->responses_api_prompt) && $settings->responses_api_prompt) {
+                $prompt .= $settings->responses_api_prompt . "\n\n";
+            } else {
+                $prompt .= "Given the user's email and query, and the articles above, find the single article that best answers the user's question. Summarize the relevant part of that article as a support answer, and provide the article URL. If no article is relevant, say so.";
+            }
 
             // Use Guzzle to call OpenAI Responses API
             try {
