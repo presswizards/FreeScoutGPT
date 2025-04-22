@@ -49,15 +49,18 @@ document.addEventListener("DOMContentLoaded", function () {
     // Hide/show Article URLs textarea based on Responses API checkbox
     const responsesApiCheckbox = document.querySelector("input[name='use_responses_api']");
     const articleUrlsGroup = document.getElementById("article-urls-group");
-    function toggleArticleUrls() {
+    const responsesApiPromptGroup = document.querySelector("textarea[name='responses_api_prompt']").closest('.form-group');
+    function toggleResponsesApiFields() {
         if (responsesApiCheckbox.checked) {
             articleUrlsGroup.style.display = '';
+            responsesApiPromptGroup.style.display = '';
         } else {
             articleUrlsGroup.style.display = 'none';
+            responsesApiPromptGroup.style.display = 'none';
         }
     }
-    if (responsesApiCheckbox && articleUrlsGroup) {
-        responsesApiCheckbox.addEventListener('change', toggleArticleUrls);
-        toggleArticleUrls(); // Set initial state
+    if (responsesApiCheckbox && articleUrlsGroup && responsesApiPromptGroup) {
+        responsesApiCheckbox.addEventListener('change', toggleResponsesApiFields);
+        toggleResponsesApiFields(); // Set initial state
     }
 });
