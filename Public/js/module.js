@@ -40,7 +40,7 @@ function freescoutgptInit() {
             // Add button to reply form
             $(".conv-reply-body .note-toolbar > .note-btn-group:first").append('<button type="button" class="note-btn btn btn-default btn-sm gptbutton" tabindex="-1" title aria-label="ChatGPT Prompt Edit" data-original-title="ChatGPT Prompt Edit">' +
                 '<i class="glyphicon glyphicon-console"></i>' +
-		'</button>'
+	    	'</button>'
             );
         }
 	});
