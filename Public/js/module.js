@@ -74,7 +74,7 @@ function generateAnswer(e) {
 function addAnswer(thread_id, text) {
     if (!$(`#thread-${thread_id} .gpt`).length) {
         $(`#thread-${thread_id}`).prepend(`<div class="gpt">
-            <strong>ChatGPT:</strong>
+            <strong>From FreeScoutGPT:</strong>
             <br />
             <div class="gpt-answers-data">
                 <div class="gpt-nav">
@@ -102,6 +102,11 @@ function addAnswer(thread_id, text) {
         <div class="gpt-answer hidden">${text}</div>
     `)
     $(`#thread-${thread_id} .gpt-max-answer`).text($(`#thread-${thread_id} .gpt-answers div`).length);
+    const robotIcon = document.querySelector('.gpt > strong > i.fa-solid.fa-robot');
+    robotIcon.classList.add('fa-fade');
+    setTimeout(() => {
+      robotIcon.classList.remove('fa-fade');
+    }, 3000);
 }
 
 function previousAnswer(e) {
