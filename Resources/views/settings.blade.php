@@ -11,14 +11,14 @@
 
 @section('content')
     <div class="section-heading">
-        FreeScoutGPT
+        FreeScoutGPT <i class="fa-solid fa-robot"></i> 
     </div>
     <div class="col-xs-12">
         <form class="form-horizontal margin-top margin-bottom" method="POST" action="">
             {{ csrf_field() }}
 
             <div class="form-group">
-                <label for="gpt_enabled" class="col-sm-2 control-label">{{ __("Enable ChatGPT") }}</label>
+                <label for="gpt_enabled" class="col-sm-2 control-label">{{ __("Enable FreeScoutGPT") }}</label>
 
                 <div class="col-sm-6">
                     <div class="controls">
@@ -104,6 +104,7 @@
             <div class="form-group">
                 <label for="use_responses_api" class="col-sm-2 control-label">{{ __("Use Articles and Responses API") }}</label>
                 <div class="col-sm-6">
+                <i style="margin: 0 20px" class="glyphicon glyphicon-info-sign icon-info" data-toggle="popover" data-trigger="hover" data-html="true" data-placement="left" data-content="{{ __('If enabled, the articles and prompt below will be sent to the new Responses API, and should generate much more targeted and informative answers if the articles have all the relevant information.') }}" data-original-title="" title=""></i>
                     <div class="controls">
                         <div class="onoffswitch-wrap">
                             <div class="onoffswitch">

@@ -147,8 +147,9 @@ class FreeScoutGPTController extends Controller
         if (Auth::user() === null) return Response::json(["error" => "Unauthorized"], 401);
         $settings = GPTSettings::findOrFail($request->get("mailbox_id"));
 
-        // If Responses API is enabled, use it instead of Chat Completions
-        if (!empty($settings->use_responses_api)) {
+        // If Responses API is enabled and is not an edit prompt ajax, use it instead of Chat Completions
+        $ajax_cmd = $request->get("command");
+        if (!empty($settings->use_responses_api) && empty($ajax_cmd)) {
             $articleUrls = array_filter(array_map('trim', preg_split('/\r?\n/', $settings->article_urls)));
             $articles = [];
             $client = new \GuzzleHttp\Client(['timeout' => 20]);
@@ -231,10 +232,6 @@ class FreeScoutGPTController extends Controller
                 }
             }
 
-            // Debug: log articles and context before API call
-            file_put_contents('freescoutgpt_articles.log', print_r($articles, true), FILE_APPEND);
-            file_put_contents('freescoutgpt_context.log', print_r($context, true), FILE_APPEND);
-
             // Build prompt: use responses_api_prompt if set, otherwise use hardcoded default
             $prompt = ($settings->start_message ? $settings->start_message . "\n\n" : "");
             if (isset($settings->responses_api_prompt) && $settings->responses_api_prompt) {
@@ -253,7 +250,6 @@ class FreeScoutGPTController extends Controller
                     'max_completion_tokens' => (integer) $settings->token_limit
                 ];
                 $jsonPayload = json_encode($payload);
-                file_put_contents('freescoutgpt-payload.log', $jsonPayload, FILE_APPEND);
                 $response = $guzzle->post('https://api.openai.com/v1/responses', [
                     'headers' => [
                         'Authorization' => 'Bearer ' . $apiKey,

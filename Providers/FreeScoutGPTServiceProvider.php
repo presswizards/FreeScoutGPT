@@ -72,6 +72,7 @@ class FreeScoutGPTServiceProvider extends ServiceProvider
             $updateAvailable = __('Update available for module ');
             $settings = $this->mailbox ? GPTSettings::find($this->mailbox->id) : null;
             $start_message = $settings ? $settings->start_message : "";
+            $responses_api_prompt = $settings ? $settings->responses_api_prompt : "";
             $modifyPrompt = __("Complete prompt and send last response from client to GPT");
             $send = __("Generate Answer");
 
@@ -80,6 +81,7 @@ class FreeScoutGPTServiceProvider extends ServiceProvider
                     "'updateAvailable': '{$updateAvailable}'," .
                     "'version': '{$version}'," .
                     "'start_message': `{$start_message}`," .
+                    "'responses_api_prompt': `{$responses_api_prompt}`," .
                     "'modifyPrompt': `{$modifyPrompt}`," .
                     "'send': `{$send}`," .
                 "};";
