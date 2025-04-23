@@ -74,7 +74,7 @@ function generateAnswer(e) {
 function addAnswer(thread_id, text) {
     if (!$(`#thread-${thread_id} .gpt`).length) {
         $(`#thread-${thread_id}`).prepend(`<div class="gpt">
-            <strong>From FreeScoutGPT:</strong>
+            <strong><i class="fa-solid fa-robot"></i> From FreeScoutGPT:</strong>
             <br />
             <div class="gpt-answers-data">
                 <div class="gpt-nav">
