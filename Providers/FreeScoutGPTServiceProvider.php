@@ -47,6 +47,11 @@ class FreeScoutGPTServiceProvider extends ServiceProvider
             return $javascripts;
         });
 
+        \Eventy::addAction('layout.head', function () {
+            echo '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" 
+          crossorigin="anonymous" referrerpolicy="no-referrer" />' . PHP_EOL;
+        });
+
         // Add module's CSS file to the application layout.
         \Eventy::addFilter('stylesheets', function($stylesheets) {
             array_push($stylesheets, \Module::getPublicPath("freescoutgpt").'/css/module.css');
@@ -68,7 +73,7 @@ class FreeScoutGPTServiceProvider extends ServiceProvider
             $settings = $this->mailbox ? GPTSettings::find($this->mailbox->id) : null;
             $start_message = $settings ? $settings->start_message : "";
             $modifyPrompt = __("Complete prompt and send last response from client to GPT");
-            $send = __("Send");
+            $send = __("Generate Answer");
 
             echo "const freescoutGPTData = {" .
                     "'copiedToClipboard': '{$copiedToClipboard}'," .

@@ -161,14 +161,14 @@ async function injectGptAnswer(){
     const conversation_subject = encodeURIComponent($(".conv-subjtext span").text().trim());
     const command = $("#gpt-modified-prompt").val();
 
-    $(".gptbutton").addClass("disabled");
+    $(".gptbutton").addClass("fa-beat-fade");
     hideModifyPromptAlert();
 
     fsAjax(`mailbox_id=${mailbox_id}&query=${query}&command=${encodeURIComponent(command)}&thread_id=${thread_id}&customer_name=${customer_name}&customer_email=${customer_email}&conversation_subject=${conversation_subject}`, '/freescoutgpt/generate', function (response) {
         $('#body').summernote('pasteHTML', response.answer);
-        $(".gptbutton").removeClass("disabled");
+        $(".gptbutton").removeClass("fa-beat-fade");
     }, true, function() {
-        $(".gptbutton").removeClass("disabled");
+        $(".gptbutton").removeClass("fa-beat-fade");
         showFloatingAlert('error', Lang.get("messages.ajax_error"));
     });
 }
