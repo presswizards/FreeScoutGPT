@@ -144,15 +144,6 @@ https://example.com/article2">{{ $settings['article_urls'] }}</textarea>
             </div>
         </form>
     </div>
-    <script>
-        $(document).ready(function() {
-            const robotIcon = document.querySelector('i.fa-solid.fa-robot');
-            robotIcon.classList.add('fa-fade');
-            setTimeout(() => {
-                robotIcon.classList.remove('fa-fade');
-            }, 3000);
-        });
-    </script>
 @endsection
 
 @section('body_bottom')

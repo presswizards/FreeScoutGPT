@@ -3,6 +3,14 @@ document.addEventListener("DOMContentLoaded", function () {
     const apiKeyInput = document.querySelector("input[name='api_key']");
     const savedModel = modelSelect.dataset.savedModel; // Load saved model from data attribute
 
+    $(document).ready(function() {
+        const robotIcon = document.querySelector('i.fa-solid.fa-robot');
+        robotIcon.classList.add('fa-fade');
+        setTimeout(() => {
+            robotIcon.classList.remove('fa-fade');
+        }, 3000);
+    });
+
     function fetchModels(apiKey) {
         if (!apiKey) return;
 
