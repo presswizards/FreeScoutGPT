@@ -161,14 +161,25 @@ class FreeScoutGPTController extends Controller
                         ]
                     ]);
                     $body = (string) $res->getBody();
-                    // Extract only the content inside .kb-category-content and strip CSS
+
+                    $contentType = $res->getHeaderLine('Content-Type');
+                    $isText = preg_match('/\.txt$/i', $url) || stripos($contentType, 'text/plain') !== false;
+                    if ($isText) {
+                        $safeText = htmlspecialchars($body, ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML5);
+                        $body = '<!DOCTYPE html>
+                        <html><head><meta charset="UTF-8"></head>
+                        <body><pre>' . $safeText . '</pre></body></html>';
+                    }
+
                     $text = '';
                     $linkLines = [];
                     libxml_use_internal_errors(true);
                     $dom = new \DOMDocument();
                     if ($dom->loadHTML($body)) {
                         $xpath = new \DOMXPath($dom);
-                        $nodes = $xpath->query('//*[contains(concat(" ", normalize-space(@class), " "), " kb-category-content ")]');
+                        // Extract only the content inside .kb-category-content and strip CSS
+                        // $nodes = $xpath->query('//*[contains(concat(" ", normalize-space(@class), " "), " kb-category-content ")]');
+                        $nodes = $xpath->query('/*');
                         if ($nodes->length > 0) {
                             foreach ($nodes as $node) {
                                 // Find all <a> tags and build "Link Text: URL" lines
