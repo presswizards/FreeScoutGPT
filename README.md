@@ -9,14 +9,20 @@ This repository contains the FreeScout + ChatGPT Integration Module, which conne
 If this module saves you time, helps your clients, or helps you do better work, I’d appreciate it.
 </p>
 
-## Features
-- Generate ChatGPT AI-based responses for each incoming message, then edit/polish as needed
+## Newest Responses API Features
+- Adds an option to use the newest OpenAI Responses API. According to OpenAI: "OpenAI’s new Responses API is built for creating powerful AI agents, going beyond the conversational scope of the Chat Completions API. It’s more capable and agent-oriented, making it ideal for complex, multi-step tasks."
+- Adds the ability to parse external knowledge base articles, and provide very specific answers based on those articles, and be able to reference and provide links to those articles, boosting the quality and raising the limits of comprehensiveness.
+- Adds a new Responses Prompt, used in combination with the regular system prompt, to help direct the AI models to process articles and customize the replies.
+- A big thanks to Lewis Downey for sponsoring the Responses API development and testing.
+
+## Chat Completion Features
+- Generates ChatGPT AI-based replies for each incoming message, then edit/polish as needed
 - Utilize the powerful ChatGPT language models to improve support efficiency
 - Customizable prompt message to set ChatGPT's role (e.g., support agent, sales manager, etc.), associate it with your brand with website links, and provide additional training information and context as desired
 - Edit the prompt per reply using the Edit Prompt button on the Reply page, to add message-specific info to send with the request for a more detailed reply.
 
 ## Requirements
-To use this module, you will need an API key for ChatGPT, which can be obtained from the OpenAI platform at [https://platform.openai.com/account/api-keys](https://platform.openai.com/account/api-keys).
+To use this module, you will need an OpenAI API key, which can be obtained from [https://platform.openai.com/account/api-keys](https://platform.openai.com/account/api-keys).
 
 ## Configuration and Use
 1. Upload the FreeScoutGPT Module ZIP file to your FreeScout Modules folder, rename it to ensure the module's folder is named "FreeScoutGPT".
@@ -26,9 +32,11 @@ To use this module, you will need an API key for ChatGPT, which can be obtained 
 5. Be sure to check the Enable switch at the top.
 6. On a conversation page, click the drop-down in the upper right near the message time and choose "Generate answer (GPT)".
 7. Then you can copy that answer, click Reply, and paste it into your message, and edit/polish it as desired.
-8. On the Reply screen, there is an Edit Prompt button, which you can use to rework the prompt and customize it for this reply, and then submit it to generate a reply using the additional information entered. Note that this prompt is not saved, it is unique to this reply.
+8. Also, on the Reply screen, there is an Edit Prompt button, which you can use to rework the prompt and customize it for this reply, and then submit it to generate a reply using the additional information entered. Note that this prompt is not saved, it is unique to this reply only. [Note: this method does not yet use the new Responses API options.]
 
 ## Changelog
+v1.0.25: Adds new OpenAI Responses API settings: Enable/Disable, Articles text area, and Responses Prompt. Disabling will ensure it uses the current Chat Completions API calls. A big thanks to Lewis Downey for sponsoring the Responses API development and testing.
+
 v1.0.24: No longer unintentionally filters out the new gpt-4.1 models from the Settings model drop-down, which were released April 14, 2025. Cheaper, faster, smarter, I'd recommend using gpt-4.1 over gpt-4o now. ( See: https://openai.com/index/gpt-4-1/ )
 
 v1.0.23: The OpenAI models drop-down on the Settings page is dynamically populated based on the chat completion models available to your API key.
