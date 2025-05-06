@@ -4,10 +4,8 @@
 
 This repository contains the FreeScout + ChatGPT Integration Module, which connects FreeScout with the powerful language models of ChatGPT by OpenAI via their API using your own API key. This integration enables the generation of AI-based responses for incoming messages, providing a more efficient and intelligent support system for your FreeScout team.
 
-<p>
-<a href="https://www.buymeacoffee.com/robwpdev" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="41" width="174"></a><br>
-If this module saves you time, helps your clients, or helps you do better work, I’d appreciate it.
-</p>
+<p><a href="https://www.buymeacoffee.com/robwpdev" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="41" width="174"></a><br>
+If this module saves you time, helps your clients, or helps you do better work, I’d appreciate it.</p>
 
 ## Features
 - Generate ChatGPT AI-based responses for each incoming message, then edit/polish as needed
@@ -123,10 +121,8 @@ This is an updated version of the FreeScout + ChatGPT Integration Module, and we
 
 Together, we can make this integration a valuable addition to the FreeScout ecosystem and enhance the capabilities of helpdesk software for the entire community.
 
-<p/>
-<a href="https://www.buymeacoffee.com/robwpdev" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="41" width="174"></a><br>
-If this module saves you time, helps your clients, or helps you do better work, I’d appreciate it.
-</p>
+<p><a href="https://www.buymeacoffee.com/robwpdev" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="41" width="174"></a><br>
+If this module saves you time, helps your clients, or helps you do better work, I’d appreciate it.</p>
 
 
 ## Use of OpenAI ChatGPT Name and API
