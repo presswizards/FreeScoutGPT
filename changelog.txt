@@ -1,3 +1,8 @@
+v1.0.25
+<ul><li>
+Adds new OpenAI Responses API settings: Enable/Disable, Articles text area, and Responses Prompt. Disabling will ensure it uses the current Chat Completions API calls. A big thanks to Lewis Downey for sponsoring the Responses API development and testing.
+</li></ul>
+
 1.0.24
   <ul><li>
   Fix so it no longer filters out models gpt-4.1* from being listed as available in the module settings drop-down.
