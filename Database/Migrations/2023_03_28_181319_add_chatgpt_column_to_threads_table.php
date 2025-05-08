@@ -14,7 +14,7 @@ class AddChatgptColumnToThreadsTable extends Migration
     public function up()
     {
         Schema::table('threads', function (Blueprint $table) {
-            $table->text('chatgpt');
+            $table->text('chatgpt')->nullable(); // Make column nullable to avoid NOT NULL violation
         });
     }
 
