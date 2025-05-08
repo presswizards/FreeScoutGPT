@@ -1,5 +1,5 @@
 {
-    "name": "FreeScoutGPT Responses",
+    "name": "FreeScoutGPT",
     "alias": "freescoutgpt",
     "description": "Module for requests to ChatGPT with support for multiple models. v1.0.25 adds new Responses API option implementation, thanks to Lewis Downey.",
     "version": "1.0.25",
