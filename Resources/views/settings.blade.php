@@ -11,14 +11,14 @@
 
 @section('content')
     <div class="section-heading">
-        FreeScoutGPT
+        FreeScoutGPT <i class="fa-solid fa-robot"></i> 
     </div>
     <div class="col-xs-12">
         <form class="form-horizontal margin-top margin-bottom" method="POST" action="">
             {{ csrf_field() }}
 
             <div class="form-group">
-                <label for="gpt_enabled" class="col-sm-2 control-label">{{ __("Enable ChatGPT") }}</label>
+                <label for="gpt_enabled" class="col-sm-2 control-label">{{ __("Enable FreeScoutGPT") }}</label>
 
                 <div class="col-sm-6">
                     <div class="controls">
@@ -98,6 +98,40 @@
 
                 <div class="col-sm-6" style="display: inline-flex;">
                     <i style="margin-left: 20px" class="glyphicon glyphicon-info-sign icon-info" data-toggle="popover" data-trigger="hover" data-html="true" data-placement="left" data-content="{{ __('View your ChatGPT usage by clicking the link. Be sure to set a budget and review costs regularly.') }}" data-original-title="" title=""></i>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="use_responses_api" class="col-sm-2 control-label">{{ __("Use Articles and Responses API") }}</label>
+                <div class="col-sm-6">
+                <i style="margin: 0 20px" class="glyphicon glyphicon-info-sign icon-info" data-toggle="popover" data-trigger="hover" data-html="true" data-placement="left" data-content="{{ __('If enabled, the articles and prompt below will be sent to the new Responses API, and should generate much more targeted and informative answers if the articles have all the relevant information.') }}" data-original-title="" title=""></i>
+                    <div class="controls">
+                        <div class="onoffswitch-wrap">
+                            <div class="onoffswitch">
+                                <input type="checkbox" name="use_responses_api" id="use_responses_api" class="onoffswitch-checkbox"
+                                    {!! $settings['use_responses_api'] ? "checked" : "" !!}
+                                >
+                                <label class="onoffswitch-label" for="use_responses_api"></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group" id="article-urls-group">
+                <label for="article_urls" class="col-sm-2 control-label">{{ __("Article URLs for Web Search") }}</label>
+                <div class="col-sm-6">
+                    <textarea rows="5" name="article_urls" class="form-control" placeholder="https://example.com/article1
+https://example.com/article2">{{ $settings['article_urls'] }}</textarea>
+                    <span class="help-block">{{ __("Enter one article URL per line. These will be used for web search and summarization when the Responses API is enabled.") }}</span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label">{{ __("Responses API Prompt") }}</label>
+                <div class="col-sm-6">
+                    <textarea rows="6" name="responses_api_prompt" class="form-control" placeholder="Prompt for Responses API (used after articles context)">{{ $settings['responses_api_prompt'] ?? "If relevant given the customer's query, and the articles included, find the single article that best answers the user's question. Summarize the relevant part of that article as a support answer, and provide the article URL. If no article is relevant, reply with a concise best attempt to answer their concerns." }}</textarea>
+                    <span class="help-block">{{ __("This prompt is used for the OpenAI Responses API, after the articles context. You can use this to further instruct the model.") }}</span>
                 </div>
             </div>
 

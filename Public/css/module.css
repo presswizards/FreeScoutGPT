@@ -4,7 +4,7 @@
     }
 }
 
-.gptbutton.disabled i {
+.gptbutton-old.disabled i {
     animation: rotateSpinner 800ms linear infinite;
 }
 

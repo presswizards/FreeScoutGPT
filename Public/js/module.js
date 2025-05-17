@@ -39,8 +39,8 @@ function freescoutgptInit() {
 
             // Add button to reply form
             $(".conv-reply-body .note-toolbar > .note-btn-group:first").append('<button type="button" class="note-btn btn btn-default btn-sm gptbutton" tabindex="-1" title aria-label="ChatGPT Prompt Edit" data-original-title="ChatGPT Prompt Edit">' +
-                '<i class="glyphicon glyphicon-console"></i>' +
-		'</button>'
+                '<i class="fa-solid fa-robot"></i>' +
+	    	'</button>'
             );
         }
 	});
@@ -74,7 +74,7 @@ function generateAnswer(e) {
 function addAnswer(thread_id, text) {
     if (!$(`#thread-${thread_id} .gpt`).length) {
         $(`#thread-${thread_id}`).prepend(`<div class="gpt">
-            <strong>ChatGPT:</strong>
+            <strong><i class="fa-solid fa-robot"></i> From FreeScoutGPT:</strong>
             <br />
             <div class="gpt-answers-data">
                 <div class="gpt-nav">
@@ -102,6 +102,11 @@ function addAnswer(thread_id, text) {
         <div class="gpt-answer hidden">${text}</div>
     `)
     $(`#thread-${thread_id} .gpt-max-answer`).text($(`#thread-${thread_id} .gpt-answers div`).length);
+    const robotIcon = document.querySelector('.gpt > strong > i.fa-solid.fa-robot');
+    robotIcon.classList.add('fa-fade');
+    setTimeout(() => {
+      robotIcon.classList.remove('fa-fade');
+    }, 3000);
 }
 
 function previousAnswer(e) {
@@ -161,14 +166,14 @@ async function injectGptAnswer(){
     const conversation_subject = encodeURIComponent($(".conv-subjtext span").text().trim());
     const command = $("#gpt-modified-prompt").val();
 
-    $(".gptbutton").addClass("disabled");
+    $(".gptbutton").addClass("fa-beat-fade");
     hideModifyPromptAlert();
 
     fsAjax(`mailbox_id=${mailbox_id}&query=${query}&command=${encodeURIComponent(command)}&thread_id=${thread_id}&customer_name=${customer_name}&customer_email=${customer_email}&conversation_subject=${conversation_subject}`, '/freescoutgpt/generate', function (response) {
         $('#body').summernote('pasteHTML', response.answer);
-        $(".gptbutton").removeClass("disabled");
+        $(".gptbutton").removeClass("fa-beat-fade");
     }, true, function() {
-        $(".gptbutton").removeClass("disabled");
+        $(".gptbutton").removeClass("fa-beat-fade");
         showFloatingAlert('error', Lang.get("messages.ajax_error"));
     });
 }

@@ -47,6 +47,11 @@ class FreeScoutGPTServiceProvider extends ServiceProvider
             return $javascripts;
         });
 
+        \Eventy::addAction('layout.head', function () {
+            echo '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" 
+          crossorigin="anonymous" referrerpolicy="no-referrer" />' . PHP_EOL;
+        });
+
         // Add module's CSS file to the application layout.
         \Eventy::addFilter('stylesheets', function($stylesheets) {
             array_push($stylesheets, \Module::getPublicPath("freescoutgpt").'/css/module.css');
@@ -61,19 +66,22 @@ class FreeScoutGPTServiceProvider extends ServiceProvider
 
         // JavaScript in the bottom
         \Eventy::addAction('javascript', function() {
-            $version = Module::find('freescoutgpt')->get('version');
+            $module = Module::find('freescoutgpt');
+            $version = $module ? $module->get('version') : '';
             $copiedToClipboard = __("Copied to clipboard");
             $updateAvailable = __('Update available for module ');
             $settings = $this->mailbox ? GPTSettings::find($this->mailbox->id) : null;
             $start_message = $settings ? $settings->start_message : "";
+            $responses_api_prompt = $settings ? $settings->responses_api_prompt : "";
             $modifyPrompt = __("Complete prompt and send last response from client to GPT");
-            $send = __("Send");
+            $send = __("Generate Answer");
 
             echo "const freescoutGPTData = {" .
                     "'copiedToClipboard': '{$copiedToClipboard}'," .
                     "'updateAvailable': '{$updateAvailable}'," .
                     "'version': '{$version}'," .
                     "'start_message': `{$start_message}`," .
+                    "'responses_api_prompt': `{$responses_api_prompt}`," .
                     "'modifyPrompt': `{$modifyPrompt}`," .
                     "'send': `{$send}`," .
                 "};";
@@ -91,7 +99,7 @@ class FreeScoutGPTServiceProvider extends ServiceProvider
                 return;
             }
             ?>
-            <li><a class="chatgpt-get" href="#" target="_blank" role="button"><?php echo __("Generate answer (GPT)")?></a></li>
+            <li><a class="chatgpt-get" href="#" target="_blank" role="button"><?php echo __("Generate Answer (GPT)")?></a></li>
             <?php
         }, 100);
 
