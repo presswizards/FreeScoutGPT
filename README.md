@@ -33,6 +33,8 @@ To use this module, you will need an OpenAI API key, which can be obtained from 
 8. Also, on the Reply screen, there is an Edit Prompt button, which you can use to rework the prompt and customize it for this reply, and then submit it to generate a reply using the additional information entered. Note that this prompt is not saved, it is unique to this reply only. [Note: this method does not yet use the new Responses API options.]
 
 ## Changelog
+v1.0.26: Adds better settings checks to prevent "Undefined array key" errors if DB migrations were not completed during the module update.
+
 v1.0.25: Adds new OpenAI Responses API settings: Enable/Disable, Articles text area, and Responses Prompt. Disabling will ensure it uses the current Chat Completions API calls. A big thanks to Lewis Downey for sponsoring the Responses API development and testing.
 
 v1.0.24: No longer unintentionally filters out the new gpt-4.1 models from the Settings model drop-down, which were released April 14, 2025. Cheaper, faster, smarter, I'd recommend using gpt-4.1 over gpt-4o now. ( See: https://openai.com/index/gpt-4-1/ )
