@@ -1,3 +1,8 @@
+v1.0.26
+<ul><li>
+Adds better settings checks to prevent "Undefined array key" errors if DB migrations were not completed during the module update.
+</li></ul>
+
 v1.0.25
 <ul><li>
 Adds new OpenAI Responses API settings: Enable/Disable, Articles text area, and Responses Prompt. Disabling will ensure it uses the current Chat Completions API calls. A big thanks to Lewis Downey for sponsoring the Responses API development and testing.
