@@ -25,7 +25,7 @@
                         <div class="onoffswitch-wrap">
                             <div class="onoffswitch">
                                 <input type="checkbox" name="gpt_enabled" id="gpt_enabled" class="onoffswitch-checkbox"
-                                    {!! $settings['enabled'] ? "checked" : "" !!}
+                                    {!! ($settings['enabled'] ?? false) ? "checked" : "" !!}
                                 >
                                 <label class="onoffswitch-label" for="gpt_enabled"></label>
                             </div>
@@ -38,7 +38,7 @@
                 <label class="col-sm-2 control-label"><a target="_blank" href="https://platform.openai.com/api-keys">{{ __("OpenAI API key") }}</a></label>
 
                 <div class="col-sm-6">
-                    <input name="api_key" class="form-control" placeholder="sk-..." value="{{ $settings['api_key'] }}" required />
+                    <input name="api_key" class="form-control" placeholder="sk-..." value="{{ $settings['api_key'] ?? '' }}" required />
                 </div>
             </div>
 
@@ -46,7 +46,7 @@
                 <label class="col-sm-2 control-label"><a target="_blank" href="https://help.openai.com/en/articles/4936856-what-are-tokens-and-how-to-count-them">{{ __("Token limit") }}</a></label>
 
                 <div class="col-sm-6">
-                    <input name="token_limit" class="form-control" placeholder="1024" type="number" value="{{ $settings['token_limit'] }}" required />
+                    <input name="token_limit" class="form-control" placeholder="1024" type="number" value="{{ $settings['token_limit'] ?? 1024 }}" required />
                 </div>
             </div>
 
@@ -54,7 +54,7 @@
                 <label class="col-sm-2 control-label"><a target="_blank" href="https://help.openai.com/en/articles/10032626-prompt-engineering-best-practices-for-chatgpt">{{ __("Prompt and Training") }}</a></label>
 
                 <div class="col-sm-6">
-                    <textarea rows="15" name="start_message" class="form-control" placeholder="Act like a support agent. (Add details like website link, knowledgebase link, etc. See module GitHub screenshots for an example)" required>{{ $settings['start_message'] }}</textarea>
+                    <textarea rows="15" name="start_message" class="form-control" placeholder="Act like a support agent. (Add details like website link, knowledgebase link, etc. See module GitHub screenshots for an example)" required>{{ $settings['start_message'] ?? '' }}</textarea>
                 </div>
             </div>
 
@@ -83,7 +83,7 @@
                         <div class="onoffswitch-wrap">
                             <div class="onoffswitch">
                                 <input type="checkbox" name="show_client_data_enabled" id="show_client_data_enabled" class="onoffswitch-checkbox"
-                                    {!! $settings['client_data_enabled'] ? "checked" : "" !!}
+                                    {!! ($settings['client_data_enabled'] ?? false) ? "checked" : "" !!}
                                 >
                                 <label class="onoffswitch-label" for="show_client_data_enabled"></label>
                             </div>
@@ -109,7 +109,7 @@
                         <div class="onoffswitch-wrap">
                             <div class="onoffswitch">
                                 <input type="checkbox" name="use_responses_api" id="use_responses_api" class="onoffswitch-checkbox"
-                                    {!! $settings['use_responses_api'] ? "checked" : "" !!}
+                                    {!! ($settings['use_responses_api'] ?? false) ? "checked" : "" !!}
                                 >
                                 <label class="onoffswitch-label" for="use_responses_api"></label>
                             </div>
@@ -122,7 +122,7 @@
                 <label for="article_urls" class="col-sm-2 control-label">{{ __("Article URLs for Web Search") }}</label>
                 <div class="col-sm-6">
                     <textarea rows="5" name="article_urls" class="form-control" placeholder="https://example.com/article1
-https://example.com/article2">{{ $settings['article_urls'] }}</textarea>
+https://example.com/article2">{{ $settings['article_urls'] ?? '' }}</textarea>
                     <span class="help-block">{{ __("Enter one article URL per line. These will be used for web search and summarization when the Responses API is enabled.") }}</span>
                 </div>
             </div>
