@@ -221,7 +221,13 @@ class FreeScoutGPTController extends Controller
                         'text' => mb_substr($finalText, 0, 12000) // limit to 12k chars per article
                     ];
                 } catch (\Exception $e) {
-                    return Response::json(['error' => 'Fetching Articles error: ' . $e->getMessage()], 500);
+                    $errorMsg = $e->getMessage();
+                    \Log::error('Error on Responses API Request: ' . $errorMsg ?? 'Error fetching or parsing the article.');
+                    $answerText = $errorMsg ?? 'Error fetching or parsing the article.';
+                    return Response::json([
+                        'query' => $userQuery ?? '',
+                        'answer' => $answerText
+                    ], 200);
                 }
             }
             $context = "";
@@ -258,7 +264,7 @@ class FreeScoutGPTController extends Controller
                 $payload = [
                     'model' => is_string($settings->model) ? $settings->model : (is_array($settings->model) ? reset($settings->model) : ''),
                     'input' => (string)($prompt . "\n" . $context),
-                    'max_completion_tokens' => (integer) $settings->token_limit
+                    'max_output_tokens' => (integer) $settings->token_limit
                 ];
                 $jsonPayload = json_encode($payload);
                 $response = $guzzle->post('https://api.openai.com/v1/responses', [
@@ -289,6 +295,7 @@ class FreeScoutGPTController extends Controller
                     }
                 }
                 $answerText = $openAiError ?: $errorMsg;
+                \Log::error('Error on Responses API Request: ' . $answerText);
                 return Response::json([
                     'query' => $userQuery ?? '',
                     'answer' => $answerText
