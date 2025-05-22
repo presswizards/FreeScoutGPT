@@ -33,6 +33,8 @@ To use this module, you will need an OpenAI API key, which can be obtained from 
 8. Also, on the Reply screen, there is an Edit Prompt button, which you can use to rework the prompt and customize it for this reply, and then submit it to generate a reply using the additional information entered. Note that this prompt is not saved, it is unique to this reply only. [Note: this method does not yet use the new Responses API options.]
 
 ## Changelog
+v1.0.27: Fixes max_completion_tokens error when using Responses API
+
 v1.0.26: Adds better settings checks to prevent "Undefined array key" errors if DB migrations were not completed during the module update.
 
 v1.0.25: Adds new OpenAI Responses API settings: Enable/Disable, Articles text area, and Responses Prompt. Disabling will ensure it uses the current Chat Completions API calls. A big thanks to Lewis Downey for sponsoring the Responses API development and testing.
