@@ -1,3 +1,8 @@
+v1.0.27
+<ul><li>
+Fixes max_completion_tokens error when using Responses API
+</li></ul>
+
 v1.0.26
 <ul><li>
 Adds better settings checks to prevent "Undefined array key" errors if DB migrations were not completed during the module update.
