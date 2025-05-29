@@ -62,7 +62,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const infomaniakFields = [
         document.querySelector("input[name='infomaniak_api_key']")?.closest('.form-group'),
         document.querySelector("input[name='infomaniak_product_id']")?.closest('.form-group'),
-        document.querySelector("input[name='infomaniak_model']")?.closest('.form-group')
+        document.querySelector("input[name='infomaniak_model']")?.closest('.form-group'),
         document.querySelector("input[name='infomaniak_api_prompt']")?.closest('.form-group')
     ];
 
