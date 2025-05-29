@@ -557,7 +557,8 @@ class FreeScoutGPTController extends Controller
                 $plainText = str_replace("\xc2\xa0", ' ', $plainText); // non-breaking space
                 $plainText = preg_replace('/[ \t]+/', ' ', $plainText);
                 // Collapse 3+ newlines to 2, and trim leading/trailing whitespace/newlines
-                $plainText = preg_replace('/[\r\n]{3,}/', "\n\n", $plainText);
+                $plainText = preg_replace('/[\r\n]{2,}/', "\n", $plainText);
+                $plainText = preg_replace('/[\n]{2,}/', "\n", $plainText);
                 $plainText = preg_replace('/^[\s\n\r]+|[\s\n\r]+$/u', '', $plainText);
                 $text .= trim($plainText) . "";
             }
