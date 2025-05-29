@@ -149,6 +149,7 @@ class FreeScoutGPTController extends Controller
 
         // Get ajax system prompt, and use it below if set
         $ajax_cmd = $request->get("command");
+
         // If Responses API is enabled, use it instead of Chat Completions
         if (!empty($settings->use_responses_api)) {
             $articleUrls = array_filter(array_map('trim', preg_split('/\r?\n/', $settings->article_urls)));
@@ -160,18 +161,7 @@ class FreeScoutGPTController extends Controller
                 ], 200);
             }
             $context = $fetchResult['context'];
-            $articles = $fetchResult['articles'];
             $userQuery = $request->get('query');
-            $context .= "Customer query: $userQuery\n";
-            if (empty($articles)) {
-                $context .= "No articles could be fetched or parsed.\n";
-            } else {
-                $context .= "Articles:\n";
-                foreach ($articles as $i => $article) {
-                    $context .= "[Article #" . ($i + 1) . "] URL: " . $article['url'] . "\n";
-                    $context .= (is_string($article['text']) ? $article['text'] : '') . "\n\n";
-                }
-            }
 
             // Build prompt: use responses_api_prompt if set, otherwise use hardcoded default
             $prompt = $ajax_cmd ?? $settings->start_message . "\n\n";
@@ -250,7 +240,6 @@ class FreeScoutGPTController extends Controller
                 ], 200);
             }
             $context = $fetchResult['context'];
-            $articles = $fetchResult['articles'];
             $apiKey = $settings->infomaniak_api_key;
             $productId = $settings->infomaniak_product_id;
             $model = $settings->infomaniak_model;
@@ -263,18 +252,6 @@ class FreeScoutGPTController extends Controller
                     'content' => $ajax_cmd ?? $settings->start_message
                 ];
                 \Log::info('Infomaniak API system prompt' . $ajax_cmd ?? $settings->start_message);
-            }
-            // Add context from articles
-            if (empty($articles)) {
-                $context .= "No articles could be fetched or parsed.\n";
-                \Log::info('Infomaniak API: No articles could be fetched or parsed.');
-            } else {
-                $context .= "Articles:\n";
-                foreach ($articles as $i => $article) {
-                    $context .= "[Article #" . ($i + 1) . "] URL: " . $article['url'] . "\n";
-                    $context .= (is_string($article['text']) ? $article['text'] : '') . "\n\n";
-                    \Log::info('Infomaniak API: Using article ' . $article['url']);
-                }
             }
             // Add Infomaniak API prompt if set
             if (!empty($settings->infomaniak_api_prompt)) {
