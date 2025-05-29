@@ -272,7 +272,7 @@ class FreeScoutGPTController extends Controller
             if (isset($settings->responses_api_prompt) && $settings->responses_api_prompt) {
                 $prompt .= $settings->responses_api_prompt . "\n\n";
             } else {
-                $prompt .= "If relevant given the customer's query, and the articles included, find the single article that best answers the user's question. Summarize the relevant part of that article as a support answer, and provide the article URL. If no article is relevant, reply with a concise best attempt to answer their concerns.";
+                $prompt .= __('If relevant given the customer\'s query, and the articles included, find the single article that best answers the user\'s question. Summarize the relevant part of that article as a support answer, and provide the article URL. If no article is relevant, reply with a concise best attempt to answer their concerns.\n\n');
             }
 
             // Use Guzzle to call OpenAI Responses API
@@ -353,6 +353,8 @@ class FreeScoutGPTController extends Controller
             $systemPrompt = (!empty($ajax_cmd) ? $ajax_cmd : $settings->start_message);
             if (!empty($settings->infomaniak_api_prompt)) {
                 $systemPrompt .= "\n\n" . $settings->infomaniak_api_prompt;
+            } else {
+                $systemPrompt .= __('\n\nIf relevant given the customer\'s query, and the articles included, find the single article that best answers the user\'s question. Summarize the relevant part of that article as a support answer, and provide the article URL. If no article is relevant, reply with a concise best attempt to answer their concerns.');
             }
             $systemPrompt .= "\n\n" . $context;
 
@@ -431,10 +433,9 @@ class FreeScoutGPTController extends Controller
             $conversationSubject = $request->get("conversation_subject");
             array_push($messages, [
                 'role' => $req_role,
-                'content' => __('Conversation subject is ":subject", customer name is ":name", customer email is ":email"', [
+                'content' => __('Conversation subject is: ":subject"\nCustomer name is: ":name"\n', [
                     'subject' => $conversationSubject,
-                    'name' => $customerName,
-                    'email' => $customerEmail
+                    'name' => $customerName
                 ])
             ]);
         }
@@ -594,15 +595,18 @@ class FreeScoutGPTController extends Controller
             $customerName = $request->get("customer_name");
             $customerEmail = $request->get("customer_email");
             $conversationSubject = $request->get("conversation_subject");
-            $context .= "Conversation subject is $conversationSubject, customer name is $customerName\n";
+            $context .= __("Conversation subject is: :subject\nCustomer name is: :name\n", [
+                'subject' => $conversationSubject,
+                'name' => $customerName
+            ]) . "\n";
         }
-        $context .= "Customer query: $userQuery\n";
+        $context .= __('Customer query: :query', ['query' => $userQuery]) . "\n";
         if (empty($articles)) {
-            $context .= "No articles could be fetched or parsed.\n";
+            $context .= __('No articles were included.') . "\n";
         } else {
-            $context .= "Articles:\n";
+            $context .= __('Articles to use for context:') . "\n";
             foreach ($articles as $i => $article) {
-                $context .= "[Article #" . ($i + 1) . "] URL: " . $article['url'] . "\n";
+                $context .= __('[Article #:num] URL: :url', ['num' => ($i + 1), 'url' => $article['url']]) . "\n";
                 $context .= (is_string($article['text']) ? $article['text'] : '') . "\n\n";
             }
         }
