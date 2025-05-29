@@ -144,16 +144,16 @@
             </div>
 
             <div class="form-group">
-                <label class="col-sm-2 control-label"><a href="https://manager.infomaniak.com/v3/ng/accounts/token/list" target="_blank">{{ __("Infomaniak API Key") }}</a></label>
+                <label class="col-sm-2 control-label"><a href="https://manager.infomaniak.com/v3/ng/accounts/token/list" target="_blank">{{ __("Infomaniak API Token") }}</a></label>
                 <div class="col-sm-6">
-                    <input name="infomaniak_api_key" class="form-control" placeholder="Infomaniak API Key" value="{{ $settings['infomaniak_api_key'] ?? '' }}" />
+                    <input name="infomaniak_api_key" class="form-control" placeholder="Infomaniak API Token" value="{{ $settings['infomaniak_api_key'] ?? '' }}" />
                 </div>
             </div>
 
             <div class="form-group">
                 <label class="col-sm-2 control-label"><a href="https://developer.infomaniak.com/docs/api/get/1/ai" target="_blank">{{ __("Infomaniak Product ID") }}</a></label>
                 <div class="col-sm-6">
-                    <input name="infomaniak_product_id" class="form-control" placeholder="33" value="{{ $settings['infomaniak_product_id'] ?? '33' }}" />
+                    <input name="infomaniak_product_id" class="form-control" placeholder="101101" value="{{ $settings['infomaniak_product_id'] ?? '' }}" />
                 </div>
             </div>
 
