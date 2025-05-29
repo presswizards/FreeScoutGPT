@@ -201,6 +201,47 @@ class FreeScoutGPTController extends Controller
         }
     }
 
+    /**
+     * Get available Infomaniak Product IDs for the account
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getAvailableInfomaniakProductIds(Request $request)
+    {
+        $apiKey = $request->input('infomaniak_api_key');
+        if (!$apiKey) {
+            return response()->json(['error' => 'Infomaniak API key is required'], 400);
+        }
+        $cacheKey = 'infomaniak_product_ids_' . md5($apiKey);
+        if (Cache::has($cacheKey)) {
+            return response()->json(['data' => Cache::get($cacheKey)]);
+        }
+        try {
+            $client = new \GuzzleHttp\Client();
+            $url = "https://api.infomaniak.com/1/ai";
+            $response = $client->get($url, [
+                'headers' => [
+                    'Authorization' => 'Bearer ' . $apiKey,
+                    'Accept' => 'application/json',
+                ],
+            ]);
+            $result = json_decode($response->getBody(), true);
+            $productIds = [];
+            if (!empty($result['data']) && is_array($result['data'])) {
+                foreach ($result['data'] as $item) {
+                    if (isset($item['product_id'])) {
+                        $productIds[] = $item['product_id'];
+                    }
+                }
+            }
+            // Cache for 10 minutes
+            Cache::put($cacheKey, $productIds, now()->addMinutes(10));
+            return response()->json(['data' => $productIds]);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
     public function generate(Request $request)
     {
         if (Auth::user() === null) return Response::json(["error" => "Unauthorized"], 401);

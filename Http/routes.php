@@ -9,4 +9,5 @@ Route::group(['middleware' => 'web', 'prefix' => \Helper::getSubdirectory(), 'na
     Route::post('/mailbox/{mailbox_id}/freescoutgpt-settings', ['uses' => 'FreeScoutGPTController@saveSettings', 'middleware' => ['auth', 'roles'], 'roles' => ['admin']]);
     Route::post('/freescoutgpt/get-models', 'FreeScoutGPTController@getAvailableModels');
     Route::post('/freescoutgpt/infomaniak-models', 'FreeScoutGPTController@getAvailableInfomaniakModels');
+    Route::post('/freescoutgpt/get-infomaniak-product-ids', 'FreeScoutGPTController@getAvailableInfomaniakProductIds');
 });

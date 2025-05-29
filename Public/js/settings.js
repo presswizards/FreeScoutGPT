@@ -174,4 +174,110 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
     // --- END Infomaniak Models Fetch ---
+    // --- BEGIN Infomaniak Product ID Fetch ---
+    // Use different variable names to avoid redeclaration
+    const infomaniakApiKeyInput2 = document.querySelector("input[name='infomaniak_api_key']");
+    const infomaniakProductIdInput2 = document.querySelector("input[name='infomaniak_product_id']");
+    function fetchInfomaniakProductIds(apiKey) {
+        if (!apiKey || !infomaniakProductIdInput2) return;
+        // If input is a select, clear options
+        if (infomaniakProductIdInput2.tagName === 'SELECT') {
+            infomaniakProductIdInput2.innerHTML = '';
+        }
+        fetch("/freescoutgpt/get-infomaniak-product-ids", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRF-TOKEN": document.querySelector('meta[name=\"csrf-token\"]').content,
+            },
+            body: JSON.stringify({ infomaniak_api_key: apiKey }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (Array.isArray(data.data) && data.data.length > 0) {
+                if (infomaniakProductIdInput2.tagName === 'SELECT') {
+                    infomaniakProductIdInput2.innerHTML = '<option value="">Select a Product ID</option>';
+                    data.data.forEach(pid => {
+                        const option = document.createElement("option");
+                        option.value = pid;
+                        option.textContent = pid;
+                        if (pid == infomaniakProductIdInput2.value) option.selected = true;
+                        infomaniakProductIdInput2.appendChild(option);
+                    });
+                } else {
+                    infomaniakProductIdInput2.value = data.data[0];
+                }
+            } else {
+                if (infomaniakProductIdInput2.tagName === 'SELECT') {
+                    infomaniakProductIdInput2.innerHTML = '<option value="">No Product IDs found</option>';
+                }
+            }
+        })
+        .catch(error => {
+            if (infomaniakProductIdInput2.tagName === 'SELECT') {
+                infomaniakProductIdInput2.innerHTML = '<option value="">Error fetching Product IDs</option>';
+            }
+            console.error("Error fetching Infomaniak Product IDs:", error);
+        });
+    }
+    if (infomaniakApiKeyInput2) {
+        infomaniakApiKeyInput2.addEventListener("blur", function () {
+            fetchInfomaniakProductIds(infomaniakApiKeyInput2.value);
+        });
+    }
+    // --- END Infomaniak Product ID Fetch ---
+    // --- BEGIN Infomaniak Product ID Select Logic ---
+    const infomaniakApiKeyInput3 = document.querySelector("input[name='infomaniak_api_key']");
+    const infomaniakProductIdSelect = document.getElementById("infomaniak_product_id_select");
+    const infomaniakProductIdHidden = document.getElementById("infomaniak_product_id_hidden");
+    if (infomaniakProductIdSelect && infomaniakProductIdHidden) {
+        function fetchAndPopulateProductIds(apiKey) {
+            if (!apiKey) return;
+            infomaniakProductIdSelect.innerHTML = '<option value="">Fetching your Product IDs...</option>';
+            fetch("/freescoutgpt/get-infomaniak-product-ids", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRF-TOKEN": document.querySelector('meta[name=\"csrf-token\"]').content,
+                },
+                body: JSON.stringify({ infomaniak_api_key: apiKey }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                infomaniakProductIdSelect.innerHTML = '<option value="">Select a Product ID</option>';
+                if (Array.isArray(data.data) && data.data.length > 0) {
+                    data.data.forEach(pid => {
+                        const option = document.createElement("option");
+                        option.value = pid;
+                        option.textContent = pid;
+                        if (infomaniakProductIdHidden.value && pid == infomaniakProductIdHidden.value) {
+                            option.selected = true;
+                        }
+                        infomaniakProductIdSelect.appendChild(option);
+                    });
+                } else {
+                    infomaniakProductIdSelect.innerHTML = '<option value="">No Product IDs found</option>';
+                }
+            })
+            .catch(error => {
+                infomaniakProductIdSelect.innerHTML = '<option value="">Error fetching Product IDs</option>';
+                console.error("Error fetching Infomaniak Product IDs:", error);
+            });
+        }
+        // On select change, update hidden input
+        infomaniakProductIdSelect.addEventListener('change', function() {
+            infomaniakProductIdHidden.value = this.value;
+        });
+        // On API key blur, fetch product IDs
+        if (infomaniakApiKeyInput3) {
+            infomaniakApiKeyInput3.addEventListener("blur", function () {
+                fetchAndPopulateProductIds(infomaniakApiKeyInput3.value);
+            });
+            // Initial fetch if value exists
+            if (infomaniakApiKeyInput3.value) {
+                fetchAndPopulateProductIds(infomaniakApiKeyInput3.value);
+            }
+        }
+    }
+    // --- END Infomaniak Product ID Select Logic ---
 });
