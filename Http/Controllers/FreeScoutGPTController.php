@@ -558,7 +558,7 @@ class FreeScoutGPTController extends Controller
                 $plainText = preg_replace('/[ \t]+/', ' ', $plainText);
                 $plainText = preg_replace('/[\r\n]{2,}/', "\n\n", $plainText);
 
-                $text .= trim($plainText) . "\n";
+                $text .= trim($plainText) . "";
             }
 
             libxml_clear_errors();
