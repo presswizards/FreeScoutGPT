@@ -58,12 +58,12 @@ document.addEventListener("DOMContentLoaded", function () {
     const responsesApiCheckbox = document.querySelector("input[name='use_responses_api']");
     const articleUrlsGroup = document.getElementById("article-urls-group");
     const responsesApiPromptGroup = document.querySelector("textarea[name='responses_api_prompt']")?.closest('.form-group');
-    const infomaniakApiPromptGroup = document.querySelector("textarea[name='infomaniak_api_prompt']")?.closest('.form-group');
     const infomaniakCheckbox = document.querySelector("input[name='infomaniak_enabled']");
     const infomaniakFields = [
         document.querySelector("input[name='infomaniak_api_key']")?.closest('.form-group'),
         document.querySelector("input[name='infomaniak_product_id']")?.closest('.form-group'),
         document.querySelector("input[name='infomaniak_model']")?.closest('.form-group')
+        document.querySelector("input[name='infomaniak_api_prompt']")?.closest('.form-group')
     ];
 
     function toggleApiFields(e) {
@@ -109,16 +109,13 @@ document.addEventListener("DOMContentLoaded", function () {
     function toggleResponsesApiFields() {
         if (infomaniakCheckbox && infomaniakCheckbox.checked) {
             articleUrlsGroup.style.display = '';
-            infomaniakApiPromptGroup.style.display = '';
             responsesApiPromptGroup.style.display = 'none';
         } else if (responsesApiCheckbox && responsesApiCheckbox.checked) {
             articleUrlsGroup.style.display = '';
             responsesApiPromptGroup.style.display = '';
-            infomaniakApiPromptGroup.style.display = 'none';
         } else {
             articleUrlsGroup.style.display = 'none';
             responsesApiPromptGroup.style.display = 'none';
-            infomaniakApiPromptGroup.style.display = 'none';
         }
     }
     if (responsesApiCheckbox && articleUrlsGroup && responsesApiPromptGroup) {
