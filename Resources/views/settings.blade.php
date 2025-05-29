@@ -129,7 +129,7 @@
             <div class="form-group">
                 <label for="infomaniak_enabled" class="col-sm-2 control-label">{{ __("Use Infomaniak Chat Completions API") }}</label>
                 <div class="col-sm-6">
-                    <i style="margin: 0 20px" class="glyphicon glyphicon-info-sign icon-info" data-toggle="popover" data-trigger="hover" data-html="true" data-placement="left" data-content="{{ __('If enabled, the Infomaniak Chat Completions API will be used with the articles provided, and should generate much more targeted and informative answers if the articles have all the relevant information. Please note: token limit maxiumum is 5000 for Infomaniak. Higher than that will cause an error.') }}" data-original-title="" title=""></i>
+                    <i style="margin: 0 20px" class="glyphicon glyphicon-info-sign icon-info" data-toggle="popover" data-trigger="hover" data-html="true" data-placement="left" data-content="{{ __('For those requiring GDPR Compliance and Enhanced Privacy, we now offer the Infomaniak Chat Completions API. If enabled, it is used with the articles provided, and should generate much more targeted and informative answers if the articles have all the relevant information.') }}" data-original-title="" title=""></i>
                     <div class="controls">
                         <div class="onoffswitch-wrap">
                             <div class="onoffswitch">
@@ -147,6 +147,7 @@
                 <label class="col-sm-2 control-label"><a href="https://manager.infomaniak.com/v3/ng/accounts/token/list" target="_blank">{{ __("Infomaniak API Token") }}</a></label>
                 <div class="col-sm-6">
                     <input name="infomaniak_api_key" class="form-control" placeholder="Infomaniak API Token" value="{{ $settings['infomaniak_api_key'] ?? '' }}" />
+                    <span class="help-block">{{ __(" Please note: For the token limit set above, the maxiumum is 5000 for Infomaniak. Higher than that will cause an error.") }}</span>
                 </div>
             </div>
 
