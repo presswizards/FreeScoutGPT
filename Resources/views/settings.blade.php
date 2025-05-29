@@ -18,7 +18,7 @@
             {{ csrf_field() }}
 
             <div class="form-group">
-                <label for="gpt_enabled" class="col-sm-2 control-label">{{ __("Enable FreeScoutGPT") }}</label>
+                <label for="gpt_enabled" class="col-sm-2 control-label">{{ __("Enable FreeScoutGPT Module") }}</label>
 
                 <div class="col-sm-6">
                     <div class="controls">
