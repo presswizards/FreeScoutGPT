@@ -19,6 +19,7 @@ function freescoutgptInit() {
                     if (!response.enabled) {
                         $(".chatgpt-get").remove();
                         $(".gptbutton").remove();
+                        $(".gpt").remove();
                     }
                 }
             });
