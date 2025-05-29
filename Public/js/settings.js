@@ -229,8 +229,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // --- BEGIN Infomaniak Product ID Select Logic ---
     const infomaniakApiKeyInput3 = document.querySelector("input[name='infomaniak_api_key']");
     const infomaniakProductIdSelect = document.getElementById("infomaniak_product_id_select");
-    const infomaniakProductIdHidden = document.getElementById("infomaniak_product_id_hidden");
-    if (infomaniakProductIdSelect && infomaniakProductIdHidden) {
+    if (infomaniakProductIdSelect) {
         function fetchAndPopulateProductIds(apiKey) {
             if (!apiKey) return;
             infomaniakProductIdSelect.innerHTML = '<option value="">Fetching your Product IDs...</option>';
@@ -250,7 +249,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         const option = document.createElement("option");
                         option.value = pid;
                         option.textContent = pid;
-                        if (infomaniakProductIdHidden.value && pid == infomaniakProductIdHidden.value) {
+                        if (infomaniakProductIdSelect.dataset.savedProductId && pid == infomaniakProductIdSelect.dataset.savedProductId) {
                             option.selected = true;
                         }
                         infomaniakProductIdSelect.appendChild(option);
@@ -264,10 +263,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 console.error("Error fetching Infomaniak Product IDs:", error);
             });
         }
-        // On select change, update hidden input
-        infomaniakProductIdSelect.addEventListener('change', function() {
-            infomaniakProductIdHidden.value = this.value;
-        });
         // On API key blur, fetch product IDs
         if (infomaniakApiKeyInput3) {
             infomaniakApiKeyInput3.addEventListener("blur", function () {
