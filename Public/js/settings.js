@@ -102,11 +102,14 @@ document.addEventListener("DOMContentLoaded", function () {
         responsesApiCheckbox.addEventListener('change', toggleApiFields);
     }
     // Initial state
-    toggleApiFields({ type: 'change', target: infomaniakCheckbox });
+    toggleApiFields();
     // --- END Infomaniak/Responses API UI logic ---
     // Hide/show Article URLs textarea based on Responses API checkbox
     function toggleResponsesApiFields() {
-        if (responsesApiCheckbox.checked) {
+        if (infomaniakCheckbox && infomaniakCheckbox.checked) {
+            articleUrlsGroup.style.display = '';
+            responsesApiPromptGroup.style.display = 'none';
+        } else if (responsesApiCheckbox && responsesApiCheckbox.checked) {
             articleUrlsGroup.style.display = '';
             responsesApiPromptGroup.style.display = '';
         } else {
