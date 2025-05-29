@@ -46,7 +46,7 @@
                 <label class="col-sm-2 control-label"><a target="_blank" href="https://help.openai.com/en/articles/4936856-what-are-tokens-and-how-to-count-them">{{ __("Token limit") }}</a></label>
 
                 <div class="col-sm-6">
-                    <input name="token_limit" class="form-control" placeholder="4096" type="number" value="{{ $settings['token_limit'] ?? 4096 }}" required />
+                    <input name="token_limit" class="form-control input-sized" placeholder="4096" type="number" value="{{ $settings['token_limit'] ?? 4096 }}" required />
                 </div>
             </div>
 
@@ -70,9 +70,6 @@
                    </select>
                 </div>
             </div>
-
-            <meta name="csrf-token" content="{{ csrf_token() }}">
-            <script src="{{ \Module::getPublicPath('freescoutgpt') }}/js/settings.js"></script>
             
             <div class="form-group">
                 <label for="show_client_data_enabled" class="col-sm-2 control-label">{{ __("Send client information to ChatGPT") }}</label>
@@ -196,6 +193,8 @@ https://example.com/article2">{{ $settings['article_urls'] ?? '' }}</textarea>
             </div>
         </form>
     </div>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <script src="{{ \Module::getPublicPath('freescoutgpt') }}/js/settings.js"></script>
 @endsection
 
 @section('body_bottom')
