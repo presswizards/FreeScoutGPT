@@ -253,15 +253,15 @@ class FreeScoutGPTController extends Controller
             if ($settings->start_message || !empty($ajax_cmd)) {
                 $messages[] = [
                     'role' => 'system',
-                    'content' => $ajax_cmd ?? $settings->start_message
+                    'content' => !empty($ajax_cmd) ? $ajax_cmd : $settings->start_message
                 ];
-                \Log::info('Infomaniak API system prompt: ' . $ajax_cmd ?? $settings->start_message);
+                \Log::info('Infomaniak API system prompt: ' . (!empty($ajax_cmd) ? $ajax_cmd : $settings->start_message));
             } else {
                 $messages[] = [
                     'role' => 'system',
-                    'content' => $ajax_cmd ?? 'You are a helpful assistant.'
+                    'content' => !empty($ajax_cmd) ? $ajax_cmd : 'You are a helpful assistant.'
                 ];
-                \Log::info('Infomaniak API system prompt: ' . $ajax_cmd ?? 'You are a helpful assistant.');
+                \Log::info('Infomaniak API system prompt: ' . (!empty($ajax_cmd) ? $ajax_cmd : 'You are a helpful assistant.'));
             }
             // Add Infomaniak API prompt if set
             if (!empty($settings->infomaniak_api_prompt)) {
