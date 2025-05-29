@@ -142,6 +142,54 @@ class FreeScoutGPTController extends Controller
         }
     }
 
+    /**
+     * Get available models from Infomaniak API
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getAvailableInfomaniakModels(Request $request)
+    {
+        $apiKey = $request->input('infomaniak_api_key');
+        $productId = $request->input('infomaniak_product_id');
+
+        if (!$apiKey || !$productId) {
+            return response()->json(['error' => 'Infomaniak API key and Product ID are required'], 400);
+        }
+
+        $cacheKey = 'infomaniak_models_' . md5($apiKey . '_' . $productId);
+
+        // Check if models are cached
+        if (Cache::has($cacheKey)) {
+            return response()->json(['data' => Cache::get($cacheKey)]);
+        }
+
+        try {
+            $client = new \GuzzleHttp\Client();
+            $url = "https://api.infomaniak.com/1/ai/{$productId}/openai/models";
+            $response = $client->get($url, [
+                'headers' => [
+                    'Authorization' => 'Bearer ' . $apiKey,
+                    'Accept' => 'application/json',
+                ],
+            ]);
+
+            $models = json_decode($response->getBody(), true);
+            $filteredModels = $models['data'] ?? [];
+
+            // Optionally, sort alphabetically by 'id' if present
+            usort($filteredModels, function($a, $b) {
+                return strcmp($a['id'] ?? '', $b['id'] ?? '');
+            });
+
+            // Cache filtered models for 10 minutes
+            Cache::put($cacheKey, $filteredModels, now()->addMinutes(10));
+
+            return response()->json(['data' => $filteredModels]);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
     public function generate(Request $request)
     {
         if (Auth::user() === null) return Response::json(["error" => "Unauthorized"], 401);

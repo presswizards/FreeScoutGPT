@@ -160,9 +160,14 @@
             <div class="form-group">
                 <label class="col-sm-2 control-label"><a href="https://developer.infomaniak.com/docs/api/post/1/ai/%7Bproduct_id%7D/openai/chat/completions" target="_blank">{{ __("Infomaniak Model Name") }}</a></label>
                 <div class="col-sm-6">
-                    <input name="infomaniak_model" class="form-control" placeholder="mistral24b" value="{{ $settings['infomaniak_model'] ?? 'mistral24b' }}" />
+                    <select id="infomaniak_model" class="form-control input-sized" name="infomaniak_model" data-saved-model="{{ old('infomaniak_model', $settings['infomaniak_model'] ?? '') }}">
+                        <option value="">Fetching your Infomaniak models...</option>
+                    </select>
                 </div>
             </div>
+            <script>
+            window.infomaniakModelInputType = 'select';
+            </script>
 
             <div class="form-group">
                 <label class="col-sm-2 control-label">{{ __("Infomaniak API Prompt") }}</label>

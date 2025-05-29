@@ -123,4 +123,55 @@ document.addEventListener("DOMContentLoaded", function () {
         responsesApiCheckbox.addEventListener('change', toggleResponsesApiFields);
         toggleResponsesApiFields(); // Set initial state
     }
+    // --- BEGIN Infomaniak Models Fetch ---
+    const infomaniakApiKeyInput = document.querySelector("input[name='infomaniak_api_key']");
+    const infomaniakProductIdInput = document.querySelector("input[name='infomaniak_product_id']");
+    const infomaniakModelSelect = document.getElementById("infomaniak_model");
+    const savedInfomaniakModel = infomaniakModelSelect ? infomaniakModelSelect.dataset.savedModel : '';
+
+    function fetchInfomaniakModels(apiKey, productId) {
+        if (!apiKey || !productId || !infomaniakModelSelect) return;
+        infomaniakModelSelect.innerHTML = '<option value="">Fetching your Infomaniak models...</option>';
+        fetch("/freescoutgpt/infomaniak-models", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content,
+            },
+            body: JSON.stringify({ infomaniak_api_key: apiKey, infomaniak_product_id: productId }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            infomaniakModelSelect.innerHTML = '<option value="">Select an Infomaniak model</option>';
+            if (data.data) {
+                data.data.forEach(model => {
+                    const option = document.createElement("option");
+                    option.value = model.id;
+                    option.textContent = model.id;
+                    if (model.id === savedInfomaniakModel) {
+                        option.selected = true;
+                    }
+                    infomaniakModelSelect.appendChild(option);
+                });
+            } else {
+                infomaniakModelSelect.innerHTML = '<option value="">No models found</option>';
+            }
+        })
+        .catch(error => {
+            infomaniakModelSelect.innerHTML = '<option value="">Error fetching models</option>';
+            console.error("Error fetching Infomaniak models:", error);
+        });
+    }
+    if (infomaniakApiKeyInput && infomaniakProductIdInput && infomaniakApiKeyInput.value && infomaniakProductIdInput.value) {
+        fetchInfomaniakModels(infomaniakApiKeyInput.value, infomaniakProductIdInput.value);
+    }
+    if (infomaniakApiKeyInput && infomaniakProductIdInput) {
+        infomaniakApiKeyInput.addEventListener("blur", function () {
+            fetchInfomaniakModels(infomaniakApiKeyInput.value, infomaniakProductIdInput.value);
+        });
+        infomaniakProductIdInput.addEventListener("blur", function () {
+            fetchInfomaniakModels(infomaniakApiKeyInput.value, infomaniakProductIdInput.value);
+        });
+    }
+    // --- END Infomaniak Models Fetch ---
 });
