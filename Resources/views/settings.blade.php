@@ -147,7 +147,7 @@
                 <label class="col-sm-2 control-label"><a href="https://manager.infomaniak.com/v3/ng/accounts/token/list" target="_blank">{{ __("Infomaniak API Token") }}</a></label>
                 <div class="col-sm-6">
                     <input name="infomaniak_api_key" class="form-control" placeholder="Infomaniak API Token" value="{{ $settings['infomaniak_api_key'] ?? '' }}" />
-                    <span class="help-block">{{ __(" Please note: For the token limit set above, the maxiumum is 5000 for Infomaniak. Higher than that will cause an error.") }}</span>
+                    <span class="help-block">{{ __("Note: For the token limit set above, the maxiumum is 5000 for Infomaniak. Higher than that will cause an error.") }}</span>
                 </div>
             </div>
 
