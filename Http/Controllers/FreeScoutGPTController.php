@@ -284,6 +284,11 @@ class FreeScoutGPTController extends Controller
                 \Log::info('Infomaniak API Article Prompt: ' . $settings->infomaniak_api_prompt);
             }
             $messages[] = [
+                'role' => 'system',
+                'content' => $context
+            ];
+            \Log::info('Infomaniak API: Using Context ' . $context);
+            $messages[] = [
                 'role' => 'user',
                 'content' => $userQuery
             ];
@@ -302,6 +307,7 @@ class FreeScoutGPTController extends Controller
                     'body' => json_encode($payload),
                 ]);
                 $data = json_decode($response->getBody(), true);
+                \Log::info('Infomaniak API Call Response ' . json_encode($data));
                 $answerText = $data['choices'][0]['message']['content'] ?? '';
             } catch (\Exception $e) {
                 $answerText = $e->getMessage();
