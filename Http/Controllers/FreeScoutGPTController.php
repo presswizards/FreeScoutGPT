@@ -249,37 +249,26 @@ class FreeScoutGPTController extends Controller
             $model = $settings->infomaniak_model;
             $tokenLimit = (int) $settings->token_limit;
             $userQuery = $request->get('query');
-            $messages = [];
-            if ($settings->start_message || !empty($ajax_cmd)) {
-                $messages[] = [
-                    'role' => 'system',
-                    'content' => !empty($ajax_cmd) ? $ajax_cmd : $settings->start_message
-                ];
-                \Log::info('Infomaniak API system prompt: ' . (!empty($ajax_cmd) ? $ajax_cmd : $settings->start_message));
-            } else {
-                $messages[] = [
-                    'role' => 'system',
-                    'content' => !empty($ajax_cmd) ? $ajax_cmd : 'You are a helpful assistant.'
-                ];
-                \Log::info('Infomaniak API system prompt: ' . (!empty($ajax_cmd) ? $ajax_cmd : 'You are a helpful assistant.'));
-            }
-            // Add Infomaniak API prompt if set
+
+            $systemPrompt = (!empty($ajax_cmd) ? $ajax_cmd : $settings->start_message);
             if (!empty($settings->infomaniak_api_prompt)) {
-                $messages[] = [
-                    'role' => 'system',
-                    'content' => $settings->infomaniak_api_prompt
-                ];
-                \Log::info('Infomaniak API Article Prompt: ' . $settings->infomaniak_api_prompt);
+                $systemPrompt .= "\n\n" . $settings->infomaniak_api_prompt;
             }
-            $messages[] = [
-                'role' => 'system',
-                'content' => $context
+            $systemPrompt .= "\n\n" . $context;
+
+            \Log::info('Infomaniak API system prompt: ' . $systemPrompt);
+
+            $messages = [
+                [
+                    'role' => 'system',
+                    'content' => $systemPrompt
+                ],
+                [
+                    'role' => 'user',
+                    'content' => $userQuery
+                ]
             ];
-            \Log::info('Infomaniak API Using Context: ' . $context);
-            $messages[] = [
-                'role' => 'user',
-                'content' => $userQuery
-            ];
+
             $payload = [
                 'model' => $model,
                 'messages' => $messages,
