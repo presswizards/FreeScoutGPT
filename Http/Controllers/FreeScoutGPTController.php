@@ -243,6 +243,7 @@ class FreeScoutGPTController extends Controller
             $articleUrls = array_filter(array_map('trim', preg_split('/\r?\n/', $settings->article_urls)));
             $fetchResult = $this->fetchArticlesContext($articleUrls, $settings, $request);
             if (!empty($fetchResult['error'])) {
+                \Log::error('Infomaniak API Articles Error: ' . $fetchResult['error']);
                 return Response::json([
                     'query' => $fetchResult['userQuery'] ?? '',
                     'answer' => $fetchResult['error']
@@ -287,7 +288,7 @@ class FreeScoutGPTController extends Controller
                 'role' => 'system',
                 'content' => $context
             ];
-            \Log::info('Infomaniak API: Using Context ' . $context);
+            \Log::info('Infomaniak API Using Context: ' . $context);
             $messages[] = [
                 'role' => 'user',
                 'content' => $userQuery
@@ -310,6 +311,7 @@ class FreeScoutGPTController extends Controller
                 \Log::info('Infomaniak API Call Response ' . json_encode($data));
                 $answerText = $data['choices'][0]['message']['content'] ?? '';
             } catch (\Exception $e) {
+                \Log::error('Infomaniak API Response Error: ' . $e->getMessage());
                 $answerText = $e->getMessage();
             }
             $thread = Thread::find($request->get('thread_id'));
@@ -318,6 +320,7 @@ class FreeScoutGPTController extends Controller
             $answers[] = $answerText;
             $thread->chatgpt = json_encode($answers, JSON_UNESCAPED_UNICODE);
             $thread->save();
+            \Log::info('Infomaniak API Generate Answer: ' . $answerText);
             return Response::json([
                 'query' => $userQuery,
                 'answer' => $answerText
