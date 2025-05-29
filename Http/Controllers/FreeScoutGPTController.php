@@ -176,6 +176,17 @@ class FreeScoutGPTController extends Controller
             $models = json_decode($response->getBody(), true);
             $filteredModels = $models['data'] ?? [];
 
+            // Filter out non-chat models (e.g., whisper, photomaker, flux, bge_multilingual_gemma2)
+            $nonChatModels = ['whisper', 'photomaker', 'flux', 'bge_multilingual_gemma2'];
+            $filteredModels = array_filter($filteredModels, function ($model) use ($nonChatModels) {
+                foreach ($nonChatModels as $nonChatModel) {
+                    if (isset($model['id']) && stripos($model['id'], $nonChatModel) !== false) {
+                        return false;
+                    }
+                }
+                return true;
+            });
+
             // Optionally, sort alphabetically by 'id' if present
             usort($filteredModels, function($a, $b) {
                 return strcmp($a['id'] ?? '', $b['id'] ?? '');
