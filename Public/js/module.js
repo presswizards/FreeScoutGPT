@@ -20,12 +20,10 @@ function freescoutgptInit() {
                         $(".chatgpt-get").remove();
                         $(".gptbutton").remove();
                         $(".gpt").remove();
-                        // Also hide any .gpt elements that may have been added by previous AJAX calls
-                        $(document).on('DOMNodeInserted', function(e) {
-                            if ($(e.target).hasClass('gpt')) {
-                                $(e.target).remove();
-                            }
-                        });
+                        // Prevent any further GPT UI injection if disabled
+                        window.freescoutgptEnabled = false;
+                    } else {
+                        window.freescoutgptEnabled = true;
                     }
                 }
             });
@@ -35,6 +33,7 @@ function freescoutgptInit() {
                 url: '/freescoutgpt/answers?conversation=' + conversation_id,
                 dataType: 'json',
                 success: function (response, status) {
+                    if (window.freescoutgptEnabled === false) return;
                     response.answers.forEach(function (item, index, array) {
                         item.answers.forEach(function (i, ind, arr) {
                             addAnswer(item.thread, i);
@@ -45,17 +44,21 @@ function freescoutgptInit() {
                 }
             });
 
-            // Add button to reply form
-            $(".conv-reply-body .note-toolbar > .note-btn-group:first").append('<button type="button" class="note-btn btn btn-default btn-sm gptbutton" tabindex="-1" title aria-label="ChatGPT Prompt Edit" data-original-title="ChatGPT Prompt Edit">' +
-                '<i class="fa-solid fa-robot"></i>' +
-	    	'</button>'
-            );
+            // Add button to reply form only if enabled
+            setTimeout(function() {
+                if (window.freescoutgptEnabled === false) return;
+                $(".conv-reply-body .note-toolbar > .note-btn-group:first").append('<button type="button" class="note-btn btn btn-default btn-sm gptbutton" tabindex="-1" title aria-label="ChatGPT Prompt Edit" data-original-title="ChatGPT Prompt Edit">' +
+                    '<i class="fa-solid fa-robot"></i>' +
+                    '</button>'
+                );
+            }, 200);
         }
 	});
 }
 
 function generateAnswer(e) {
     e.preventDefault();
+    if (window.freescoutgptEnabled === false) return;
     const text = $(e.target).closest(".thread").children(".thread-message").children(".thread-body").children(".thread-content").get(0).innerHTML.replace(/<\/?.*?>/g, "").trim();
     const query = encodeURIComponent(text);
     const thread_id = $(e.target).closest(".thread").attr("data-thread_id");
@@ -80,6 +83,7 @@ function generateAnswer(e) {
 }
 
 function addAnswer(thread_id, text) {
+    if (window.freescoutgptEnabled === false) return;
     if (!$(`#thread-${thread_id} .gpt`).length) {
         $(`#thread-${thread_id}`).prepend(`<div class="gpt">
             <strong><i class="fa-solid fa-robot"></i> From FreeScoutGPT:</strong>
@@ -151,6 +155,7 @@ function copyAnswer(e) {
 }
 
 async function injectGptAnswer(){
+    if (window.freescoutgptEnabled === false) return;
     // const { value: command } = await Swal.fire({
     //     input: 'textarea',
     //     inputLabel: 'Anfrage an Chat GPT',
