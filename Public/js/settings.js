@@ -125,7 +125,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     // --- BEGIN Infomaniak Models Fetch ---
     const infomaniakApiKeyInput = document.querySelector("input[name='infomaniak_api_key']");
-    const infomaniakProductIdInput = document.querySelector("input[name='infomaniak_product_id']");
     const infomaniakModelSelect = document.getElementById("infomaniak_model");
     const savedInfomaniakModel = infomaniakModelSelect ? infomaniakModelSelect.dataset.savedModel : '';
 
@@ -136,7 +135,7 @@ document.addEventListener("DOMContentLoaded", function () {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content,
+                "X-CSRF-TOKEN": document.querySelector('meta[name=\"csrf-token\"]').content,
             },
             body: JSON.stringify({ infomaniak_api_key: apiKey, infomaniak_product_id: productId }),
         })
@@ -162,15 +161,15 @@ document.addEventListener("DOMContentLoaded", function () {
             console.error("Error fetching Infomaniak models:", error);
         });
     }
-    if (infomaniakApiKeyInput && infomaniakProductIdInput && infomaniakApiKeyInput.value && infomaniakProductIdInput.value) {
-        fetchInfomaniakModels(infomaniakApiKeyInput.value, infomaniakProductIdInput.value);
+    if (infomaniakApiKeyInput && infomaniakProductIdSelect && infomaniakApiKeyInput.value && infomaniakProductIdSelect.value) {
+        fetchInfomaniakModels(infomaniakApiKeyInput.value, infomaniakProductIdSelect.value);
     }
-    if (infomaniakApiKeyInput && infomaniakProductIdInput) {
+    if (infomaniakApiKeyInput && infomaniakProductIdSelect) {
         infomaniakApiKeyInput.addEventListener("blur", function () {
-            fetchInfomaniakModels(infomaniakApiKeyInput.value, infomaniakProductIdInput.value);
+            fetchInfomaniakModels(infomaniakApiKeyInput.value, infomaniakProductIdSelect.value);
         });
-        infomaniakProductIdInput.addEventListener("blur", function () {
-            fetchInfomaniakModels(infomaniakApiKeyInput.value, infomaniakProductIdInput.value);
+        infomaniakProductIdSelect.addEventListener("change", function () {
+            fetchInfomaniakModels(infomaniakApiKeyInput.value, infomaniakProductIdSelect.value);
         });
     }
     // --- END Infomaniak Models Fetch ---
