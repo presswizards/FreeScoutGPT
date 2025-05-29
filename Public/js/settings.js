@@ -227,7 +227,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // --- END Infomaniak Product ID Fetch ---
     // --- BEGIN Infomaniak Product ID Select Logic ---
     const infomaniakApiKeyInput3 = document.querySelector("input[name='infomaniak_api_key']");
-    const infomaniakProductIdSelect = document.getElementById("infomaniak_product_id_select");
+    // infomaniakProductIdSelect is already declared above
     if (infomaniakProductIdSelect) {
         function fetchAndPopulateProductIds(apiKey) {
             if (!apiKey) return;
@@ -244,7 +244,7 @@ document.addEventListener("DOMContentLoaded", function () {
             .then(data => {
                 infomaniakProductIdSelect.innerHTML = '<option value="">Select a Product ID</option>';
                 if (Array.isArray(data.data) && data.data.length > 0) {
-                    data.data.forEach(pid => {
+                    data.data.forEach((pid, idx) => {
                         const option = document.createElement("option");
                         option.value = pid;
                         option.textContent = pid;
@@ -253,6 +253,14 @@ document.addEventListener("DOMContentLoaded", function () {
                         }
                         infomaniakProductIdSelect.appendChild(option);
                     });
+                    // If no saved value, select the first and trigger model fetch
+                    if (!infomaniakProductIdSelect.value || infomaniakProductIdSelect.value === "") {
+                        infomaniakProductIdSelect.selectedIndex = 1; // 0 is placeholder
+                    }
+                    // Always fetch models for the selected Product ID
+                    if (infomaniakApiKeyInput3 && infomaniakProductIdSelect.value) {
+                        fetchInfomaniakModels(infomaniakApiKeyInput3.value, infomaniakProductIdSelect.value);
+                    }
                 } else {
                     infomaniakProductIdSelect.innerHTML = '<option value="">No Product IDs found</option>';
                 }
@@ -272,6 +280,12 @@ document.addEventListener("DOMContentLoaded", function () {
                 fetchAndPopulateProductIds(infomaniakApiKeyInput3.value);
             }
         }
+        // On Product ID change, fetch models
+        infomaniakProductIdSelect.addEventListener("change", function () {
+            if (infomaniakApiKeyInput3 && infomaniakProductIdSelect.value) {
+                fetchInfomaniakModels(infomaniakApiKeyInput3.value, infomaniakProductIdSelect.value);
+            }
+        });
     }
     // --- END Infomaniak Product ID Select Logic ---
 });
