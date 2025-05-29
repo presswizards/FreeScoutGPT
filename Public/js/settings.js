@@ -65,35 +65,35 @@ document.addEventListener("DOMContentLoaded", function () {
         document.querySelector("input[name='infomaniak_model']")?.closest('.form-group')
     ];
 
-    function toggleApiFields() {
+    function toggleApiFields(e) {
         const infomaniakOn = infomaniakCheckbox && infomaniakCheckbox.checked;
         const responsesApiOn = responsesApiCheckbox && responsesApiCheckbox.checked;
 
-        // Infomaniak fields
-        infomaniakFields.forEach(f => { if (f) f.style.display = infomaniakOn ? '' : 'none'; });
+        // If this event is a click on Responses API and Infomaniak is on, turn off Infomaniak and turn on Responses API
+        if (e && e.type === 'change' && e.target === responsesApiCheckbox && infomaniakOn && !responsesApiOn) {
+            if (infomaniakCheckbox) infomaniakCheckbox.checked = false;
+            if (responsesApiCheckbox) responsesApiCheckbox.checked = true;
+        }
+        // If this event is a click on Infomaniak and Responses API is on, turn off Responses API and turn on Infomaniak
+        if (e && e.type === 'change' && e.target === infomaniakCheckbox && responsesApiOn && !infomaniakOn) {
+            if (responsesApiCheckbox) responsesApiCheckbox.checked = false;
+            if (infomaniakCheckbox) infomaniakCheckbox.checked = true;
+        }
 
-        // If Infomaniak is enabled, Responses API is not checked, but still clickable
-        if (infomaniakOn) {
-            if (responsesApiCheckbox) {
-                responsesApiCheckbox.checked = false;
-                responsesApiCheckbox.disabled = false;
-            }
-        }
-        // If Responses API is enabled, Infomaniak is not checked, but still clickable
-        if (responsesApiOn) {
-            if (infomaniakCheckbox) {
-                infomaniakCheckbox.checked = false;
-            }
-        }
+        const infomaniakNow = infomaniakCheckbox && infomaniakCheckbox.checked;
+        const responsesApiNow = responsesApiCheckbox && responsesApiCheckbox.checked;
+
+        // Infomaniak fields
+        infomaniakFields.forEach(f => { if (f) f.style.display = infomaniakNow ? '' : 'none'; });
 
         // Show/hide Responses API prompt group
         if (responsesApiPromptGroup) {
-            responsesApiPromptGroup.style.display = (responsesApiOn && !infomaniakOn) ? '' : 'none';
+            responsesApiPromptGroup.style.display = (responsesApiNow && !infomaniakNow) ? '' : 'none';
         }
 
         // Show Article URLs if either is enabled
         if (articleUrlsGroup) {
-            articleUrlsGroup.style.display = (infomaniakOn || responsesApiOn) ? '' : 'none';
+            articleUrlsGroup.style.display = (infomaniakNow || responsesApiNow) ? '' : 'none';
         }
     }
 
