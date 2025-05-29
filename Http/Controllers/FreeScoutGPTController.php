@@ -147,9 +147,10 @@ class FreeScoutGPTController extends Controller
         if (Auth::user() === null) return Response::json(["error" => "Unauthorized"], 401);
         $settings = GPTSettings::findOrFail($request->get("mailbox_id"));
 
-        // If Responses API is enabled and is not an edit prompt ajax, use it instead of Chat Completions
+        // Get ajax system prompt, and use it below if set
         $ajax_cmd = $request->get("command");
-        if (!empty($settings->use_responses_api) && empty($ajax_cmd)) {
+        // If Responses API is enabled, use it instead of Chat Completions
+        if (!empty($settings->use_responses_api)) {
             $articleUrls = array_filter(array_map('trim', preg_split('/\r?\n/', $settings->article_urls)));
             $fetchResult = $this->fetchArticlesContext($articleUrls, $settings, $request);
             if (!empty($fetchResult['error'])) {
@@ -173,7 +174,7 @@ class FreeScoutGPTController extends Controller
             }
 
             // Build prompt: use responses_api_prompt if set, otherwise use hardcoded default
-            $prompt = ($settings->start_message ? $settings->start_message . "\n\n" : "");
+            $prompt = $ajax_cmd ?? $settings->start_message . "\n\n";
             if (isset($settings->responses_api_prompt) && $settings->responses_api_prompt) {
                 $prompt .= $settings->responses_api_prompt . "\n\n";
             } else {
@@ -238,6 +239,7 @@ class FreeScoutGPTController extends Controller
 
         // Infomaniak API: use if enabled, before OpenAI
         if (!empty($settings->infomaniak_enabled)) {
+            \Log::info('Using Infomaniak API for answers');
             $articleUrls = array_filter(array_map('trim', preg_split('/\r?\n/', $settings->article_urls)));
             $fetchResult = $this->fetchArticlesContext($articleUrls, $settings, $request);
             if (!empty($fetchResult['error'])) {
@@ -257,15 +259,21 @@ class FreeScoutGPTController extends Controller
             if ($settings->start_message) {
                 $messages[] = [
                     'role' => 'system',
-                    'content' => $settings->start_message
+                    'content' => $ajax_cmd ?? $settings->start_message
                 ];
+                \Log::info('Infomaniak API system prompt' . $ajax_cmd ?? $settings->start_message);
             }
             // Add context from articles
-            if ($context) {
-                $messages[] = [
-                    'role' => 'system',
-                    'content' => $context
-                ];
+            if (empty($articles)) {
+                $context .= "No articles could be fetched or parsed.\n";
+                \Log::info('Infomaniak API: No articles could be fetched or parsed.');
+            } else {
+                $context .= "Articles:\n";
+                foreach ($articles as $i => $article) {
+                    $context .= "[Article #" . ($i + 1) . "] URL: " . $article['url'] . "\n";
+                    $context .= (is_string($article['text']) ? $article['text'] : '') . "\n\n";
+                    \Log::info('Infomaniak API: Using article ' . $article['url']);
+                }
             }
             // Add Infomaniak API prompt if set
             if (!empty($settings->infomaniak_api_prompt)) {
@@ -273,6 +281,7 @@ class FreeScoutGPTController extends Controller
                     'role' => 'system',
                     'content' => $settings->infomaniak_api_prompt
                 ];
+                \Log::info('Infomaniak API Article Prompt: ' . $settings->infomaniak_api_prompt);
             }
             $messages[] = [
                 'role' => 'user',
