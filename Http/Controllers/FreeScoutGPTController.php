@@ -496,47 +496,11 @@ class FreeScoutGPTController extends Controller
                     $safeText = htmlspecialchars($body, ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML5);
                     $body = '<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body><pre>' . $safeText . '</pre></body></html>';
                 }
-                $text = '';
-                $linkLines = [];
-                libxml_use_internal_errors(true);
-                $dom = new \DOMDocument();
-                if ($dom->loadHTML($body)) {
-                    $xpath = new \DOMXPath($dom);
-                    $nodes = $xpath->query('/*');
-                    if ($nodes->length > 0) {
-                        foreach ($nodes as $node) {
-                            $aTags = $node->getElementsByTagName('a');
-                            $aList = [];
-                            foreach ($aTags as $a) {
-                                $aList[] = $a;
-                            }
-                            foreach ($aList as $a) {
-                                $linkText = trim($a->textContent);
-                                $href = $a->getAttribute('href');
-                                if ($linkText && $href) {
-                                    $replacement = $linkText . ': ' . $href . "\n";
-                                    $textNode = $dom->createTextNode($replacement);
-                                    $a->parentNode->replaceChild($textNode, $a);
-                                }
-                            }
-                            $innerHTML = '';
-                            foreach ($node->childNodes as $child) {
-                                $innerHTML .= $dom->saveHTML($child);
-                            }
-                            $innerHTML = preg_replace('/<style[\s\S]*?<\/style>/i', '', $innerHTML);
-                            $text = trim(strip_tags($innerHTML));
-                        }
-                    }
-                }
-                libxml_clear_errors();
-                $finalText = '';
-                if (!empty($linkLines)) {
-                    $finalText .= implode("\n", $linkLines) . "\n\n";
-                }
-                $finalText .= $text;
+                // Use the new parseArticleHtml function for parsing
+                $text = $this->parseArticleHtml($body);
                 $articles[] = [
                     'url' => $url,
-                    'text' => mb_substr($finalText, 0, 12000)
+                    'text' => mb_substr($text, 0, 12000)
                 ];
             } catch (\Exception $e) {
                 $errorMsg = $e->getMessage();
@@ -554,7 +518,7 @@ class FreeScoutGPTController extends Controller
             $customerName = $request->get("customer_name");
             $customerEmail = $request->get("customer_email");
             $conversationSubject = $request->get("conversation_subject");
-            $context .= "Conversation subject is $conversationSubject, customer name is $customerName, customer email is $customerEmail\n";
+            $context .= "Conversation subject is $conversationSubject, customer name is $customerName\n";
         }
         $context .= "Customer query: $userQuery\n";
         if (empty($articles)) {
@@ -570,5 +534,61 @@ class FreeScoutGPTController extends Controller
             'context' => $context,
             'articles' => $articles
         ];
+    }
+    private function parseArticleHtml($html)
+    {
+        if (empty($html)) {
+            return '';
+        }
+
+        // Normalize: ensure UTF-8 and decode any entities
+        $html = html_entity_decode($html, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+
+        libxml_use_internal_errors(true);
+        $dom = new \DOMDocument();
+
+        // Force UTF-8 parsing
+        if ($dom->loadHTML('<?xml encoding="utf-8" ?>' . $html, LIBXML_NOERROR | LIBXML_NOWARNING)) {
+            $xpath = new \DOMXPath($dom);
+            $nodes = $xpath->query('/*');
+            $text = '';
+
+            foreach ($nodes as $node) {
+                // Replace <a> tags with "text: href"
+                $aTags = $node->getElementsByTagName('a');
+                foreach (iterator_to_array($aTags) as $a) {
+                    $linkText = trim($a->textContent);
+                    $href = $a->getAttribute('href');
+                    if ($linkText && $href) {
+                        $replacement = $linkText . ': ' . $href . "\n";
+                        $a->parentNode->replaceChild($dom->createTextNode($replacement), $a);
+                    }
+                }
+
+                // Collect inner content
+                $innerHTML = '';
+                foreach ($node->childNodes as $child) {
+                    $innerHTML .= $dom->saveHTML($child);
+                }
+
+                // Strip unwanted elements
+                $innerHTML = preg_replace('/<style[\s\S]*?<\/style>/i', '', $innerHTML);
+                $innerHTML = preg_replace('/<script[\s\S]*?<\/script>/i', '', $innerHTML);
+                $plainText = strip_tags($innerHTML);
+
+                // Normalize spacing and entities
+                $plainText = html_entity_decode($plainText, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+                $plainText = str_replace("\xc2\xa0", ' ', $plainText); // non-breaking space
+                $plainText = preg_replace('/[ \t]+/', ' ', $plainText);
+                $plainText = preg_replace('/[\r\n]{2,}/', "\n\n", $plainText);
+
+                $text .= trim($plainText) . "\n\n";
+            }
+
+            libxml_clear_errors();
+            return trim($text);
+        }
+
+        return '';
     }
 }
