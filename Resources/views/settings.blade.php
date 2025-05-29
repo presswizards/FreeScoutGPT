@@ -172,6 +172,14 @@ https://example.com/article2">{{ $settings['article_urls'] ?? '' }}</textarea>
                 </div>
             </div>
 
+            <div class="form-group">
+                <label class="col-sm-2 control-label">{{ __("Infomaniak API Prompt") }}</label>
+                <div class="col-sm-6">
+                    <textarea rows="6" name="infomaniak_api_prompt" class="form-control" placeholder="Prompt for Infomaniak API (used after articles context)">{{ $settings['infomaniak_api_prompt'] ?? "If relevant given the customer's query, and the articles included, find the single article that best answers the user's question. Summarize the relevant part of that article as a support answer, and provide the article URL. If no article is relevant, reply with a concise best attempt to answer their concerns." }}</textarea>
+                    <span class="help-block">{{ __("This prompt is used for the Infomaniak API, after the articles context. You can use this to further instruct the model.") }}</span>
+                </div>
+            </div>
+
             <div class="form-group margin-top margin-bottom">
                 <div class="col-sm-6 col-sm-offset-2">
                     <button type="submit" class="btn btn-primary">

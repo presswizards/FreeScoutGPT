@@ -29,5 +29,6 @@ class GPTSettings extends Model
         'infomaniak_api_key',
         'infomaniak_product_id',
         'infomaniak_model',
+        'infomaniak_api_prompt',
     ];
 }

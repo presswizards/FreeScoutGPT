@@ -160,7 +160,80 @@ class FreeScoutGPTController extends Controller
             }
             $context = $fetchResult['context'];
             $articles = $fetchResult['articles'];
-            // ...existing code...
+            $userQuery = $request->get('query');
+            $context .= "Customer query: $userQuery\n";
+            if (empty($articles)) {
+                $context .= "No articles could be fetched or parsed.\n";
+            } else {
+                $context .= "Articles:\n";
+                foreach ($articles as $i => $article) {
+                    $context .= "[Article #" . ($i + 1) . "] URL: " . $article['url'] . "\n";
+                    $context .= (is_string($article['text']) ? $article['text'] : '') . "\n\n";
+                }
+            }
+
+            // Build prompt: use responses_api_prompt if set, otherwise use hardcoded default
+            $prompt = ($settings->start_message ? $settings->start_message . "\n\n" : "");
+            if (isset($settings->responses_api_prompt) && $settings->responses_api_prompt) {
+                $prompt .= $settings->responses_api_prompt . "\n\n";
+            } else {
+                $prompt .= "If relevant given the customer's query, and the articles included, find the single article that best answers the user's question. Summarize the relevant part of that article as a support answer, and provide the article URL. If no article is relevant, reply with a concise best attempt to answer their concerns.";
+            }
+
+            // Use Guzzle to call OpenAI Responses API
+            try {
+                $guzzle = new \GuzzleHttp\Client(['timeout' => 30]);
+                $apiKey = $settings->api_key;
+                $payload = [
+                    'model' => is_string($settings->model) ? $settings->model : (is_array($settings->model) ? reset($settings->model) : ''),
+                    'input' => (string)($prompt . "\n" . $context),
+                    'max_output_tokens' => (integer) $settings->token_limit
+                ];
+                $jsonPayload = json_encode($payload);
+                $response = $guzzle->post('https://api.openai.com/v1/responses', [
+                    'headers' => [
+                        'Authorization' => 'Bearer ' . $apiKey,
+                        'Content-Type' => 'application/json',
+                    ],
+                    'body' => $jsonPayload,
+                ]);
+                $data = json_decode($response->getBody(), true);
+                $answerText = '';
+                if (
+                    isset($data['output'][0]['content'][0]['text']) &&
+                    is_string($data['output'][0]['content'][0]['text'])
+                ) {
+                    $answerText = trim($data['output'][0]['content'][0]['text'], "\n");
+                }
+            } catch (\Exception $e) {
+                $errorMsg = $e->getMessage();
+                $openAiError = '';
+                if (method_exists($e, 'getResponse') && $e->getResponse()) {
+                    $body = (string) $e->getResponse()->getBody();
+                    $json = json_decode($body, true);
+                    if (isset($json['error']['message'])) {
+                        $openAiError = $json['error']['message'];
+                    } else {
+                        $openAiError = $body;
+                    }
+                }
+                $answerText = $openAiError ?: $errorMsg;
+                \Log::error('Error on Responses API Request: ' . $answerText);
+                return Response::json([
+                    'query' => $userQuery ?? '',
+                    'answer' => $answerText
+                ], 200);
+            }
+            $thread = Thread::find($request->get('thread_id'));
+            $answers = $thread->chatgpt ? json_decode($thread->chatgpt, true) : [];
+            if ($answers === null) $answers = [];
+            $answers[] = $answerText;
+            $thread->chatgpt = json_encode($answers, JSON_UNESCAPED_UNICODE);
+            $thread->save();
+            return Response::json([
+                'query' => $userQuery,
+                'answer' => $answerText
+            ], 200);
         }
 
         // Infomaniak API: use if enabled, before OpenAI
@@ -192,6 +265,13 @@ class FreeScoutGPTController extends Controller
                 $messages[] = [
                     'role' => 'system',
                     'content' => $context
+                ];
+            }
+            // Add Infomaniak API prompt if set
+            if (!empty($settings->infomaniak_api_prompt)) {
+                $messages[] = [
+                    'role' => 'system',
+                    'content' => $settings->infomaniak_api_prompt
                 ];
             }
             $messages[] = [
@@ -229,6 +309,7 @@ class FreeScoutGPTController extends Controller
             ], 200);
         }
 
+        // OpenAI Chat Completions API
         $openaiClient = \Tectalic\OpenAi\Manager::build(new \GuzzleHttp\Client(
             [
                 'timeout' => config('app.curl_timeout'),
@@ -357,6 +438,7 @@ class FreeScoutGPTController extends Controller
                 'infomaniak_api_key' => $request->get('infomaniak_api_key'),
                 'infomaniak_product_id' => $request->get('infomaniak_product_id'),
                 'infomaniak_model' => $request->get('infomaniak_model'),
+                'infomaniak_api_prompt' => $request->get('infomaniak_api_prompt'),
             ]
         );
         \Session::flash('flash_success_floating', __('Settings updated'));
