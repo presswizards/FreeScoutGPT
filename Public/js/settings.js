@@ -72,15 +72,17 @@ document.addEventListener("DOMContentLoaded", function () {
         // Infomaniak fields
         infomaniakFields.forEach(f => { if (f) f.style.display = infomaniakOn ? '' : 'none'; });
 
-        // If Infomaniak is enabled, disable and uncheck Responses API
+        // If Infomaniak is enabled, Responses API is not checked, but still clickable
         if (infomaniakOn) {
             if (responsesApiCheckbox) {
                 responsesApiCheckbox.checked = false;
-                responsesApiCheckbox.disabled = true;
-            }
-        } else {
-            if (responsesApiCheckbox) {
                 responsesApiCheckbox.disabled = false;
+            }
+        }
+        // If Responses API is enabled, Infomaniak is not checked, but still clickable
+        if (responsesApiOn) {
+            if (infomaniakCheckbox) {
+                infomaniakCheckbox.checked = false;
             }
         }
 
