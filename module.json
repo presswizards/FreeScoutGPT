@@ -1,8 +1,8 @@
 {
     "name": "FreeScoutGPT",
     "alias": "freescoutgpt",
-    "description": "Module for requests to ChatGPT with support for multiple models. v1.0.25 adds new Responses API option implementation, thanks to Lewis Downey. v1.0.27 Fixes max_completion_tokens error when using Responses API.",
-    "version": "1.0.27",
+    "description": "Module for requests to ChatGPT with support for multiple models. v1.0.28 adds new Infomaniak API option implementation.",
+    "version": "1.0.28",
     "detailsUrl": "https://github.com/presswizards/FreeScoutGPT",
     "img": "https://raw.githubusercontent.com/presswizards/FreeScoutGPT/refs/heads/main/FreeScoutGPT-Logo.jpg",
     "author": "Press Wizards",
