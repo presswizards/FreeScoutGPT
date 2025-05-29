@@ -65,7 +65,7 @@
 
                 <div class="col-sm-6">
                 <i style="margin: 0 20px" class="glyphicon glyphicon-info-sign icon-info" data-toggle="popover" data-trigger="hover" data-html="true" data-placement="left" data-content="{{ __('Check the model capabilities and pricing, and test models to see which works best for you.') }}" data-original-title="" title=""></i>
-                   <select id="model" class="form-control input-sized" name="model" required data-saved-model="{{ old('model', $settings['model'] ?? '') }}">
+                   <select id="model" class="form-control input-sized" name="model" data-saved-model="{{ old('model', $settings['model'] ?? '') }}">
                         <option value="">Fetching your API Key models...</option>
                    </select>
                 </div>
