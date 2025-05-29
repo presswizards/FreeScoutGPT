@@ -69,15 +69,13 @@ document.addEventListener("DOMContentLoaded", function () {
         const infomaniakOn = infomaniakCheckbox && infomaniakCheckbox.checked;
         const responsesApiOn = responsesApiCheckbox && responsesApiCheckbox.checked;
 
-        // If this event is a click on Responses API and Infomaniak is on, turn off Infomaniak and turn on Responses API
-        if (e && e.type === 'change' && e.target === responsesApiCheckbox && infomaniakOn && !responsesApiOn) {
-            if (infomaniakCheckbox) infomaniakCheckbox.checked = false;
-            if (responsesApiCheckbox) responsesApiCheckbox.checked = true;
-        }
-        // If this event is a click on Infomaniak and Responses API is on, turn off Responses API and turn on Infomaniak
-        if (e && e.type === 'change' && e.target === infomaniakCheckbox && responsesApiOn && !infomaniakOn) {
+        // If turning ON Infomaniak, turn OFF Responses API
+        if (e && e.type === 'change' && e.target === infomaniakCheckbox && infomaniakCheckbox.checked) {
             if (responsesApiCheckbox) responsesApiCheckbox.checked = false;
-            if (infomaniakCheckbox) infomaniakCheckbox.checked = true;
+        }
+        // If turning ON Responses API, turn OFF Infomaniak
+        if (e && e.type === 'change' && e.target === responsesApiCheckbox && responsesApiCheckbox.checked) {
+            if (infomaniakCheckbox) infomaniakCheckbox.checked = false;
         }
 
         const infomaniakNow = infomaniakCheckbox && infomaniakCheckbox.checked;
