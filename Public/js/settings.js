@@ -125,6 +125,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     // --- BEGIN Infomaniak Models Fetch ---
     const infomaniakApiKeyInput = document.querySelector("input[name='infomaniak_api_key']");
+    const infomaniakProductIdSelect = document.getElementById("infomaniak_product_id_select");
     const infomaniakModelSelect = document.getElementById("infomaniak_model");
     const savedInfomaniakModel = infomaniakModelSelect ? infomaniakModelSelect.dataset.savedModel : '';
 
@@ -227,7 +228,6 @@ document.addEventListener("DOMContentLoaded", function () {
     // --- END Infomaniak Product ID Fetch ---
     // --- BEGIN Infomaniak Product ID Select Logic ---
     const infomaniakApiKeyInput3 = document.querySelector("input[name='infomaniak_api_key']");
-    // infomaniakProductIdSelect is already declared above
     if (infomaniakProductIdSelect) {
         function fetchAndPopulateProductIds(apiKey) {
             if (!apiKey) return;
