@@ -59,11 +59,12 @@ document.addEventListener("DOMContentLoaded", function () {
     const articleUrlsGroup = document.getElementById("article-urls-group");
     const responsesApiPromptGroup = document.querySelector("textarea[name='responses_api_prompt']")?.closest('.form-group');
     const infomaniakCheckbox = document.querySelector("input[name='infomaniak_enabled']");
+    const infomaniakApiPromptGroup = document.querySelector("textarea[name='infomaniak_api_prompt']")?.closest('.form-group');
     const infomaniakFields = [
         document.querySelector("input[name='infomaniak_api_key']")?.closest('.form-group'),
         document.querySelector("input[name='infomaniak_product_id']")?.closest('.form-group'),
         document.querySelector("input[name='infomaniak_model']")?.closest('.form-group'),
-        document.querySelector("input[name='infomaniak_api_prompt']")?.closest('.form-group')
+        infomaniakApiPromptGroup
     ];
 
     function toggleApiFields(e) {
@@ -82,7 +83,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const infomaniakNow = infomaniakCheckbox && infomaniakCheckbox.checked;
         const responsesApiNow = responsesApiCheckbox && responsesApiCheckbox.checked;
 
-        // Infomaniak fields
+        // Infomaniak fields (including prompt)
         infomaniakFields.forEach(f => { if (f) f.style.display = infomaniakNow ? '' : 'none'; });
 
         // Show/hide Responses API prompt group
