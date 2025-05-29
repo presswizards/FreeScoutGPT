@@ -20,6 +20,12 @@ function freescoutgptInit() {
                         $(".chatgpt-get").remove();
                         $(".gptbutton").remove();
                         $(".gpt").remove();
+                        // Also hide any .gpt elements that may have been added by previous AJAX calls
+                        $(document).on('DOMNodeInserted', function(e) {
+                            if ($(e.target).hasClass('gpt')) {
+                                $(e.target).remove();
+                            }
+                        });
                     }
                 }
             });
