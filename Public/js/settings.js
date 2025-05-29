@@ -102,7 +102,7 @@ document.addEventListener("DOMContentLoaded", function () {
         responsesApiCheckbox.addEventListener('change', toggleApiFields);
     }
     // Initial state
-    toggleApiFields();
+    toggleApiFields({ type: 'change', target: infomaniakCheckbox });
     // --- END Infomaniak/Responses API UI logic ---
     // Hide/show Article URLs textarea based on Responses API checkbox
     function toggleResponsesApiFields() {
