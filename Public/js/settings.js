@@ -55,38 +55,46 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     // --- BEGIN Infomaniak/Responses API UI logic ---
-    // Use existing variables for articleUrlsGroup and responsesApiPromptGroup
+    const responsesApiCheckbox = document.querySelector("input[name='use_responses_api']");
+    const articleUrlsGroup = document.getElementById("article-urls-group");
+    const responsesApiPromptGroup = document.querySelector("textarea[name='responses_api_prompt']")?.closest('.form-group');
     const infomaniakCheckbox = document.querySelector("input[name='infomaniak_enabled']");
     const infomaniakFields = [
         document.querySelector("input[name='infomaniak_api_key']")?.closest('.form-group'),
         document.querySelector("input[name='infomaniak_product_id']")?.closest('.form-group'),
         document.querySelector("input[name='infomaniak_model']")?.closest('.form-group')
     ];
+
     function toggleApiFields() {
-        if (infomaniakCheckbox && infomaniakCheckbox.checked) {
-            // Show Infomaniak fields
-            infomaniakFields.forEach(f => { if (f) f.style.display = ''; });
-            // Show articles textarea
-            if (articleUrlsGroup) articleUrlsGroup.style.display = '';
-            // Hide Responses API fields
-            if (responsesApiCheckbox) responsesApiCheckbox.checked = false;
-            if (responsesApiCheckbox) responsesApiCheckbox.disabled = true;
-            if (responsesApiPromptGroup) responsesApiPromptGroup.style.display = 'none';
+        const infomaniakOn = infomaniakCheckbox && infomaniakCheckbox.checked;
+        const responsesApiOn = responsesApiCheckbox && responsesApiCheckbox.checked;
+
+        // Infomaniak fields
+        infomaniakFields.forEach(f => { if (f) f.style.display = infomaniakOn ? '' : 'none'; });
+
+        // If Infomaniak is enabled, disable and uncheck Responses API
+        if (infomaniakOn) {
+            if (responsesApiCheckbox) {
+                responsesApiCheckbox.checked = false;
+                responsesApiCheckbox.disabled = true;
+            }
         } else {
-            // Hide Infomaniak fields
-            infomaniakFields.forEach(f => { if (f) f.style.display = 'none'; });
-            // Enable Responses API checkbox
-            if (responsesApiCheckbox) responsesApiCheckbox.disabled = false;
-            // Show/hide articles textarea and prompt based on Responses API
-            if (responsesApiCheckbox && responsesApiCheckbox.checked) {
-                if (articleUrlsGroup) articleUrlsGroup.style.display = '';
-                if (responsesApiPromptGroup) responsesApiPromptGroup.style.display = '';
-            } else {
-                if (articleUrlsGroup) articleUrlsGroup.style.display = 'none';
-                if (responsesApiPromptGroup) responsesApiPromptGroup.style.display = 'none';
+            if (responsesApiCheckbox) {
+                responsesApiCheckbox.disabled = false;
             }
         }
+
+        // Show/hide Responses API prompt group
+        if (responsesApiPromptGroup) {
+            responsesApiPromptGroup.style.display = (responsesApiOn && !infomaniakOn) ? '' : 'none';
+        }
+
+        // Show Article URLs if either is enabled
+        if (articleUrlsGroup) {
+            articleUrlsGroup.style.display = (infomaniakOn || responsesApiOn) ? '' : 'none';
+        }
     }
+
     if (infomaniakCheckbox) {
         infomaniakCheckbox.addEventListener('change', toggleApiFields);
     }
