@@ -167,9 +167,6 @@
                     </select>
                 </div>
             </div>
-            <script>
-            window.infomaniakModelInputType = 'select';
-            </script>
 
             <div class="form-group">
                 <label class="col-sm-2 control-label">{{ __("Infomaniak API Prompt") }}</label>
