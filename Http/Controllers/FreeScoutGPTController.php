@@ -149,7 +149,11 @@ class FreeScoutGPTController extends Controller
 
         // Get ajax system prompt, and use it below if set
         $ajax_cmd = $request->get("command");
-
+        if (!empty($ajax_cmd)) {
+            $ajax_cmd = trim($ajax_cmd);
+            \Log::info('Using Reply Prompt Override: ' . $ajax_cmd);
+        }
+        
         // If Responses API is enabled, use it instead of Chat Completions
         if (!empty($settings->use_responses_api)) {
             $articleUrls = array_filter(array_map('trim', preg_split('/\r?\n/', $settings->article_urls)));
@@ -246,12 +250,18 @@ class FreeScoutGPTController extends Controller
             $tokenLimit = (int) $settings->token_limit;
             $userQuery = $request->get('query');
             $messages = [];
-            if ($settings->start_message) {
+            if ($settings->start_message || !empty($ajax_cmd)) {
                 $messages[] = [
                     'role' => 'system',
                     'content' => $ajax_cmd ?? $settings->start_message
                 ];
-                \Log::info('Infomaniak API system prompt' . $ajax_cmd ?? $settings->start_message);
+                \Log::info('Infomaniak API system prompt: ' . $ajax_cmd ?? $settings->start_message);
+            } else {
+                $messages[] = [
+                    'role' => 'system',
+                    'content' => $ajax_cmd ?? 'You are a helpful assistant.'
+                ];
+                \Log::info('Infomaniak API system prompt: ' . $ajax_cmd ?? 'You are a helpful assistant.');
             }
             // Add Infomaniak API prompt if set
             if (!empty($settings->infomaniak_api_prompt)) {
