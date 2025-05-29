@@ -104,7 +104,7 @@
             <div class="form-group">
                 <label for="use_responses_api" class="col-sm-2 control-label">{{ __("Use OpenAI Responses API") }}</label>
                 <div class="col-sm-6">
-                <i style="margin: 0 20px" class="glyphicon glyphicon-info-sign icon-info" data-toggle="popover" data-trigger="hover" data-html="true" data-placement="left" data-content="{{ __('If enabled, the articles and prompt below will be sent to the new Responses API, and should generate much more targeted and informative answers if the articles have all the relevant information.') }}" data-original-title="" title=""></i>
+                <i style="margin: 0 20px" class="glyphicon glyphicon-info-sign icon-info" data-toggle="popover" data-trigger="hover" data-html="true" data-placement="left" data-content="{{ __('If enabled, the OpenAI Responses API will be used with the articles provided, and should generate much more targeted and informative answers if the articles have all the relevant information.') }}" data-original-title="" title=""></i>
                     <div class="controls">
                         <div class="onoffswitch-wrap">
                             <div class="onoffswitch">
@@ -129,6 +129,7 @@
             <div class="form-group">
                 <label for="infomaniak_enabled" class="col-sm-2 control-label">{{ __("Use Infomaniak Chat Completions API") }}</label>
                 <div class="col-sm-6">
+                    <i style="margin: 0 20px" class="glyphicon glyphicon-info-sign icon-info" data-toggle="popover" data-trigger="hover" data-html="true" data-placement="left" data-content="{{ __('If enabled, the Infomaniak Chat Completions API will be used with the articles provided, and should generate much more targeted and informative answers if the articles have all the relevant information.') }}" data-original-title="" title=""></i>
                     <div class="controls">
                         <div class="onoffswitch-wrap">
                             <div class="onoffswitch">
