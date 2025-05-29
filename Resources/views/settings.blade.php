@@ -38,7 +38,7 @@
                 <label class="col-sm-2 control-label"><a target="_blank" href="https://platform.openai.com/api-keys">{{ __("OpenAI API key") }}</a></label>
 
                 <div class="col-sm-6">
-                    <input name="api_key" class="form-control" placeholder="sk-..." value="{{ $settings['api_key'] ?? '' }}" required />
+                    <input name="api_key" class="form-control" placeholder="sk-..." value="{{ $settings['api_key'] ?? '' }}" />
                 </div>
             </div>
 
@@ -46,7 +46,7 @@
                 <label class="col-sm-2 control-label"><a target="_blank" href="https://help.openai.com/en/articles/4936856-what-are-tokens-and-how-to-count-them">{{ __("Token limit") }}</a></label>
 
                 <div class="col-sm-6">
-                    <input name="token_limit" class="form-control" placeholder="1024" type="number" value="{{ $settings['token_limit'] ?? 1024 }}" required />
+                    <input name="token_limit" class="form-control" placeholder="4096" type="number" value="{{ $settings['token_limit'] ?? 4096 }}" required />
                 </div>
             </div>
 
@@ -102,7 +102,7 @@
             </div>
 
             <div class="form-group">
-                <label for="use_responses_api" class="col-sm-2 control-label">{{ __("Use Articles and Responses API") }}</label>
+                <label for="use_responses_api" class="col-sm-2 control-label">{{ __("Use OpenAI Responses API") }}</label>
                 <div class="col-sm-6">
                 <i style="margin: 0 20px" class="glyphicon glyphicon-info-sign icon-info" data-toggle="popover" data-trigger="hover" data-html="true" data-placement="left" data-content="{{ __('If enabled, the articles and prompt below will be sent to the new Responses API, and should generate much more targeted and informative answers if the articles have all the relevant information.') }}" data-original-title="" title=""></i>
                     <div class="controls">
@@ -118,15 +118,6 @@
                 </div>
             </div>
 
-            <div class="form-group" id="article-urls-group">
-                <label for="article_urls" class="col-sm-2 control-label">{{ __("Article URLs for Web Search") }}</label>
-                <div class="col-sm-6">
-                    <textarea rows="5" name="article_urls" class="form-control" placeholder="https://example.com/article1
-https://example.com/article2">{{ $settings['article_urls'] ?? '' }}</textarea>
-                    <span class="help-block">{{ __("Enter one article URL per line. These will be used for web search and summarization when the Responses API is enabled.") }}</span>
-                </div>
-            </div>
-
             <div class="form-group">
                 <label class="col-sm-2 control-label">{{ __("Responses API Prompt") }}</label>
                 <div class="col-sm-6">
@@ -136,7 +127,7 @@ https://example.com/article2">{{ $settings['article_urls'] ?? '' }}</textarea>
             </div>
 
             <div class="form-group">
-                <label for="infomaniak_enabled" class="col-sm-2 control-label">{{ __("Enable Infomaniak API") }}</label>
+                <label for="infomaniak_enabled" class="col-sm-2 control-label">{{ __("Use Infomaniak Chat Completions API") }}</label>
                 <div class="col-sm-6">
                     <div class="controls">
                         <div class="onoffswitch-wrap">
@@ -161,14 +152,23 @@ https://example.com/article2">{{ $settings['article_urls'] ?? '' }}</textarea>
             <div class="form-group">
                 <label class="col-sm-2 control-label">{{ __("Infomaniak Product ID") }}</label>
                 <div class="col-sm-6">
-                    <input name="infomaniak_product_id" class="form-control" placeholder="Product ID" value="{{ $settings['infomaniak_product_id'] ?? '' }}" />
+                    <input name="infomaniak_product_id" class="form-control" placeholder="33" value="{{ $settings['infomaniak_product_id'] ?? '33' }}" />
                 </div>
             </div>
 
             <div class="form-group">
                 <label class="col-sm-2 control-label">{{ __("Infomaniak Model Name") }}</label>
                 <div class="col-sm-6">
-                    <input name="infomaniak_model" class="form-control" placeholder="Model Name" value="{{ $settings['infomaniak_model'] ?? '' }}" />
+                    <input name="infomaniak_model" class="form-control" placeholder="mistral24b" value="{{ $settings['infomaniak_model'] ?? 'mistral24b' }}" />
+                </div>
+            </div>
+
+            <div class="form-group" id="article-urls-group">
+                <label for="article_urls" class="col-sm-2 control-label">{{ __("Article URLs for Web Search") }}</label>
+                <div class="col-sm-6">
+                    <textarea rows="5" name="article_urls" class="form-control" placeholder="https://example.com/article1
+https://example.com/article2">{{ $settings['article_urls'] ?? '' }}</textarea>
+                    <span class="help-block">{{ __("Enter one article URL per line. These will be used for web search and summarization when the Responses API is enabled.") }}</span>
                 </div>
             </div>
 
