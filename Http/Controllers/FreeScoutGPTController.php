@@ -168,7 +168,7 @@ class FreeScoutGPTController extends Controller
             $userQuery = $request->get('query');
 
             // Build prompt: use responses_api_prompt if set, otherwise use hardcoded default
-            $prompt = $ajax_cmd ?? $settings->start_message . "\n\n";
+            $prompt = (!empty($ajax_cmd) ? $ajax_cmd : $settings->start_message) . "\n\n";
             if (isset($settings->responses_api_prompt) && $settings->responses_api_prompt) {
                 $prompt .= $settings->responses_api_prompt . "\n\n";
             } else {
