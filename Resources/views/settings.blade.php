@@ -135,6 +135,43 @@ https://example.com/article2">{{ $settings['article_urls'] ?? '' }}</textarea>
                 </div>
             </div>
 
+            <div class="form-group">
+                <label for="infomaniak_enabled" class="col-sm-2 control-label">{{ __("Enable Infomaniak API") }}</label>
+                <div class="col-sm-6">
+                    <div class="controls">
+                        <div class="onoffswitch-wrap">
+                            <div class="onoffswitch">
+                                <input type="checkbox" name="infomaniak_enabled" id="infomaniak_enabled" class="onoffswitch-checkbox"
+                                    {!! ($settings['infomaniak_enabled'] ?? false) ? "checked" : "" !!}
+                                >
+                                <label class="onoffswitch-label" for="infomaniak_enabled"></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label">{{ __("Infomaniak API Key") }}</label>
+                <div class="col-sm-6">
+                    <input name="infomaniak_api_key" class="form-control" placeholder="Infomaniak API Key" value="{{ $settings['infomaniak_api_key'] ?? '' }}" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label">{{ __("Infomaniak Product ID") }}</label>
+                <div class="col-sm-6">
+                    <input name="infomaniak_product_id" class="form-control" placeholder="Product ID" value="{{ $settings['infomaniak_product_id'] ?? '' }}" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label">{{ __("Infomaniak Model Name") }}</label>
+                <div class="col-sm-6">
+                    <input name="infomaniak_model" class="form-control" placeholder="Model Name" value="{{ $settings['infomaniak_model'] ?? '' }}" />
+                </div>
+            </div>
+
             <div class="form-group margin-top margin-bottom">
                 <div class="col-sm-6 col-sm-offset-2">
                     <button type="submit" class="btn btn-primary">

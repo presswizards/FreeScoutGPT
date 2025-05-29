@@ -151,155 +151,71 @@ class FreeScoutGPTController extends Controller
         $ajax_cmd = $request->get("command");
         if (!empty($settings->use_responses_api) && empty($ajax_cmd)) {
             $articleUrls = array_filter(array_map('trim', preg_split('/\r?\n/', $settings->article_urls)));
-            $articles = [];
-            $client = new \GuzzleHttp\Client(['timeout' => 20]);
-            foreach ($articleUrls as $url) {
-                try {
-                    $res = $client->get($url, [
-                        'headers' => [
-                            'User-Agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36'
-                        ]
-                    ]);
-                    $body = (string) $res->getBody();
-
-                    $contentType = $res->getHeaderLine('Content-Type');
-                    $isText = preg_match('/\.txt$/i', $url) || stripos($contentType, 'text/plain') !== false;
-                    if ($isText) {
-                        $safeText = htmlspecialchars($body, ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML5);
-                        $body = '<!DOCTYPE html>
-                        <html><head><meta charset="UTF-8"></head>
-                        <body><pre>' . $safeText . '</pre></body></html>';
-                    }
-
-                    $text = '';
-                    $linkLines = [];
-                    libxml_use_internal_errors(true);
-                    $dom = new \DOMDocument();
-                    if ($dom->loadHTML($body)) {
-                        $xpath = new \DOMXPath($dom);
-                        // Extract only the content inside .kb-category-content and strip CSS
-                        // $nodes = $xpath->query('//*[contains(concat(" ", normalize-space(@class), " "), " kb-category-content ")]');
-                        $nodes = $xpath->query('/*');
-                        if ($nodes->length > 0) {
-                            foreach ($nodes as $node) {
-                                // Find all <a> tags and build "Link Text: URL" lines
-                                $aTags = $node->getElementsByTagName('a');
-                                $aList = [];
-                                foreach ($aTags as $a) {
-                                    $aList[] = $a;
-                                }
-                                foreach ($aList as $a) {
-                                    $linkText = trim($a->textContent);
-                                    $href = $a->getAttribute('href');
-                                    if ($linkText && $href) {
-                                        $replacement = $linkText . ': ' . $href . "\n";
-                                        $textNode = $dom->createTextNode($replacement);
-                                        $a->parentNode->replaceChild($textNode, $a);
-                                    }
-                                }
-                                // Get the remaining text content
-                                $innerHTML = '';
-                                foreach ($node->childNodes as $child) {
-                                    $innerHTML .= $dom->saveHTML($child);
-                                }
-                                // Remove <style> tags and CSS blocks
-                                $innerHTML = preg_replace('/<style[\s\S]*?<\/style>/i', '', $innerHTML);
-                                // Strip all HTML tags
-                                $text = trim(strip_tags($innerHTML));
-                            }
-                        }
-                    }
-                    libxml_clear_errors();
-                    // Combine links and text, links first, each on its own line
-                    $finalText = '';
-                    if (!empty($linkLines)) {
-                        $finalText .= implode("\n", $linkLines) . "\n\n";
-                    }
-                    $finalText .= $text;
-                    $articles[] = [
-                        'url' => $url,
-                        'text' => mb_substr($finalText, 0, 12000) // limit to 12k chars per article
-                    ];
-                } catch (\Exception $e) {
-                    $errorMsg = $e->getMessage();
-                    \Log::error('Error on Responses API Request: ' . $errorMsg ?? 'Error fetching or parsing the article.');
-                    $answerText = $errorMsg ?? 'Error fetching or parsing the article.';
-                    return Response::json([
-                        'query' => $userQuery ?? '',
-                        'answer' => $answerText
-                    ], 200);
-                }
+            $fetchResult = $this->fetchArticlesContext($articleUrls, $settings, $request);
+            if (!empty($fetchResult['error'])) {
+                return Response::json([
+                    'query' => $fetchResult['userQuery'] ?? '',
+                    'answer' => $fetchResult['error']
+                ], 200);
             }
-            $context = "";
-            if ($settings->client_data_enabled) {
-                $customerName = $request->get("customer_name");
-                $customerEmail = $request->get("customer_email");
-                $conversationSubject = $request->get("conversation_subject");
-                $context .= "Conversation subject is $conversationSubject, customer name is $customerName, customer email is $customerEmail\n";
+            $context = $fetchResult['context'];
+            $articles = $fetchResult['articles'];
+            // ...existing code...
+        }
+
+        // Infomaniak API: use if enabled, before OpenAI
+        if (!empty($settings->infomaniak_enabled)) {
+            $articleUrls = array_filter(array_map('trim', preg_split('/\r?\n/', $settings->article_urls)));
+            $fetchResult = $this->fetchArticlesContext($articleUrls, $settings, $request);
+            if (!empty($fetchResult['error'])) {
+                return Response::json([
+                    'query' => $fetchResult['userQuery'] ?? '',
+                    'answer' => $fetchResult['error']
+                ], 200);
             }
+            $context = $fetchResult['context'];
+            $articles = $fetchResult['articles'];
+            $apiKey = $settings->infomaniak_api_key;
+            $productId = $settings->infomaniak_product_id;
+            $model = $settings->infomaniak_model;
+            $tokenLimit = (int) $settings->token_limit;
             $userQuery = $request->get('query');
-            $context .= "Customer query: $userQuery\n";
-            if (empty($articles)) {
-                $context .= "No articles could be fetched or parsed.\n";
-            } else {
-                $context .= "Articles:\n";
-                foreach ($articles as $i => $article) {
-                    $context .= "[Article #" . ($i + 1) . "] URL: " . $article['url'] . "\n";
-                    $context .= (is_string($article['text']) ? $article['text'] : '') . "\n\n";
-                }
-            }
-
-            // Build prompt: use responses_api_prompt if set, otherwise use hardcoded default
-            $prompt = ($settings->start_message ? $settings->start_message . "\n\n" : "");
-            if (isset($settings->responses_api_prompt) && $settings->responses_api_prompt) {
-                $prompt .= $settings->responses_api_prompt . "\n\n";
-            } else {
-                $prompt .= "If relevant given the customer's query, and the articles included, find the single article that best answers the user's question. Summarize the relevant part of that article as a support answer, and provide the article URL. If no article is relevant, reply with a concise best attempt to answer their concerns.";
-            }
-
-            // Use Guzzle to call OpenAI Responses API
-            try {
-                $guzzle = new \GuzzleHttp\Client(['timeout' => 30]);
-                $apiKey = $settings->api_key;
-                $payload = [
-                    'model' => is_string($settings->model) ? $settings->model : (is_array($settings->model) ? reset($settings->model) : ''),
-                    'input' => (string)($prompt . "\n" . $context),
-                    'max_output_tokens' => (integer) $settings->token_limit
+            $messages = [];
+            if ($settings->start_message) {
+                $messages[] = [
+                    'role' => 'system',
+                    'content' => $settings->start_message
                 ];
-                $jsonPayload = json_encode($payload);
-                $response = $guzzle->post('https://api.openai.com/v1/responses', [
+            }
+            // Add context from articles
+            if ($context) {
+                $messages[] = [
+                    'role' => 'system',
+                    'content' => $context
+                ];
+            }
+            $messages[] = [
+                'role' => 'user',
+                'content' => $userQuery
+            ];
+            $payload = [
+                'model' => $model,
+                'messages' => $messages,
+                'max_tokens' => $tokenLimit
+            ];
+            try {
+                $client = new \GuzzleHttp\Client(['timeout' => 30]);
+                $response = $client->post("https://api.infomaniak.com/1/ai/{$productId}/openai/chat/completions", [
                     'headers' => [
                         'Authorization' => 'Bearer ' . $apiKey,
                         'Content-Type' => 'application/json',
                     ],
-                    'body' => $jsonPayload,
+                    'body' => json_encode($payload),
                 ]);
                 $data = json_decode($response->getBody(), true);
-                $answerText = '';
-                if (
-                    isset($data['output'][0]['content'][0]['text']) &&
-                    is_string($data['output'][0]['content'][0]['text'])
-                ) {
-                    $answerText = trim($data['output'][0]['content'][0]['text'], "\n");
-                }
+                $answerText = $data['choices'][0]['message']['content'] ?? '';
             } catch (\Exception $e) {
-                $errorMsg = $e->getMessage();
-                $openAiError = '';
-                if (method_exists($e, 'getResponse') && $e->getResponse()) {
-                    $body = (string) $e->getResponse()->getBody();
-                    $json = json_decode($body, true);
-                    if (isset($json['error']['message'])) {
-                        $openAiError = $json['error']['message'];
-                    } else {
-                        $openAiError = $body;
-                    }
-                }
-                $answerText = $openAiError ?: $errorMsg;
-                \Log::error('Error on Responses API Request: ' . $answerText);
-                return Response::json([
-                    'query' => $userQuery ?? '',
-                    'answer' => $answerText
-                ], 200);
+                $answerText = $e->getMessage();
             }
             $thread = Thread::find($request->get('thread_id'));
             $answers = $thread->chatgpt ? json_decode($thread->chatgpt, true) : [];
@@ -437,6 +353,10 @@ class FreeScoutGPTController extends Controller
                 'use_responses_api' => isset($_POST['use_responses_api']),
                 'article_urls' => $request->get('article_urls'),
                 'responses_api_prompt' => $request->get('responses_api_prompt'),
+                'infomaniak_enabled' => isset($_POST['infomaniak_enabled']),
+                'infomaniak_api_key' => $request->get('infomaniak_api_key'),
+                'infomaniak_product_id' => $request->get('infomaniak_product_id'),
+                'infomaniak_model' => $request->get('infomaniak_model'),
             ]
         );
         \Session::flash('flash_success_floating', __('Settings updated'));
@@ -450,5 +370,105 @@ class FreeScoutGPTController extends Controller
             return Response::json(['enabled' => false], 200);
         }
         return Response::json(['enabled' => $settings['enabled']], 200);
+    }
+
+    /**
+     * Fetch and parse articles from URLs for context.
+     * @param array $articleUrls
+     * @return array [ 'context' => string, 'articles' => array ]
+     */
+    protected function fetchArticlesContext(array $articleUrls, $settings, $request)
+    {
+        $articles = [];
+        $client = new \GuzzleHttp\Client(['timeout' => 20]);
+        $userQuery = $request->get('query');
+        foreach ($articleUrls as $url) {
+            try {
+                $res = $client->get($url, [
+                    'headers' => [
+                        'User-Agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36'
+                    ]
+                ]);
+                $body = (string) $res->getBody();
+                $contentType = $res->getHeaderLine('Content-Type');
+                $isText = preg_match('/\.txt$/i', $url) || stripos($contentType, 'text/plain') !== false;
+                if ($isText) {
+                    $safeText = htmlspecialchars($body, ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML5);
+                    $body = '<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body><pre>' . $safeText . '</pre></body></html>';
+                }
+                $text = '';
+                $linkLines = [];
+                libxml_use_internal_errors(true);
+                $dom = new \DOMDocument();
+                if ($dom->loadHTML($body)) {
+                    $xpath = new \DOMXPath($dom);
+                    $nodes = $xpath->query('/*');
+                    if ($nodes->length > 0) {
+                        foreach ($nodes as $node) {
+                            $aTags = $node->getElementsByTagName('a');
+                            $aList = [];
+                            foreach ($aTags as $a) {
+                                $aList[] = $a;
+                            }
+                            foreach ($aList as $a) {
+                                $linkText = trim($a->textContent);
+                                $href = $a->getAttribute('href');
+                                if ($linkText && $href) {
+                                    $replacement = $linkText . ': ' . $href . "\n";
+                                    $textNode = $dom->createTextNode($replacement);
+                                    $a->parentNode->replaceChild($textNode, $a);
+                                }
+                            }
+                            $innerHTML = '';
+                            foreach ($node->childNodes as $child) {
+                                $innerHTML .= $dom->saveHTML($child);
+                            }
+                            $innerHTML = preg_replace('/<style[\s\S]*?<\/style>/i', '', $innerHTML);
+                            $text = trim(strip_tags($innerHTML));
+                        }
+                    }
+                }
+                libxml_clear_errors();
+                $finalText = '';
+                if (!empty($linkLines)) {
+                    $finalText .= implode("\n", $linkLines) . "\n\n";
+                }
+                $finalText .= $text;
+                $articles[] = [
+                    'url' => $url,
+                    'text' => mb_substr($finalText, 0, 12000)
+                ];
+            } catch (\Exception $e) {
+                $errorMsg = $e->getMessage();
+                \Log::error('Error on Article Fetch: ' . $errorMsg ?? 'Error fetching or parsing the article.');
+                return [
+                    'context' => '',
+                    'articles' => [],
+                    'error' => $errorMsg ?? 'Error fetching or parsing the article.',
+                    'userQuery' => $userQuery
+                ];
+            }
+        }
+        $context = "";
+        if ($settings->client_data_enabled) {
+            $customerName = $request->get("customer_name");
+            $customerEmail = $request->get("customer_email");
+            $conversationSubject = $request->get("conversation_subject");
+            $context .= "Conversation subject is $conversationSubject, customer name is $customerName, customer email is $customerEmail\n";
+        }
+        $context .= "Customer query: $userQuery\n";
+        if (empty($articles)) {
+            $context .= "No articles could be fetched or parsed.\n";
+        } else {
+            $context .= "Articles:\n";
+            foreach ($articles as $i => $article) {
+                $context .= "[Article #" . ($i + 1) . "] URL: " . $article['url'] . "\n";
+                $context .= (is_string($article['text']) ? $article['text'] : '') . "\n\n";
+            }
+        }
+        return [
+            'context' => $context,
+            'articles' => $articles
+        ];
     }
 }
