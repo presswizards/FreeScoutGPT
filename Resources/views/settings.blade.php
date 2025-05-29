@@ -129,7 +129,7 @@
             <div class="form-group">
                 <label for="infomaniak_enabled" class="col-sm-2 control-label">{{ __("Use Infomaniak Chat Completions API") }}</label>
                 <div class="col-sm-6">
-                    <i style="margin: 0 20px" class="glyphicon glyphicon-info-sign icon-info" data-toggle="popover" data-trigger="hover" data-html="true" data-placement="left" data-content="{{ __('If enabled, the Infomaniak Chat Completions API will be used with the articles provided, and should generate much more targeted and informative answers if the articles have all the relevant information.') }}" data-original-title="" title=""></i>
+                    <i style="margin: 0 20px" class="glyphicon glyphicon-info-sign icon-info" data-toggle="popover" data-trigger="hover" data-html="true" data-placement="left" data-content="{{ __('If enabled, the Infomaniak Chat Completions API will be used with the articles provided, and should generate much more targeted and informative answers if the articles have all the relevant information. Please note: token limit maxiumum is 5000 for Infomaniak. Higher than that will cause an error.') }}" data-original-title="" title=""></i>
                     <div class="controls">
                         <div class="onoffswitch-wrap">
                             <div class="onoffswitch">
@@ -144,21 +144,21 @@
             </div>
 
             <div class="form-group">
-                <label class="col-sm-2 control-label">{{ __("Infomaniak API Key") }}</label>
+                <label class="col-sm-2 control-label"><a href="https://manager.infomaniak.com/v3/ng/accounts/token/list" target="_blank">{{ __("Infomaniak API Key") }}</a></label>
                 <div class="col-sm-6">
                     <input name="infomaniak_api_key" class="form-control" placeholder="Infomaniak API Key" value="{{ $settings['infomaniak_api_key'] ?? '' }}" />
                 </div>
             </div>
 
             <div class="form-group">
-                <label class="col-sm-2 control-label">{{ __("Infomaniak Product ID") }}</label>
+                <label class="col-sm-2 control-label"><a href="https://developer.infomaniak.com/docs/api/get/1/ai" target="_blank">{{ __("Infomaniak Product ID") }}</a></label>
                 <div class="col-sm-6">
                     <input name="infomaniak_product_id" class="form-control" placeholder="33" value="{{ $settings['infomaniak_product_id'] ?? '33' }}" />
                 </div>
             </div>
 
             <div class="form-group">
-                <label class="col-sm-2 control-label">{{ __("Infomaniak Model Name") }}</label>
+                <label class="col-sm-2 control-label"><a href="https://developer.infomaniak.com/docs/api/post/1/ai/%7Bproduct_id%7D/openai/chat/completions" target="_blank">{{ __("Infomaniak Model Name") }}</a></label>
                 <div class="col-sm-6">
                     <input name="infomaniak_model" class="form-control" placeholder="mistral24b" value="{{ $settings['infomaniak_model'] ?? 'mistral24b' }}" />
                 </div>
