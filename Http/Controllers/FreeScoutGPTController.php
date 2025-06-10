@@ -393,6 +393,7 @@ class FreeScoutGPTController extends Controller
                 ]);
                 $data = json_decode($response->getBody(), true);
                 \Log::info('Infomaniak API Call Response ' . json_encode($data));
+                // This may need to be more robust like Responses API checks above?
                 $answerText = $data['choices'][0]['message']['content'] ?? '';
             } catch (\Exception $e) {
                 \Log::error('Infomaniak API Response Error: ' . $e->getMessage());
