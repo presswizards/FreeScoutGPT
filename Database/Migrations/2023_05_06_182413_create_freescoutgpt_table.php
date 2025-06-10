@@ -16,7 +16,7 @@ class CreateFreescoutgptTable extends Migration
         Schema::create('freescoutgpt', function (Blueprint $table) {
             $table->integer('mailbox_id');
             $table->boolean('enabled');
-            $table->string('api_key');
+            $table->string('api_key')->nullable();
             $table->integer('token_limit');
             $table->string('start_message');
             $table->string('model');
