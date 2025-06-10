@@ -294,11 +294,17 @@ class FreeScoutGPTController extends Controller
                 ]);
                 $data = json_decode($response->getBody(), true);
                 $answerText = '';
-                if (
-                    isset($data['output'][0]['content'][0]['text']) &&
-                    is_string($data['output'][0]['content'][0]['text'])
-                ) {
-                    $answerText = trim($data['output'][0]['content'][0]['text'], "\n");
+                if (isset($data['output']) && is_array($data['output'])) {
+                    foreach ($data['output'] as $item) {
+                        if (
+                            isset($item['type'], $item['content'][0]['text']) &&
+                            $item['type'] === 'message' &&
+                            is_string($item['content'][0]['text'])
+                        ) {
+                            $answerText = trim($item['content'][0]['text'], "\n");
+                            break; // Message found, no need to continue looping
+                        }
+                    }
                 }
             } catch (\Exception $e) {
                 $errorMsg = $e->getMessage();
