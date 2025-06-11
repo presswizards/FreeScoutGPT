@@ -118,7 +118,7 @@ function addAnswer(thread_id, text) {
     robotIcon.classList.add('fa-fade');
     setTimeout(() => {
       robotIcon.classList.remove('fa-fade');
-    }, 3000);
+    }, 1000);
 }
 
 function previousAnswer(e) {
