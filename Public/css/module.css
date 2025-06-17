@@ -38,3 +38,22 @@
     margin-left: 20px;
     cursor: pointer;
 }
+.sidebar-menu .fa-solid {
+    color: #b5c1cc;
+    font-size: 16px;
+    left: 20px;
+    margin-right: 10px;
+    position: absolute;
+    top: 10px;
+    z-index: 9;
+}
+.sidebar-buttons .dropdown-menu .fa-solid {
+    position: relative;
+    color: #0078D7;
+    left: -5px;
+}
+.dropdown-menu.with-icons .fa-solid, .dash-card-footer .dropdown-menu .fa-solid, .sidebar-buttons .dropdown-menu .fa-solid {
+    position: relative;
+    color: #0078D7;
+    left: -5px;
+}
