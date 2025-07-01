@@ -1,8 +1,8 @@
 {
     "name": "FreeScoutGPT",
     "alias": "freescoutgpt",
-    "description": "Module for requests to ChatGPT with support for multiple models. v1.0.28 adds new Infomaniak API option implementation.",
-    "version": "1.0.28",
+    "description": "Module for requests to ChatGPT with support for multiple models. v1.0.30 adds new Infomaniak API option implementation.",
+    "version": "1.0.30",
     "detailsUrl": "https://github.com/presswizards/FreeScoutGPT",
     "img": "https://raw.githubusercontent.com/presswizards/FreeScoutGPT/refs/heads/main/FreeScoutGPT-Logo.jpg",
     "author": "Press Wizards",
