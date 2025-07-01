@@ -197,7 +197,7 @@ https://example.com/article2">{{ $settings['article_urls'] ?? '' }}</textarea>
         <div class="col-md-4 col-xs-12" style="margin-top: 30px;">
             <div class="panel panel-default" style="border-color: #4CAF50;">
                 <div class="panel-heading" style="background: #4CAF50; color: #fff; font-weight: bold; font-size: 18px;">
-                    <i class="fa fa-star"></i> Upgrade to FreeScout GPT Pro
+                    Upgrade to<br><i class="fa fa-star"></i> FreeScout GPT Pro <i class="fa fa-star"></i>
                 </div>
                 <div class="panel-body">
                     <ul class="fa-ul" style="margin-left: 1em;">
@@ -211,12 +211,7 @@ https://example.com/article2">{{ $settings['article_urls'] ?? '' }}</textarea>
                         <li><span class="fa-li" style="color: #4CAF50;"><i class="fa fa-check-circle"></i></span>Auto-Generate Answer Drafts</li>
                         <li><span class="fa-li" style="color: #4CAF50;"><i class="fa fa-check-circle"></i></span>Content Specific Prompt</li>
                     </ul>
-                    <div class="text-center" style="margin-top: 20px;">
-                        <a href="https://freescout.net/modules/gpt-pro/" target="_blank" class="btn btn-success btn-lg">
-                            Learn More &amp; Upgrade
-                        </a>
-                    </div>
-                    <div class="text-center" style="margin-top: 10px;">
+                    <div class="text-center" style="margin-top: 15px;">
                         <a href="http://5starplugins.com/freescout-gpt-pro/" target="_blank" class="btn btn-primary btn-lg">
                             Upgrade To Pro
                         </a>
