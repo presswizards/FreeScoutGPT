@@ -311,7 +311,7 @@ class FreeScoutGPTController extends Controller
                 'query' => $userQuery,
                 'answer' => $answerText
             ], 200);
-        }
+        } // End of Non-Edit-Prompt & Responses API Call
 
         $openaiClient = \Tectalic\OpenAi\Manager::build(new \GuzzleHttp\Client(
             [
