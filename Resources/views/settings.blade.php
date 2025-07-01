@@ -217,7 +217,7 @@ https://example.com/article2">{{ $settings['article_urls'] ?? '' }}</textarea>
                         </a>
                     </div>
                     <div class="text-center" style="margin-top: 15px;">
-                        <a href="https://5starplugins.com/freescout-gpt-pro/#trial" target="_blank" class="btn btn-secondary btn-lg">
+                        <a href="https://5starplugins.com/freescout-gpt-pro/#trial" target="_blank" class="btn btn-grey btn-md">
                             Explore Free 14-Day Trial
                         </a>
                     </div>
