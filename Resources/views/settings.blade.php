@@ -216,6 +216,11 @@ https://example.com/article2">{{ $settings['article_urls'] ?? '' }}</textarea>
                             Upgrade To Pro
                         </a>
                     </div>
+                    <div class="text-center" style="margin-top: 15px;">
+                        <a href="https://5starplugins.com/freescout-gpt-pro/#trial" target="_blank" class="btn btn-secondary btn-lg">
+                            Explore Free 14-Day Trial
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
