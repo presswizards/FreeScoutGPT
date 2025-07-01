@@ -183,7 +183,7 @@ async function injectGptAnswer(){
     hideModifyPromptAlert();
 
     fsAjax(`mailbox_id=${mailbox_id}&query=${query}&command=${encodeURIComponent(command)}&thread_id=${thread_id}&customer_name=${customer_name}&customer_email=${customer_email}&conversation_subject=${conversation_subject}`, '/freescoutgpt/generate', function (response) {
-        $('#body').summernote('pasteHTML', response.answer);
+        $('#body').summernote('pasteHTML', response.answer.replace(/\n/g, "<br>"));
         $(".gptbutton").removeClass("fa-beat-fade");
     }, true, function() {
         $(".gptbutton").removeClass("fa-beat-fade");
