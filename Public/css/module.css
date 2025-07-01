@@ -26,6 +26,9 @@
     justify-content: space-between;
     align-items: center;
 }
+.gpt-answer {
+    white-space: pre-line;
+}
 .gpt-nav {
     display: flex;
     justify-content: space-between;
