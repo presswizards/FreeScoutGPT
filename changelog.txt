@@ -1,6 +1,11 @@
+v1.0.30
+<ul><li>
+Adds Infomaniak Chat Completion API option for Switzerland privacy protection.
+</li></ul>
+
 v1.0.28
 <ul><li>
-Adds Infomaniak Chat Completion API option
+Adds newlines to reply button injected answers.
 </li></ul>
 
 v1.0.27
