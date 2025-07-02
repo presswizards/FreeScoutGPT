@@ -194,7 +194,7 @@ https://example.com/article2">{{ $settings['article_urls'] ?? '' }}</textarea>
                 </div>
             </form>
         </div>
-        <div class="col-md-4 col-xs-6 col-xs-offset-3" style="margin-top: 30px; padding-right: 20px;">
+        <div class="col-md-3 col-md-offset-0 col-xs-6 col-xs-offset-3" style="margin-top: 30px; padding-right: 20px;">
             <div class="panel panel-default" style="border-radius: 5px; border-color: #4CAF50;">
                 <div class="panel-heading" style="text-align: center; background: #4CAF50; color: #fff; font-weight: bold; font-size: 18px;">
                     Upgrade to<br><i class="fa fa-star"></i> FreeScout GPT Pro <i class="fa fa-star"></i>
