@@ -210,6 +210,8 @@ https://example.com/article2">{{ $settings['article_urls'] ?? '' }}</textarea>
                         <li><span class="fa-li" style="color: #4CAF50;"><i class="fa fa-check-circle"></i></span>One-Click Insert Into Reply</li>
                         <li><span class="fa-li" style="color: #4CAF50;"><i class="fa fa-check-circle"></i></span>Auto-Generate Answer Drafts</li>
                         <li><span class="fa-li" style="color: #4CAF50;"><i class="fa fa-check-circle"></i></span>Content Specific Prompt</li>
+                        <li><span class="fa-li" style="color: #4CAF50;"><i class="fa fa-check-circle"></i></span>Technical Support</li>
+                        <li><span class="fa-li" style="color: #4CAF50;"><i class="fa fa-check-circle"></i></span>Feature & Security Updates</li>
                     </ul>
                     <div class="text-center" style="margin-top: 15px;">
                         <a href="http://5starplugins.com/freescout-gpt-pro/" target="_blank" class="btn btn-primary btn-lg">
