@@ -14,7 +14,7 @@
         FreeScoutGPT <i class="fa-solid fa-robot"></i> 
     </div>
     <div class="row">
-        <div class="col-md-8 col-xs-12">
+        <div class="col-md-8 col-xs-10 col-xs-offset-1">
             <form class="form-horizontal margin-top margin-bottom" method="POST" action="">
                 {{ csrf_field() }}
 
@@ -194,7 +194,7 @@ https://example.com/article2">{{ $settings['article_urls'] ?? '' }}</textarea>
                 </div>
             </form>
         </div>
-        <div class="col-md-4 col-xs-12" style="margin-top: 30px; padding-right: 20px;">
+        <div class="col-md-4 col-xs-6 col-xs-offset-3" style="margin-top: 30px; padding-right: 20px;">
             <div class="panel panel-default" style="border-radius: 5px; border-color: #4CAF50;">
                 <div class="panel-heading" style="text-align: center; background: #4CAF50; color: #fff; font-weight: bold; font-size: 18px;">
                     Upgrade to<br><i class="fa fa-star"></i> FreeScout GPT Pro <i class="fa fa-star"></i>
