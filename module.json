@@ -2,7 +2,7 @@
     "name": "FreeScoutGPT",
     "alias": "freescoutgpt",
     "description": "Module for requests to ChatGPT with support for multiple models. v1.0.28 adds newslines to reply injected answers. v1.0.27 Fixes max_completion_tokens error when using Responses API. v1.0.25 adds new Responses API option implementation, thanks to Lewis Downey.",
-    "version": "1.0.28",
+    "version": "1.0.29",
     "detailsUrl": "https://github.com/presswizards/FreeScoutGPT",
     "img": "https://raw.githubusercontent.com/presswizards/FreeScoutGPT/refs/heads/main/FreeScoutGPT-Logo.jpg",
     "author": "Press Wizards",
