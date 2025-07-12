@@ -4,8 +4,19 @@
 
 This repository contains the FreeScout + ChatGPT Integration Module, which connects FreeScout with the powerful language models of ChatGPT by OpenAI via their API using your own API key. This integration enables the generation of AI-based responses for incoming messages, providing a more efficient and intelligent support system for your FreeScout team.
 
-<p><a href="https://www.buymeacoffee.com/robwpdev" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="41" width="174"></a><br>
-If this module saves you time, helps your clients, or helps you do better work, I’d appreciate it.</p>
+<a href="https://5starplugins.com/freescout-gpt-pro/" target="_blank"><img src="https://github.com/user-attachments/assets/b501fec8-2daa-4075-a00e-e7be243219a7" width="200"></a><br>
+### FreeScout GPT Pro now available
+- Knowledge Base Integration with AI Embeddings
+- Saved Replies Integration with AI Embeddings
+- Web Pages Cached with AI Embeddings
+- Auto-Generate Email Responses
+- Content-Specific Prompt
+- One-Click Insert Into Reply
+- AI Edit options for spelling, length, tone
+- World-Class Support from the U.S.
+- See The Screenshots
+<a href="https://5starplugins.com/freescout-gpt-pro/" target="_blank"><strong>FreeScout GPT Pro Details and Screenshots</strong></a>
+
 
 ## Newest Responses API Features
 - Adds an option to use the newest OpenAI Responses API. According to OpenAI: "OpenAI’s new Responses API is built for creating powerful AI agents, going beyond the conversational scope of the Chat Completions API. It’s more capable and agent-oriented, making it ideal for complex, multi-step tasks."
