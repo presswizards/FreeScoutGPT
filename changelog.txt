@@ -1,3 +1,5 @@
+v1.0.30: Add gpt-5
+
 v1.0.29
 <ul><li>
 FreeScout GPT Pro module now available - try it out today. See the Settings page for details.
