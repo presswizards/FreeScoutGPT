@@ -112,7 +112,7 @@ class FreeScoutGPTController extends Controller
                     }
                 }
 
-                if (strpos($model['id'], 'gpt-4o') !== false || strpos($model['id'], 'gpt-4.5') !== false || strpos($model['id'], 'gpt-4.1') !== false) {
+                if (strpos($model['id'], 'gpt-4o') !== false || strpos($model['id'], 'gpt-4.5') !== false || strpos($model['id'], 'gpt-4.1') !== false) || strpos($model['id'], 'gpt-5') !== false) {
                     return true;
                 }
 
