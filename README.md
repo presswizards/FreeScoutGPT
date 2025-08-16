@@ -45,6 +45,8 @@ To use this module, you will need an OpenAI API key, which can be obtained from 
 8. Also, on the Reply screen, there is an Edit Prompt button, which you can use to rework the prompt and customize it for this reply, and then submit it to generate a reply using the additional information entered. Note that this prompt is not saved, it is unique to this reply only. [Note: this method does not yet use the new Responses API options.]
 
 ## Changelog
+v1.0.30: Add gpt-5
+
 v1.0.29: FreeScout GPT Pro module now available - try it out today. See the Settings page for details.
 
 v1.0.28: Adds newlines to reply button injected answers.
