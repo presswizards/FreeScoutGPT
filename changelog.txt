@@ -1,3 +1,5 @@
+v1.0.31: Fix gpt-5 logic typo
+
 v1.0.30: Add gpt-5
 
 v1.0.29
