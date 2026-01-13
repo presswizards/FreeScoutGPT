@@ -1,26 +1,23 @@
 {
-    "name": "FreeScoutGPT",
-    "alias": "freescoutgpt",
-    "description": "Module for requests to ChatGPT with support for multiple models. v1.0.32: Fix gpt-5.1 responses api results, fix empty articles error in PHP 8.x",
-    "version": "1.0.32",
-    "detailsUrl": "https://github.com/presswizards/FreeScoutGPT/blob/main/changelog.txt",
-    "img": "https://raw.githubusercontent.com/presswizards/FreeScoutGPT/refs/heads/main/FreeScoutGPT-Logo.jpg",
-    "author": "5 Star Plugins",
-    "authorUrl": "https://5starplugins.com/freescout-gpt-pro/",
+    "name": "AIAssistant",
+    "alias": "aiassistant",
+    "description": "AI-powered reply drafting with customer context learning for FreeScout helpdesk. Features intelligent response generation, customer history analysis, and auto-draft capabilities.",
+    "version": "2.0.0",
+    "detailsUrl": "https://github.com/DigiGrow-LTD/FreeScoutGPT",
+    "img": "https://raw.githubusercontent.com/DigiGrow-LTD/FreeScoutGPT/refs/heads/main/FreeScoutGPT-Logo.jpg",
+    "author": "DigiGrow LTD",
+    "authorUrl": "https://github.com/DigiGrow-LTD",
     "requiredAppVersion": "1.8",
     "license": "MIT",
-    "keywords": [],
+    "keywords": ["ai", "assistant", "gpt", "openai", "customer-context", "auto-draft"],
     "active": 0,
     "order": 0,
     "providers": [
-        "Modules\\FreeScoutGPT\\Providers\\FreeScoutGPTServiceProvider"
+        "Modules\\AIAssistant\\Providers\\AIAssistantServiceProvider"
     ],
     "aliases": {},
     "files": [
         "start.php"
     ],
-    "requires": [],
-    "latestVersionUrl": "https://raw.githubusercontent.com/presswizards/FreeScoutGPT/refs/heads/main/module.json",
-    "latestVersionZipUrl": "https://github.com/presswizards/FreeScoutGPT/archive/refs/heads/main.zip",
-    "changelogUrl": "https://github.com/presswizards/FreeScoutGPT/blob/main/changelog.txt"
+    "requires": []
 }

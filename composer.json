@@ -1,25 +1,23 @@
 {
-    "name": "freescout/freescoutgpt",
-    "description": "",
+    "name": "digigrow/aiassistant",
+    "description": "AI-powered reply drafting with customer context learning for FreeScout",
     "authors": [
         {
-            "name": "FreeScout",
-            "email": "support@freescout.net"
+            "name": "DigiGrow LTD",
+            "email": "support@digigrow.com"
         }
     ],
     "extra": {
         "laravel": {
             "providers": [
-                "Modules\\FreeScoutGPT\\Providers\\FreeScoutGPTServiceProvider"
+                "Modules\\AIAssistant\\Providers\\AIAssistantServiceProvider"
             ],
-            "aliases": {
-
-            }
+            "aliases": {}
         }
     },
     "autoload": {
         "psr-4": {
-            "Modules\\FreeScoutGPT\\": ""
+            "Modules\\AIAssistant\\": ""
         }
     },
     "require": {

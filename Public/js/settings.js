@@ -1,21 +1,30 @@
+/**
+ * AI Assistant Settings Page JavaScript
+ */
 document.addEventListener("DOMContentLoaded", function () {
     const modelSelect = document.getElementById("model");
     const apiKeyInput = document.querySelector("input[name='api_key']");
-    const savedModel = modelSelect.dataset.savedModel; // Load saved model from data attribute
+    const savedModel = modelSelect ? modelSelect.dataset.savedModel : '';
 
+    // Animate robot icon on page load
     $(document).ready(function() {
         const robotIcon = document.querySelector('i.fa-solid.fa-robot');
-        robotIcon.classList.add('fa-fade');
-        setTimeout(() => {
-            robotIcon.classList.remove('fa-fade');
-        }, 3000);
+        if (robotIcon) {
+            robotIcon.classList.add('fa-fade');
+            setTimeout(function() {
+                robotIcon.classList.remove('fa-fade');
+            }, 3000);
+        }
     });
 
+    /**
+     * Fetch available models from OpenAI API
+     */
     function fetchModels(apiKey) {
-        if (!apiKey) return;
+        if (!apiKey || !modelSelect) return;
 
-        console.log('fetchModels');
-        fetch("/freescoutgpt/get-models", {
+        // Try new endpoint first, fallback to legacy
+        fetch("/aiassistant/get-models", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -23,52 +32,54 @@ document.addEventListener("DOMContentLoaded", function () {
             },
             body: JSON.stringify({ api_key: apiKey }),
         })
-        .then(response => response.json())
-        .then(data => {
+        .then(function(response) {
+            if (!response.ok) {
+                // Try legacy endpoint
+                return fetch("/freescoutgpt/get-models", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content,
+                    },
+                    body: JSON.stringify({ api_key: apiKey }),
+                });
+            }
+            return response;
+        })
+        .then(function(response) { return response.json(); })
+        .then(function(data) {
             modelSelect.innerHTML = '<option value="">Select an API model</option>';
             if (data.data) {
-                const models = Object.values(data.data);
-                models.forEach(model => {
-                const option = document.createElement("option");
-                option.value = model.id;
-                option.textContent = model.id;
+                var models = Object.values(data.data);
+                models.forEach(function(model) {
+                    var option = document.createElement("option");
+                    option.value = model.id;
+                    option.textContent = model.id;
 
-                if (model.id === savedModel) {
-                   option.selected = true;
-                }
+                    if (model.id === savedModel) {
+                        option.selected = true;
+                    }
 
-                modelSelect.appendChild(option);
+                    modelSelect.appendChild(option);
                 });
             } else {
                 console.log('No models found or invalid data format');
             }
         })
-        .catch(error => console.error("Error fetching models:", error));
+        .catch(function(error) {
+            console.error("Error fetching models:", error);
+        });
     }
 
-    if (apiKeyInput.value) {
+    // Fetch models if API key is present
+    if (apiKeyInput && apiKeyInput.value) {
         fetchModels(apiKeyInput.value);
     }
 
-    apiKeyInput.addEventListener("blur", function () {
-        fetchModels(this.value);
-    });
-
-    // Hide/show Article URLs textarea based on Responses API checkbox
-    const responsesApiCheckbox = document.querySelector("input[name='use_responses_api']");
-    const articleUrlsGroup = document.getElementById("article-urls-group");
-    const responsesApiPromptGroup = document.querySelector("textarea[name='responses_api_prompt']").closest('.form-group');
-    function toggleResponsesApiFields() {
-        if (responsesApiCheckbox.checked) {
-            articleUrlsGroup.style.display = '';
-            responsesApiPromptGroup.style.display = '';
-        } else {
-            articleUrlsGroup.style.display = 'none';
-            responsesApiPromptGroup.style.display = 'none';
-        }
-    }
-    if (responsesApiCheckbox && articleUrlsGroup && responsesApiPromptGroup) {
-        responsesApiCheckbox.addEventListener('change', toggleResponsesApiFields);
-        toggleResponsesApiFields(); // Set initial state
+    // Fetch models when API key field loses focus
+    if (apiKeyInput) {
+        apiKeyInput.addEventListener("blur", function () {
+            fetchModels(this.value);
+        });
     }
 });
