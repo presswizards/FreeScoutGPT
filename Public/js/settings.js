@@ -281,7 +281,11 @@ document.addEventListener("DOMContentLoaded", function () {
                     litellmModelSelect.appendChild(option);
                 });
             } else if (data.error) {
-                litellmModelSelect.innerHTML = '<option value="">Error: ' + data.error + '</option>';
+                const errorOption = document.createElement("option");
+                errorOption.value = "";
+                errorOption.textContent = "Error: " + data.error;
+                litellmModelSelect.innerHTML = '';
+                litellmModelSelect.appendChild(errorOption);
             } else {
                 litellmModelSelect.innerHTML = '<option value="">No models found</option>';
             }

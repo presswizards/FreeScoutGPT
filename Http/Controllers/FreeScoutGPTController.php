@@ -256,6 +256,15 @@ class FreeScoutGPTController extends Controller
             return response()->json(['error' => 'LiteLLM base URL is required'], 400);
         }
 
+        if (!filter_var($baseUrl, FILTER_VALIDATE_URL)) {
+            return response()->json(['error' => 'Invalid URL format'], 400);
+        }
+
+        $parsedUrl = parse_url($baseUrl);
+        if (!in_array($parsedUrl['scheme'] ?? '', ['http', 'https'])) {
+            return response()->json(['error' => 'URL must use http or https'], 400);
+        }
+
         $baseUrl = rtrim($baseUrl, '/');
         $cacheKey = 'litellm_models_' . md5($baseUrl . '_' . ($apiKey ?? ''));
 
@@ -549,7 +558,6 @@ class FreeScoutGPTController extends Controller
 
                 if ($settings->client_data_enabled) {
                     $customerName = $request->get("customer_name");
-                    $customerEmail = $request->get("customer_email");
                     $conversationSubject = $request->get("conversation_subject");
                     $messages[] = [
                         'role' => 'system',
