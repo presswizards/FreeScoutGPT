@@ -68,6 +68,16 @@ document.addEventListener("DOMContentLoaded", function () {
     const infomaniakProductIdSelect = document.getElementById("infomaniak_product_id_select");
     const infomaniakModelSelect = document.getElementById("infomaniak_model");
     const infomaniakApiPromptGroup = document.querySelector("textarea[name='infomaniak_api_prompt']")?.closest('.form-group');
+    const litellmCheckbox = document.querySelector("input[name='litellm_enabled']");
+    const litellmBaseUrlInput = document.querySelector("input[name='litellm_base_url']");
+    const litellmApiKeyInput = document.querySelector("input[name='litellm_api_key']");
+    const litellmModelSelect = document.getElementById("litellm_model");
+    const litellmFields = [
+        litellmBaseUrlInput?.closest('.form-group'),
+        litellmApiKeyInput?.closest('.form-group'),
+        litellmModelSelect?.closest('.form-group')
+    ];
+
     const infomaniakFields = [
         infomaniakApiKeyInput?.closest('.form-group'),
         infomaniakProductIdSelect?.closest('.form-group'),
@@ -76,38 +86,41 @@ document.addEventListener("DOMContentLoaded", function () {
     ];
 
     function toggleApiFields(e) {
-        const infomaniakOn = infomaniakCheckbox && infomaniakCheckbox.checked;
-        const responsesApiOn = responsesApiCheckbox && responsesApiCheckbox.checked;
-
-        // If turning ON Infomaniak, turn OFF Responses API
+        if (e && e.type === 'change' && e.target === litellmCheckbox && litellmCheckbox.checked) {
+            if (infomaniakCheckbox) infomaniakCheckbox.checked = false;
+        }
         if (e && e.type === 'change' && e.target === infomaniakCheckbox && infomaniakCheckbox.checked) {
+            if (litellmCheckbox) litellmCheckbox.checked = false;
             if (responsesApiCheckbox) responsesApiCheckbox.checked = false;
         }
-        // If turning ON Responses API, turn OFF Infomaniak
         if (e && e.type === 'change' && e.target === responsesApiCheckbox && responsesApiCheckbox.checked) {
             if (infomaniakCheckbox) infomaniakCheckbox.checked = false;
         }
 
         const infomaniakNow = infomaniakCheckbox && infomaniakCheckbox.checked;
         const responsesApiNow = responsesApiCheckbox && responsesApiCheckbox.checked;
+        const litellmNow = litellmCheckbox && litellmCheckbox.checked;
 
-        // Show/hide Infomaniak fields (including prompt)
         infomaniakFields.forEach(f => { if (f) f.style.display = infomaniakNow ? '' : 'none'; });
+        litellmFields.forEach(f => { if (f) f.style.display = litellmNow ? '' : 'none'; });
 
-        // Show/hide Responses API prompt group
         if (responsesApiPromptGroup) {
             responsesApiPromptGroup.style.display = (responsesApiNow && !infomaniakNow) ? '' : 'none';
         }
 
-        // Show Article URLs if either is enabled
         if (articleUrlsGroup) {
             articleUrlsGroup.style.display = (infomaniakNow || responsesApiNow) ? '' : 'none';
         }
 
-        // When Infomaniak is turned ON, fetch Product IDs and Models if API key exists
         if (e && e.type === 'change' && e.target === infomaniakCheckbox && infomaniakCheckbox.checked) {
             if (infomaniakApiKeyInput && infomaniakApiKeyInput.value) {
                 fetchAndPopulateProductIds(infomaniakApiKeyInput.value);
+            }
+        }
+
+        if (e && e.type === 'change' && e.target === litellmCheckbox && litellmCheckbox.checked) {
+            if (litellmBaseUrlInput && litellmBaseUrlInput.value) {
+                fetchLitellmModels(litellmBaseUrlInput.value, litellmApiKeyInput ? litellmApiKeyInput.value : '');
             }
         }
     }
@@ -118,7 +131,9 @@ document.addEventListener("DOMContentLoaded", function () {
     if (responsesApiCheckbox) {
         responsesApiCheckbox.addEventListener('change', toggleApiFields);
     }
-    // Initial state
+    if (litellmCheckbox) {
+        litellmCheckbox.addEventListener('change', toggleApiFields);
+    }
     toggleApiFields();
 
     // ===================================================================
@@ -227,10 +242,75 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     if (infomaniakProductIdSelect) {
-        // On Product ID change, fetch models
         infomaniakProductIdSelect.addEventListener("change", function () {
             if (infomaniakApiKeyInput && this.value) {
                 fetchInfomaniakModels(infomaniakApiKeyInput.value, this.value);
+            }
+        });
+    }
+
+    // ===================================================================
+    // LiteLLM Models Fetch
+    // ===================================================================
+    const savedLitellmModel = litellmModelSelect ? litellmModelSelect.dataset.savedModel : '';
+
+    function fetchLitellmModels(baseUrl, apiKey) {
+        if (!baseUrl || !litellmModelSelect) return;
+
+        litellmModelSelect.innerHTML = '<option value="">Fetching models from proxy...</option>';
+
+        fetch("/freescoutgpt/litellm-models", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content,
+            },
+            body: JSON.stringify({ litellm_base_url: baseUrl, litellm_api_key: apiKey || '' }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            litellmModelSelect.innerHTML = '<option value="">Select a model</option>';
+            if (data.data && data.data.length > 0) {
+                data.data.forEach(model => {
+                    const option = document.createElement("option");
+                    option.value = model.id;
+                    option.textContent = model.id;
+                    if (model.id === savedLitellmModel) {
+                        option.selected = true;
+                    }
+                    litellmModelSelect.appendChild(option);
+                });
+            } else if (data.error) {
+                litellmModelSelect.innerHTML = '<option value="">Error: ' + data.error + '</option>';
+            } else {
+                litellmModelSelect.innerHTML = '<option value="">No models found</option>';
+            }
+        })
+        .catch(error => {
+            litellmModelSelect.innerHTML = '<option value="">Error fetching models</option>';
+            console.error("Error fetching LiteLLM models:", error);
+        });
+    }
+
+    // ===================================================================
+    // LiteLLM Event Listeners
+    // ===================================================================
+    if (litellmBaseUrlInput) {
+        litellmBaseUrlInput.addEventListener("blur", function () {
+            if (this.value && litellmCheckbox && litellmCheckbox.checked) {
+                fetchLitellmModels(this.value, litellmApiKeyInput ? litellmApiKeyInput.value : '');
+            }
+        });
+
+        if (litellmBaseUrlInput.value && litellmCheckbox && litellmCheckbox.checked) {
+            fetchLitellmModels(litellmBaseUrlInput.value, litellmApiKeyInput ? litellmApiKeyInput.value : '');
+        }
+    }
+
+    if (litellmApiKeyInput) {
+        litellmApiKeyInput.addEventListener("blur", function () {
+            if (litellmBaseUrlInput && litellmBaseUrlInput.value && litellmCheckbox && litellmCheckbox.checked) {
+                fetchLitellmModels(litellmBaseUrlInput.value, this.value);
             }
         });
     }

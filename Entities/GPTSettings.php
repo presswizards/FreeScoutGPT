@@ -30,5 +30,9 @@ class GPTSettings extends Model
         'infomaniak_product_id',
         'infomaniak_model',
         'infomaniak_api_prompt',
+        'litellm_enabled',
+        'litellm_base_url',
+        'litellm_api_key',
+        'litellm_model',
     ];
 }
