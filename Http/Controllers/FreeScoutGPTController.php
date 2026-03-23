@@ -247,6 +247,48 @@ class FreeScoutGPTController extends Controller
         }
     }
 
+    public function getAvailableLitellmModels(Request $request)
+    {
+        $baseUrl = $request->input('litellm_base_url');
+        $apiKey = $request->input('litellm_api_key');
+
+        if (!$baseUrl) {
+            return response()->json(['error' => 'LiteLLM base URL is required'], 400);
+        }
+
+        $baseUrl = rtrim($baseUrl, '/');
+        $cacheKey = 'litellm_models_' . md5($baseUrl . '_' . ($apiKey ?? ''));
+
+        if (Cache::has($cacheKey)) {
+            return response()->json(['data' => Cache::get($cacheKey)]);
+        }
+
+        try {
+            $client = new \GuzzleHttp\Client(['timeout' => 15]);
+            $headers = ['Accept' => 'application/json'];
+            if ($apiKey) {
+                $headers['Authorization'] = 'Bearer ' . $apiKey;
+            }
+
+            $response = $client->get($baseUrl . '/v1/models', [
+                'headers' => $headers,
+            ]);
+
+            $models = json_decode($response->getBody(), true);
+            $modelList = $models['data'] ?? [];
+
+            usort($modelList, function ($a, $b) {
+                return strcmp($a['id'] ?? '', $b['id'] ?? '');
+            });
+
+            Cache::put($cacheKey, $modelList, now()->addMinutes(10));
+
+            return response()->json(['data' => $modelList]);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
     public function generate(Request $request)
     {
         if (Auth::user() === null) return Response::json(["error" => "Unauthorized"], 401);
@@ -259,8 +301,8 @@ class FreeScoutGPTController extends Controller
             \Log::info('Using Reply Prompt Override: ' . $ajax_cmd);
         }
         
-        // If Responses API is enabled, use it instead of Chat Completions
-        if (!empty($settings->use_responses_api)) {
+        // If Responses API is enabled (direct OpenAI, not via LiteLLM or Infomaniak)
+        if (!empty($settings->use_responses_api) && empty($settings->litellm_enabled) && empty($settings->infomaniak_enabled)) {
             $articleUrls = array_filter(array_map('trim', preg_split('/\r?\n/', $settings->article_urls ?? '')));
             $fetchResult = $this->fetchArticlesContext($articleUrls, $settings, $request);
             if (!empty($fetchResult['error'])) {
@@ -417,6 +459,145 @@ class FreeScoutGPTController extends Controller
             ], 200);
         }
 
+        // LiteLLM Proxy API: use if enabled, before direct OpenAI
+        if (!empty($settings->litellm_enabled)) {
+            \Log::info('Using LiteLLM Proxy for answers');
+            $litellmBaseUrl = rtrim($settings->litellm_base_url ?? '', '/');
+            $litellmApiKey = $settings->litellm_api_key;
+            $litellmModel = $settings->litellm_model;
+            $tokenLimit = (int) $settings->token_limit;
+            $userQuery = $request->get('query');
+
+            $litellmHeaders = ['Content-Type' => 'application/json'];
+            if ($litellmApiKey) {
+                $litellmHeaders['Authorization'] = 'Bearer ' . $litellmApiKey;
+            }
+
+            // If Responses API is also enabled, use LiteLLM's /v1/responses endpoint
+            if (!empty($settings->use_responses_api)) {
+                $articleUrls = array_filter(array_map('trim', preg_split('/\r?\n/', $settings->article_urls ?? '')));
+                $fetchResult = $this->fetchArticlesContext($articleUrls, $settings, $request);
+                if (!empty($fetchResult['error'])) {
+                    return Response::json([
+                        'query' => $fetchResult['userQuery'] ?? '',
+                        'answer' => $fetchResult['error']
+                    ], 200);
+                }
+                $context = $fetchResult['context'];
+
+                $prompt = (!empty($ajax_cmd) ? $ajax_cmd : $settings->start_message) . "\n\n";
+                if (isset($settings->responses_api_prompt) && $settings->responses_api_prompt) {
+                    $prompt .= $settings->responses_api_prompt . "\n\n";
+                } else {
+                    $prompt .= __('If relevant given the customer\'s query, and the articles included, find the single article that best answers the user\'s question. Summarize the relevant part of that article as a support answer, and provide the article URL. If no article is relevant, reply with a concise best attempt to answer their concerns.\n\n');
+                }
+
+                try {
+                    $guzzle = new \GuzzleHttp\Client(['timeout' => 30]);
+                    $payload = [
+                        'model' => $litellmModel,
+                        'input' => (string)($prompt . "\n" . $context),
+                        'max_output_tokens' => $tokenLimit,
+                    ];
+                    $response = $guzzle->post($litellmBaseUrl . '/v1/responses', [
+                        'headers' => $litellmHeaders,
+                        'body' => json_encode($payload),
+                    ]);
+                    $data = json_decode($response->getBody(), true);
+                    $answerText = '';
+                    if (isset($data['output']) && is_array($data['output'])) {
+                        foreach ($data['output'] as $item) {
+                            if (
+                                isset($item['type'], $item['content'][0]['text']) &&
+                                $item['type'] === 'message' &&
+                                is_string($item['content'][0]['text'])
+                            ) {
+                                $answerText = trim($item['content'][0]['text'], "\n");
+                                break;
+                            }
+                        }
+                    }
+                } catch (\Exception $e) {
+                    $errorMsg = $e->getMessage();
+                    $proxyError = '';
+                    if (method_exists($e, 'getResponse') && $e->getResponse()) {
+                        $body = (string) $e->getResponse()->getBody();
+                        $json = json_decode($body, true);
+                        if (isset($json['error']['message'])) {
+                            $proxyError = $json['error']['message'];
+                        } else {
+                            $proxyError = $body;
+                        }
+                    }
+                    $answerText = $proxyError ?: $errorMsg;
+                    \Log::error('Error on LiteLLM Responses API Request: ' . $answerText);
+                    return Response::json([
+                        'query' => $userQuery ?? '',
+                        'answer' => $answerText
+                    ], 200);
+                }
+            } else {
+                // LiteLLM Chat Completions
+                $systemPrompt = (!empty($ajax_cmd) ? $ajax_cmd : $settings->start_message);
+
+                $messages = [
+                    [
+                        'role' => 'system',
+                        'content' => $systemPrompt
+                    ]
+                ];
+
+                if ($settings->client_data_enabled) {
+                    $customerName = $request->get("customer_name");
+                    $customerEmail = $request->get("customer_email");
+                    $conversationSubject = $request->get("conversation_subject");
+                    $messages[] = [
+                        'role' => 'system',
+                        'content' => __('Conversation subject is: ":subject"\nCustomer name is: ":name"\n', [
+                            'subject' => $conversationSubject,
+                            'name' => $customerName
+                        ])
+                    ];
+                }
+
+                $messages[] = [
+                    'role' => 'user',
+                    'content' => $userQuery
+                ];
+
+                $payload = [
+                    'model' => $litellmModel,
+                    'messages' => $messages,
+                    'max_tokens' => $tokenLimit,
+                ];
+
+                try {
+                    $client = new \GuzzleHttp\Client(['timeout' => 30]);
+                    $response = $client->post($litellmBaseUrl . '/v1/chat/completions', [
+                        'headers' => $litellmHeaders,
+                        'body' => json_encode($payload),
+                    ]);
+                    $data = json_decode($response->getBody(), true);
+                    $answerText = $data['choices'][0]['message']['content'] ?? '';
+                } catch (\Exception $e) {
+                    \Log::error('LiteLLM Chat Completions Error: ' . $e->getMessage());
+                    $answerText = $e->getMessage();
+                }
+            }
+
+            $thread = Thread::find($request->get('thread_id'));
+            $answers = $thread->chatgpt ? json_decode($thread->chatgpt, true) : [];
+            if ($answers === null) $answers = [];
+            $answers[] = $answerText;
+            $thread->chatgpt = json_encode($answers, JSON_UNESCAPED_UNICODE);
+            $thread->save();
+            \Log::info('LiteLLM Generate Answer: ' . $answerText);
+            return Response::json([
+                'query' => $userQuery,
+                'answer' => $answerText
+            ], 200);
+        }
+
         // OpenAI Chat Completions API
         $openaiClient = \Tectalic\OpenAi\Manager::build(new \GuzzleHttp\Client(
             [
@@ -519,6 +700,10 @@ class FreeScoutGPTController extends Controller
             $settings['enabled'] = false;
             $settings['model'] = "";
             $settings['client_data_enabled'] = false;
+            $settings['litellm_enabled'] = false;
+            $settings['litellm_base_url'] = "";
+            $settings['litellm_api_key'] = "";
+            $settings['litellm_model'] = "";
         }
 
         return view('freescoutgpt::settings', [
@@ -546,6 +731,10 @@ class FreeScoutGPTController extends Controller
                 'infomaniak_product_id' => $request->get('infomaniak_product_id'),
                 'infomaniak_model' => $request->get('infomaniak_model'),
                 'infomaniak_api_prompt' => $request->get('infomaniak_api_prompt'),
+                'litellm_enabled' => isset($_POST['litellm_enabled']),
+                'litellm_base_url' => $request->get('litellm_base_url'),
+                'litellm_api_key' => $request->get('litellm_api_key'),
+                'litellm_model' => $request->get('litellm_model'),
             ]
         );
         \Session::flash('flash_success_floating', __('Settings updated'));

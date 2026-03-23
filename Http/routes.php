@@ -10,4 +10,5 @@ Route::group(['middleware' => 'web', 'prefix' => \Helper::getSubdirectory(), 'na
     Route::post('/freescoutgpt/get-models', 'FreeScoutGPTController@getAvailableModels');
     Route::post('/freescoutgpt/infomaniak-models', 'FreeScoutGPTController@getAvailableInfomaniakModels');
     Route::post('/freescoutgpt/get-infomaniak-product-ids', 'FreeScoutGPTController@getAvailableInfomaniakProductIds');
+    Route::post('/freescoutgpt/litellm-models', 'FreeScoutGPTController@getAvailableLitellmModels');
 });
