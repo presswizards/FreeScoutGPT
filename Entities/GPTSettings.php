@@ -17,6 +17,7 @@ class GPTSettings extends Model
     protected $fillable = [
         'mailbox_id',
         'api_key',
+        'api_base_url',
         'token_limit',
         'start_message',
         'enabled',

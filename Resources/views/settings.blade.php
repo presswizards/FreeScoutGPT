@@ -36,10 +36,18 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="col-sm-4 control-label"><a target="_blank" href="https://platform.openai.com/api-keys">{{ __("OpenAI API key") }}</a></label>
+                    <label class="col-sm-4 control-label"><a target="_blank" href="https://platform.openai.com/api-keys">{{ __("API Key") }}</a></label>
 
                     <div class="col-sm-8">
                         <input type="password" name="api_key" class="form-control" placeholder="sk-..." value="{{ $settings['api_key'] ?? '' }}" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">{{ __("API Base URL") }}</label>
+                    <div class="col-sm-8">
+                        <input type="text" name="api_base_url" id="api_base_url" class="form-control" placeholder="https://api.openai.com" value="{{ $settings['api_base_url'] ?? '' }}" />
+                        <span class="help-block">{{ __("Leave empty for direct OpenAI access. Set a custom URL to route through any OpenAI-compatible gateway or proxy (OpenRouter, PortKey, LiteLLM, etc.).") }}</span>
                     </div>
                 </div>
 
@@ -60,14 +68,14 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="col-sm-4 control-label"><a target="_blank" href="https://platform.openai.com/docs/models">{{ __("OpenAI Model") }}</a> 
+                    <label class="col-sm-4 control-label"><a target="_blank" href="https://platform.openai.com/docs/models">{{ __("Model") }}</a> 
                         <br/><a target="_blank" href="https://platform.openai.com/docs/pricing">{{ __("Model Pricing") }}</a>
                     </label>
 
                     <div class="col-sm-8">
-                    <i style="margin: 0 20px" class="glyphicon glyphicon-info-sign icon-info" data-toggle="popover" data-trigger="hover" data-html="true" data-placement="left" data-content="{{ __('Check the model capabilities and pricing, and test models to see which works best for you.') }}" data-original-title="" title=""></i>
+                    <i style="margin: 0 20px" class="glyphicon glyphicon-info-sign icon-info" data-toggle="popover" data-trigger="hover" data-html="true" data-placement="left" data-content="{{ __('Models are fetched from your API endpoint. When using a custom gateway URL, available models depend on the gateway configuration.') }}" data-original-title="" title=""></i>
                        <select id="model" class="form-control input-sized" name="model" data-saved-model="{{ old('model', $settings['model'] ?? '') }}">
-                            <option value="">Fetching your API Key models...</option>
+                            <option value="">Fetching models...</option>
                        </select>
                     </div>
                 </div>
