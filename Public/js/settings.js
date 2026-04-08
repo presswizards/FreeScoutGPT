@@ -1,7 +1,8 @@
 document.addEventListener("DOMContentLoaded", function () {
     const modelSelect = document.getElementById("model");
     const apiKeyInput = document.querySelector("input[name='api_key']");
-    const savedModel = modelSelect.dataset.savedModel; // Load saved model from data attribute
+    const baseUrlInput = document.getElementById("api_base_url");
+    const savedModel = modelSelect.dataset.savedModel;
 
     $(document).ready(function() {
         const robotIcon = document.querySelector('i.fa-solid.fa-robot');
@@ -12,50 +13,65 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     // ===================================================================
-    // OpenAI Models Fetch
+    // Model Fetch
     // ===================================================================
-    function fetchModels(apiKey) {
+    function fetchModels(apiKey, baseUrl) {
         if (!apiKey) return;
 
-        console.log('fetchModels');
+        modelSelect.innerHTML = '<option value="">Fetching models...</option>';
+
+        const payload = { api_key: apiKey };
+        if (baseUrl) {
+            payload.base_url = baseUrl;
+        }
+
         fetch("/freescoutgpt/get-models", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
                 "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content,
             },
-            body: JSON.stringify({ api_key: apiKey }),
+            body: JSON.stringify(payload),
         })
         .then(response => response.json())
         .then(data => {
-            modelSelect.innerHTML = '<option value="">Select an API model</option>';
+            modelSelect.innerHTML = '<option value="">Select a model</option>';
             if (data.data) {
                 const models = Object.values(data.data);
                 models.forEach(model => {
-                const option = document.createElement("option");
-                option.value = model.id;
-                option.textContent = model.id;
-
-                if (model.id === savedModel) {
-                   option.selected = true;
-                }
-
-                modelSelect.appendChild(option);
+                    const option = document.createElement("option");
+                    option.value = model.id;
+                    option.textContent = model.id;
+                    if (model.id === savedModel) {
+                        option.selected = true;
+                    }
+                    modelSelect.appendChild(option);
                 });
+            } else if (data.error) {
+                modelSelect.innerHTML = '<option value="">Error: ' + data.error + '</option>';
             } else {
-                console.log('No models found or invalid data format');
+                modelSelect.innerHTML = '<option value="">No models found</option>';
             }
         })
-        .catch(error => console.error("Error fetching models:", error));
+        .catch(error => {
+            modelSelect.innerHTML = '<option value="">Error fetching models</option>';
+            console.error("Error fetching models:", error);
+        });
     }
 
-    if (apiKeyInput.value) {
-        fetchModels(apiKeyInput.value);
+    function triggerModelFetch() {
+        if (apiKeyInput.value) {
+            fetchModels(apiKeyInput.value, baseUrlInput ? baseUrlInput.value : '');
+        }
     }
 
-    apiKeyInput.addEventListener("blur", function () {
-        fetchModels(this.value);
-    });
+    triggerModelFetch();
+
+    apiKeyInput.addEventListener("blur", triggerModelFetch);
+
+    if (baseUrlInput) {
+        baseUrlInput.addEventListener("blur", triggerModelFetch);
+    }
 
     // ===================================================================
     // Infomaniak/Responses API UI Toggle Logic
@@ -68,15 +84,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const infomaniakProductIdSelect = document.getElementById("infomaniak_product_id_select");
     const infomaniakModelSelect = document.getElementById("infomaniak_model");
     const infomaniakApiPromptGroup = document.querySelector("textarea[name='infomaniak_api_prompt']")?.closest('.form-group');
-    const litellmCheckbox = document.querySelector("input[name='litellm_enabled']");
-    const litellmBaseUrlInput = document.querySelector("input[name='litellm_base_url']");
-    const litellmApiKeyInput = document.querySelector("input[name='litellm_api_key']");
-    const litellmModelSelect = document.getElementById("litellm_model");
-    const litellmFields = [
-        litellmBaseUrlInput?.closest('.form-group'),
-        litellmApiKeyInput?.closest('.form-group'),
-        litellmModelSelect?.closest('.form-group')
-    ];
 
     const infomaniakFields = [
         infomaniakApiKeyInput?.closest('.form-group'),
@@ -86,11 +93,7 @@ document.addEventListener("DOMContentLoaded", function () {
     ];
 
     function toggleApiFields(e) {
-        if (e && e.type === 'change' && e.target === litellmCheckbox && litellmCheckbox.checked) {
-            if (infomaniakCheckbox) infomaniakCheckbox.checked = false;
-        }
         if (e && e.type === 'change' && e.target === infomaniakCheckbox && infomaniakCheckbox.checked) {
-            if (litellmCheckbox) litellmCheckbox.checked = false;
             if (responsesApiCheckbox) responsesApiCheckbox.checked = false;
         }
         if (e && e.type === 'change' && e.target === responsesApiCheckbox && responsesApiCheckbox.checked) {
@@ -99,10 +102,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const infomaniakNow = infomaniakCheckbox && infomaniakCheckbox.checked;
         const responsesApiNow = responsesApiCheckbox && responsesApiCheckbox.checked;
-        const litellmNow = litellmCheckbox && litellmCheckbox.checked;
 
         infomaniakFields.forEach(f => { if (f) f.style.display = infomaniakNow ? '' : 'none'; });
-        litellmFields.forEach(f => { if (f) f.style.display = litellmNow ? '' : 'none'; });
 
         if (responsesApiPromptGroup) {
             responsesApiPromptGroup.style.display = (responsesApiNow && !infomaniakNow) ? '' : 'none';
@@ -117,12 +118,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 fetchAndPopulateProductIds(infomaniakApiKeyInput.value);
             }
         }
-
-        if (e && e.type === 'change' && e.target === litellmCheckbox && litellmCheckbox.checked) {
-            if (litellmBaseUrlInput && litellmBaseUrlInput.value) {
-                fetchLitellmModels(litellmBaseUrlInput.value, litellmApiKeyInput ? litellmApiKeyInput.value : '');
-            }
-        }
     }
 
     if (infomaniakCheckbox) {
@@ -130,9 +125,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     if (responsesApiCheckbox) {
         responsesApiCheckbox.addEventListener('change', toggleApiFields);
-    }
-    if (litellmCheckbox) {
-        litellmCheckbox.addEventListener('change', toggleApiFields);
     }
     toggleApiFields();
 
@@ -167,11 +159,9 @@ document.addEventListener("DOMContentLoaded", function () {
                     }
                     infomaniakProductIdSelect.appendChild(option);
                 });
-                // If no saved value, select the first
                 if (!infomaniakProductIdSelect.value || infomaniakProductIdSelect.value === "") {
-                    infomaniakProductIdSelect.selectedIndex = 1; // 0 is placeholder
+                    infomaniakProductIdSelect.selectedIndex = 1;
                 }
-                // Fetch models for the selected Product ID
                 if (infomaniakProductIdSelect.value) {
                     fetchInfomaniakModels(apiKey, infomaniakProductIdSelect.value);
                 }
@@ -228,14 +218,12 @@ document.addEventListener("DOMContentLoaded", function () {
     // Infomaniak Event Listeners
     // ===================================================================
     if (infomaniakApiKeyInput) {
-        // On API key blur, fetch product IDs
         infomaniakApiKeyInput.addEventListener("blur", function () {
             if (this.value && infomaniakCheckbox && infomaniakCheckbox.checked) {
                 fetchAndPopulateProductIds(this.value);
             }
         });
         
-        // Initial fetch if value exists and Infomaniak is enabled
         if (infomaniakApiKeyInput.value && infomaniakCheckbox && infomaniakCheckbox.checked) {
             fetchAndPopulateProductIds(infomaniakApiKeyInput.value);
         }
@@ -245,76 +233,6 @@ document.addEventListener("DOMContentLoaded", function () {
         infomaniakProductIdSelect.addEventListener("change", function () {
             if (infomaniakApiKeyInput && this.value) {
                 fetchInfomaniakModels(infomaniakApiKeyInput.value, this.value);
-            }
-        });
-    }
-
-    // ===================================================================
-    // LiteLLM Models Fetch
-    // ===================================================================
-    const savedLitellmModel = litellmModelSelect ? litellmModelSelect.dataset.savedModel : '';
-
-    function fetchLitellmModels(baseUrl, apiKey) {
-        if (!baseUrl || !litellmModelSelect) return;
-
-        litellmModelSelect.innerHTML = '<option value="">Fetching models from proxy...</option>';
-
-        fetch("/freescoutgpt/litellm-models", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content,
-            },
-            body: JSON.stringify({ litellm_base_url: baseUrl, litellm_api_key: apiKey || '' }),
-        })
-        .then(response => response.json())
-        .then(data => {
-            litellmModelSelect.innerHTML = '<option value="">Select a model</option>';
-            if (data.data && data.data.length > 0) {
-                data.data.forEach(model => {
-                    const option = document.createElement("option");
-                    option.value = model.id;
-                    option.textContent = model.id;
-                    if (model.id === savedLitellmModel) {
-                        option.selected = true;
-                    }
-                    litellmModelSelect.appendChild(option);
-                });
-            } else if (data.error) {
-                const errorOption = document.createElement("option");
-                errorOption.value = "";
-                errorOption.textContent = "Error: " + data.error;
-                litellmModelSelect.innerHTML = '';
-                litellmModelSelect.appendChild(errorOption);
-            } else {
-                litellmModelSelect.innerHTML = '<option value="">No models found</option>';
-            }
-        })
-        .catch(error => {
-            litellmModelSelect.innerHTML = '<option value="">Error fetching models</option>';
-            console.error("Error fetching LiteLLM models:", error);
-        });
-    }
-
-    // ===================================================================
-    // LiteLLM Event Listeners
-    // ===================================================================
-    if (litellmBaseUrlInput) {
-        litellmBaseUrlInput.addEventListener("blur", function () {
-            if (this.value && litellmCheckbox && litellmCheckbox.checked) {
-                fetchLitellmModels(this.value, litellmApiKeyInput ? litellmApiKeyInput.value : '');
-            }
-        });
-
-        if (litellmBaseUrlInput.value && litellmCheckbox && litellmCheckbox.checked) {
-            fetchLitellmModels(litellmBaseUrlInput.value, litellmApiKeyInput ? litellmApiKeyInput.value : '');
-        }
-    }
-
-    if (litellmApiKeyInput) {
-        litellmApiKeyInput.addEventListener("blur", function () {
-            if (litellmBaseUrlInput && litellmBaseUrlInput.value && litellmCheckbox && litellmCheckbox.checked) {
-                fetchLitellmModels(litellmBaseUrlInput.value, this.value);
             }
         });
     }

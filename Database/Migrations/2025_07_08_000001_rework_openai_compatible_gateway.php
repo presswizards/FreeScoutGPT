@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddLitellmFieldsToFreescoutgptTable extends Migration
+class ReworkOpenaiCompatibleGateway extends Migration
 {
     /**
      * Run the migrations.
@@ -14,10 +14,7 @@ class AddLitellmFieldsToFreescoutgptTable extends Migration
     public function up()
     {
         Schema::table('freescoutgpt', function (Blueprint $table) {
-            $table->boolean('litellm_enabled')->default(false);
-            $table->string('litellm_base_url', 255)->nullable();
-            $table->string('litellm_api_key', 255)->nullable();
-            $table->string('litellm_model', 255)->nullable();
+            $table->string('api_base_url', 500)->nullable()->after('api_key');
         });
     }
 
@@ -29,12 +26,7 @@ class AddLitellmFieldsToFreescoutgptTable extends Migration
     public function down()
     {
         Schema::table('freescoutgpt', function (Blueprint $table) {
-            $table->dropColumn([
-                'litellm_enabled',
-                'litellm_base_url',
-                'litellm_api_key',
-                'litellm_model',
-            ]);
+            $table->dropColumn('api_base_url');
         });
     }
 }

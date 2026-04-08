@@ -36,10 +36,18 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="col-sm-4 control-label"><a target="_blank" href="https://platform.openai.com/api-keys">{{ __("OpenAI API key") }}</a></label>
+                    <label class="col-sm-4 control-label"><a target="_blank" href="https://platform.openai.com/api-keys">{{ __("API Key") }}</a></label>
 
                     <div class="col-sm-8">
                         <input type="password" name="api_key" class="form-control" placeholder="sk-..." value="{{ $settings['api_key'] ?? '' }}" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">{{ __("API Base URL") }}</label>
+                    <div class="col-sm-8">
+                        <input type="text" name="api_base_url" id="api_base_url" class="form-control" placeholder="https://api.openai.com" value="{{ $settings['api_base_url'] ?? '' }}" />
+                        <span class="help-block">{{ __("Leave empty for direct OpenAI access. Set a custom URL to route through any OpenAI-compatible gateway or proxy (OpenRouter, PortKey, LiteLLM, etc.).") }}</span>
                     </div>
                 </div>
 
@@ -60,14 +68,14 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="col-sm-4 control-label"><a target="_blank" href="https://platform.openai.com/docs/models">{{ __("OpenAI Model") }}</a> 
+                    <label class="col-sm-4 control-label"><a target="_blank" href="https://platform.openai.com/docs/models">{{ __("Model") }}</a> 
                         <br/><a target="_blank" href="https://platform.openai.com/docs/pricing">{{ __("Model Pricing") }}</a>
                     </label>
 
                     <div class="col-sm-8">
-                    <i style="margin: 0 20px" class="glyphicon glyphicon-info-sign icon-info" data-toggle="popover" data-trigger="hover" data-html="true" data-placement="left" data-content="{{ __('Check the model capabilities and pricing, and test models to see which works best for you.') }}" data-original-title="" title=""></i>
+                    <i style="margin: 0 20px" class="glyphicon glyphicon-info-sign icon-info" data-toggle="popover" data-trigger="hover" data-html="true" data-placement="left" data-content="{{ __('Models are fetched from your API endpoint. When using a custom gateway URL, available models depend on the gateway configuration.') }}" data-original-title="" title=""></i>
                        <select id="model" class="form-control input-sized" name="model" data-saved-model="{{ old('model', $settings['model'] ?? '') }}">
-                            <option value="">Fetching your API Key models...</option>
+                            <option value="">Fetching models...</option>
                        </select>
                     </div>
                 </div>
@@ -172,48 +180,6 @@
                     <div class="col-sm-8">
                         <textarea rows="6" name="infomaniak_api_prompt" class="form-control" placeholder="Prompt for Infomaniak API (used after articles context)">{{ $settings['infomaniak_api_prompt'] ?? "If relevant given the customer's query, and the articles included, find the single article that best answers the user's question. Summarize the relevant part of that article as a support answer, and provide the article URL. If no article is relevant, reply with a concise best attempt to answer their concerns." }}</textarea>
                         <span class="help-block">{{ __("This prompt is used for the Infomaniak API, sent with the articles context. You can use this to further instruct the model.") }}</span>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="litellm_enabled" class="col-sm-4 control-label">{{ __("Use LiteLLM Proxy") }}</label>
-                    <div class="col-sm-8">
-                        <i style="margin: 0 20px" class="glyphicon glyphicon-info-sign icon-info" data-toggle="popover" data-trigger="hover" data-html="true" data-placement="left" data-content="{{ __('If enabled, all API requests will be routed through your LiteLLM proxy server. This allows you to use any LLM provider (OpenAI, Anthropic, local models, etc.) via a single OpenAI-compatible endpoint. The Responses API toggle above also works with LiteLLM.') }}" data-original-title="" title=""></i>
-                        <div class="controls">
-                            <div class="onoffswitch-wrap">
-                                <div class="onoffswitch">
-                                    <input type="checkbox" name="litellm_enabled" id="litellm_enabled" class="onoffswitch-checkbox"
-                                        {!! ($settings['litellm_enabled'] ?? false) ? "checked" : "" !!}
-                                    >
-                                    <label class="onoffswitch-label" for="litellm_enabled"></label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label class="col-sm-4 control-label"><a href="https://docs.litellm.ai/docs/proxy/quick_start" target="_blank">{{ __("LiteLLM Proxy Base URL") }}</a></label>
-                    <div class="col-sm-8">
-                        <input type="text" name="litellm_base_url" class="form-control" placeholder="http://your-proxy:4000" value="{{ $settings['litellm_base_url'] ?? '' }}" />
-                        <span class="help-block">{{ __("The base URL of your LiteLLM proxy server (e.g. http://localhost:4000).") }}</span>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label class="col-sm-4 control-label">{{ __("LiteLLM API Key") }}</label>
-                    <div class="col-sm-8">
-                        <input type="password" name="litellm_api_key" class="form-control" placeholder="sk-..." value="{{ $settings['litellm_api_key'] ?? '' }}" />
-                        <span class="help-block">{{ __("Virtual key issued by your LiteLLM proxy admin. Leave empty if proxy has no authentication.") }}</span>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label class="col-sm-4 control-label">{{ __("LiteLLM Model") }}</label>
-                    <div class="col-sm-8">
-                        <select id="litellm_model" class="form-control input-sized" name="litellm_model" data-saved-model="{{ old('litellm_model', $settings['litellm_model'] ?? '') }}">
-                            <option value="">{{ __("Enter Base URL to fetch models...") }}</option>
-                        </select>
                     </div>
                 </div>
 
