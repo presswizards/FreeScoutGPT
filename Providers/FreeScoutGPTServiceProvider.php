@@ -72,19 +72,31 @@ class FreeScoutGPTServiceProvider extends ServiceProvider
             $updateAvailable = __('Update available for module ');
             $settings = $this->mailbox ? GPTSettings::find($this->mailbox->id) : null;
             $start_message = $settings ? $settings->start_message : "";
+            $message_edit_prompt = $settings ? $settings->message_edit_prompt : "";
             $responses_api_prompt = $settings ? $settings->responses_api_prompt : "";
             $modifyPrompt = __("Complete prompt and send last response from client to GPT");
             $send = __("Generate Answer");
+            $editDraft = __("Edit Draft");
+            $nothingToEdit = __("There is no text to edit");
+            $moduleDisabled = __("FreeScoutGPT is disabled for this mailbox");
 
-            echo "const freescoutGPTData = {" .
-                    "'copiedToClipboard': '{$copiedToClipboard}'," .
-                    "'updateAvailable': '{$updateAvailable}'," .
-                    "'version': '{$version}'," .
-                    "'start_message': `{$start_message}`," .
-                    "'responses_api_prompt': `{$responses_api_prompt}`," .
-                    "'modifyPrompt': `{$modifyPrompt}`," .
-                    "'send': `{$send}`," .
-                "};";
+            $freescoutGPTData = [
+                    'copiedToClipboard' => $copiedToClipboard,
+                    'updateAvailable' => $updateAvailable,
+                    'version' => $version,
+                    'start_message' => $start_message,
+                    'message_edit_prompt' => $message_edit_prompt,
+                    'responses_api_prompt' => $responses_api_prompt,
+                    'modifyPrompt' => $modifyPrompt,
+                    'send' => $send,
+                    'editDraft' => $editDraft,
+                    'nothingToEdit' => $nothingToEdit,
+                    'moduleDisabled' => $moduleDisabled
+            ];
+            echo 'const freescoutGPTData = ' . json_encode(
+                $freescoutGPTData,
+                JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT
+            ) . ';';
             echo 'freescoutgptInit();';
         });
 

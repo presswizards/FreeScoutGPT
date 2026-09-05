@@ -60,6 +60,15 @@
                 </div>
 
                 <div class="form-group">
+                    <label class="col-sm-4 control-label"><a target="_blank" href="https://help.openai.com/en/articles/10032626-prompt-engineering-best-practices-for-chatgpt">{{ __("Message Editing Instructions") }}</a></label>
+
+                    <div class="col-sm-8">
+                        <textarea rows="10" name="message_edit_prompt" class="form-control" placeholder="Edit the already-written support reply. Fix grammar and spelling, improve clarity and tone. Keep the same language as the input. Do not add new facts. Return only the edited message text.">{{ $settings['message_edit_prompt'] ?? '' }}</textarea>
+                        <span class="help-block">{{ __("Used by the Draft Editing button in the reply editor. This should edit the agent's draft (not generate a new answer).") }}</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
                     <label class="col-sm-4 control-label"><a target="_blank" href="https://platform.openai.com/docs/models">{{ __("OpenAI Model") }}</a> 
                         <br/><a target="_blank" href="https://platform.openai.com/docs/pricing">{{ __("Model Pricing") }}</a>
                     </label>

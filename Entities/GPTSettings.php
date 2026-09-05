@@ -19,6 +19,7 @@ class GPTSettings extends Model
         'api_key',
         'token_limit',
         'start_message',
+        'message_edit_prompt',
         'enabled',
         'model',
         'client_data_enabled',
