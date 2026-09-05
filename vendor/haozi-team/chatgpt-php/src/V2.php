@@ -24,10 +24,10 @@ class V2
 
     public function __construct(
         string $key,
-        string $baseUrl = null,
-        string $model = null,
-        int $temperature = null,
-        int $topP = null,
+        ?string $baseUrl = null,
+        ?string $model = null,
+        ?int $temperature = null,
+        ?int $topP = null,
         int $timeout = 360
     ) {
         $this->key = 'Bearer '.$key;
@@ -73,7 +73,7 @@ class V2
      * @return mixed
      * @throws Exception
      */
-    public function ask(string $prompt, string $user = null, bool $stream = false)
+    public function ask(string $prompt, ?string $user = null, bool $stream = false)
     {
         // 将消息添加到消息列表中
         $this->addMessage($prompt);

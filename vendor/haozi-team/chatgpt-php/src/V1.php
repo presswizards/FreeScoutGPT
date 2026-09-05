@@ -15,7 +15,7 @@ class V1
 
     private $http;
 
-    public function __construct(string $baseUrl = null, int $timeout = 360)
+    public function __construct(?string $baseUrl = null, int $timeout = 360)
     {
         if ($baseUrl) {
             $this->baseUrl = $baseUrl;
@@ -36,7 +36,7 @@ class V1
      * @param  string|null  $model
      * @return void
      */
-    public function addAccount(string $accessToken, $name = null, bool $paid = false, string $model = null): void
+    public function addAccount(string $accessToken, $name = null, bool $paid = false, ?string $model = null): void
     {
         if ($name === null) {
             $this->accounts[] = [
@@ -84,8 +84,8 @@ class V1
      */
     public function ask(
         string $prompt,
-        string $conversationId = null,
-        string $parentId = null,
+        ?string $conversationId = null,
+        ?string $parentId = null,
         $account = null,
         bool $stream = false
     ) {
