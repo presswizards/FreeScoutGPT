@@ -1,4 +1,6 @@
-v1.0.31: Adds Infomaniak Chat Completion API option for Switzerland privacy protection. Fixes Infomaniak Settings page to get product ID and models.
+v1.1: Fixes PHP 8.4/8.5 issues with the guzzlehttp library.
+
+v1.0.33: Adds Infomaniak Chat Completion API option for Switzerland privacy protection. Fixes Infomaniak Settings page to get product ID and models.
 
 v1.0.32: Fix gpt-5.1 responses api results, fix empty articles error in PHP 8.x
 
