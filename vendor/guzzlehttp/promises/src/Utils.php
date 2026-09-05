@@ -21,7 +21,7 @@ final class Utils
      *
      * @return TaskQueueInterface
      */
-    public static function queue(TaskQueueInterface $assign = null)
+    public static function queue(?TaskQueueInterface $assign = null): TaskQueueInterface
     {
         static $queue;
 
