@@ -21,7 +21,7 @@ namespace GuzzleHttp\Promise;
  *
  * @deprecated queue will be removed in guzzlehttp/promises:2.0. Use Utils::queue instead.
  */
-function queue(TaskQueueInterface $assign = null)
+function queue(?TaskQueueInterface $assign = null)
 {
     return Utils::queue($assign);
 }

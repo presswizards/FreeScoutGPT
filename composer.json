@@ -23,7 +23,9 @@
         }
     },
     "require": {
-        "tectalic/openai": "^1.4"
+        "tectalic/openai": "^1.4",
+        "guzzlehttp/guzzle": "^7.15.2",
+        "guzzlehttp/promises": "^2.5.3"
     },
     "config": {
         "allow-plugins": {
