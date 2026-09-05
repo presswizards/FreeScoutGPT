@@ -163,47 +163,95 @@ class FreeScoutGPTController extends Controller
 
         $cacheKey = 'infomaniak_models_' . md5($apiKey . '_' . $productId);
 
-        // Check if models are cached
+        // Only serve the cache when it actually holds models, so a transient
+        // API failure does not stay sticky for 10 minutes.
         if (Cache::has($cacheKey)) {
-            return response()->json(['data' => Cache::get($cacheKey)]);
+            $cached = Cache::get($cacheKey);
+            if (!empty($cached)) {
+                return response()->json(['data' => $cached]);
+            }
         }
 
+        $client = new \GuzzleHttp\Client(['http_errors' => false, 'timeout' => 30]);
+        $headers = [
+            'Authorization' => 'Bearer ' . $apiKey,
+            'Accept' => 'application/json',
+        ];
+
+        // Models that cannot be used for chat completions.
+        $nonChatModels = ['whisper', 'photomaker', 'flux', 'bge_multilingual_gemma2', 'mini_lm_l12_v2'];
+        $isChatModel = function ($id) use ($nonChatModels) {
+            if ($id === null || $id === '') {
+                return false;
+            }
+            foreach ($nonChatModels as $nonChatModel) {
+                if (stripos((string) $id, $nonChatModel) !== false) {
+                    return false;
+                }
+            }
+            return true;
+        };
+
+        $ids = [];
+        $lastError = null;
+
+        // Source 1: the OpenAI-compatible /models listing.
         try {
-            $client = new \GuzzleHttp\Client();
-            $url = "https://api.infomaniak.com/1/ai/{$productId}/openai/models";
-            $response = $client->get($url, [
-                'headers' => [
-                    'Authorization' => 'Bearer ' . $apiKey,
-                    'Accept' => 'application/json',
+            $response = $client->get("https://api.infomaniak.com/1/ai/{$productId}/openai/models", [
+                'headers' => $headers,
+            ]);
+            $models = json_decode((string) $response->getBody(), true);
+            foreach ($models['data'] ?? [] as $model) {
+                if (isset($model['id']) && $isChatModel($model['id'])) {
+                    $ids[] = $model['id'];
+                }
+            }
+        } catch (\Exception $e) {
+            $lastError = $e->getMessage();
+        }
+
+        // Source 2: Infomaniak does not advertise its LLM chat models through
+        // /openai/models (that endpoint only lists whisper/flux/embedding
+        // products). The chat/completions endpoint does return the
+        // authoritative allow-list inside its validation error, so probe it
+        // with a deliberately invalid model name and harvest that list.
+        try {
+            $probe = $client->post("https://api.infomaniak.com/1/ai/{$productId}/openai/chat/completions", [
+                'headers' => $headers + ['Content-Type' => 'application/json'],
+                'json' => [
+                    'model' => '__freescoutgpt_model_probe__',
+                    'messages' => [['role' => 'user', 'content' => 'x']],
+                    'max_tokens' => 1,
                 ],
             ]);
-
-            $models = json_decode($response->getBody(), true);
-            $filteredModels = $models['data'] ?? [];
-
-            // Filter out non-chat models (e.g., whisper, photomaker, flux, bge_multilingual_gemma2)
-            $nonChatModels = ['whisper', 'photomaker', 'flux', 'bge_multilingual_gemma2', 'mini_lm_l12_v2'];
-            $filteredModels = array_filter($filteredModels, function ($model) use ($nonChatModels) {
-                foreach ($nonChatModels as $nonChatModel) {
-                    if (isset($model['id']) && stripos($model['id'], $nonChatModel) !== false) {
-                        return false;
+            $probeBody = json_decode((string) $probe->getBody(), true);
+            foreach ($probeBody['error']['errors'] ?? [] as $error) {
+                foreach ($error['context']['values'] ?? [] as $id) {
+                    if ($isChatModel($id)) {
+                        $ids[] = $id;
                     }
                 }
-                return true;
-            });
-
-            // Optionally, sort alphabetically by 'id' if present
-            usort($filteredModels, function($a, $b) {
-                return strcmp($a['id'] ?? '', $b['id'] ?? '');
-            });
-
-            // Cache filtered models for 10 minutes
-            Cache::put($cacheKey, $filteredModels, now()->addMinutes(10));
-
-            return response()->json(['data' => $filteredModels]);
+            }
         } catch (\Exception $e) {
-            return response()->json(['error' => $e->getMessage()], 500);
+            $lastError = $e->getMessage();
         }
+
+        $ids = array_values(array_unique($ids));
+        sort($ids, SORT_NATURAL | SORT_FLAG_CASE);
+
+        if (empty($ids)) {
+            return response()->json([
+                'error' => $lastError ?: 'No chat models available for this Infomaniak Product ID',
+            ], 500);
+        }
+
+        $filteredModels = array_map(function ($id) {
+            return ['id' => $id];
+        }, $ids);
+
+        Cache::put($cacheKey, $filteredModels, now()->addMinutes(10));
+
+        return response()->json(['data' => $filteredModels]);
     }
 
     /**
