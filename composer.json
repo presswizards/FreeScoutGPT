@@ -24,12 +24,18 @@
     },
     "require": {
         "tectalic/openai": "^1.4",
-        "guzzlehttp/guzzle": "^7.9",
-        "guzzlehttp/promises": "^2.0.2"
+        "guzzlehttp/guzzle": "^7.15.2",
+        "guzzlehttp/promises": "^2.5.3"
     },
     "config": {
         "allow-plugins": {
             "php-http/discovery": true
         }
+    },
+    "replace": {
+        "guzzlehttp/guzzle": "*",
+        "guzzlehttp/promises": "*",
+        "guzzlehttp/psr7": "*",
+        "psr/http-message": "*"
     }
 }

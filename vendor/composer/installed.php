@@ -38,8 +38,8 @@
             'dev_requirement' => false,
         ),
         'guzzlehttp/guzzle' => array(
-            'pretty_version' => '7.5.0',
-            'version' => '7.5.0.0',
+            'pretty_version' => '7.15.5',
+            'version' => '7.15.5.0',
             'reference' => 'b50a2a1251152e43f6a37f0fa053e730a67d25ba',
             'type' => 'library',
             'install_path' => __DIR__ . '/../guzzlehttp/guzzle',
@@ -47,8 +47,8 @@
             'dev_requirement' => false,
         ),
         'guzzlehttp/promises' => array(
-            'pretty_version' => '1.5.2',
-            'version' => '1.5.2.0',
+            'pretty_version' => '2.5.3',
+            'version' => '2.5.3.0',
             'reference' => 'b94b2807d85443f9719887892882d0329d1e2598',
             'type' => 'library',
             'install_path' => __DIR__ . '/../guzzlehttp/promises',
@@ -56,8 +56,8 @@
             'dev_requirement' => false,
         ),
         'guzzlehttp/psr7' => array(
-            'pretty_version' => '2.4.4',
-            'version' => '2.4.4.0',
+            'pretty_version' => '2.13.1',
+            'version' => '2.13.1.0',
             'reference' => '3cf1b6d4f0c820a2cf8bcaec39fc698f3443b5cf',
             'type' => 'library',
             'install_path' => __DIR__ . '/../guzzlehttp/psr7',
@@ -137,8 +137,8 @@
             'dev_requirement' => false,
         ),
         'psr/http-client' => array(
-            'pretty_version' => '1.0.1',
-            'version' => '1.0.1.0',
+            'pretty_version' => '1.1',
+            'version' => '1.1.0',
             'reference' => '2dfb5f6c5eff0e91e20e913f8c5452ed95b86621',
             'type' => 'library',
             'install_path' => __DIR__ . '/../psr/http-client',
@@ -153,8 +153,8 @@
             ),
         ),
         'psr/http-factory' => array(
-            'pretty_version' => '1.0.1',
-            'version' => '1.0.1.0',
+            'pretty_version' => '1.1',
+            'version' => '1.1.0',
             'reference' => '12ac7fcd07e5b077433f5f2bee95b3a771bf61be',
             'type' => 'library',
             'install_path' => __DIR__ . '/../psr/http-factory',
@@ -169,8 +169,8 @@
             ),
         ),
         'psr/http-message' => array(
-            'pretty_version' => '1.0.1',
-            'version' => '1.0.1.0',
+            'pretty_version' => '1.1',
+            'version' => '1.1.0',
             'reference' => 'f6561bf28d520154e4b0ec72be95418abe6d9363',
             'type' => 'library',
             'install_path' => __DIR__ . '/../psr/http-message',
@@ -227,7 +227,7 @@
             'dev_requirement' => false,
         ),
         'symfony/deprecation-contracts' => array(
-            'pretty_version' => 'v2.5.2',
+            'pretty_version' => 'v3.7.1',
             'version' => '2.5.2.0',
             'reference' => 'e8b495ea28c1d97b5e0c121748d6f9b53d075c66',
             'type' => 'library',
@@ -236,7 +236,7 @@
             'dev_requirement' => false,
         ),
         'symfony/polyfill-ctype' => array(
-            'pretty_version' => 'v1.27.0',
+            'pretty_version' => 'v1.37.0',
             'version' => '1.27.0.0',
             'reference' => '5bbc823adecdae860bb64756d639ecfec17b050a',
             'type' => 'library',
@@ -245,7 +245,7 @@
             'dev_requirement' => false,
         ),
         'symfony/polyfill-php80' => array(
-            'pretty_version' => 'v1.27.0',
+            'pretty_version' => 'v1.37.0',
             'version' => '1.27.0.0',
             'reference' => '7a6ff3f1959bb01aefccb463a0f2cd3d3d2fd936',
             'type' => 'library',
@@ -254,7 +254,7 @@
             'dev_requirement' => false,
         ),
         'symfony/polyfill-php81' => array(
-            'pretty_version' => 'v1.27.0',
+            'pretty_version' => 'v1.37.0',
             'version' => '1.27.0.0',
             'reference' => '707403074c8ea6e2edaf8794b0157a0bfa52157a',
             'type' => 'library',
